@@ -5,6 +5,7 @@ See LICENSE.txt for more information.
 */
 package edu.ucalgary.oop;
 
+import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

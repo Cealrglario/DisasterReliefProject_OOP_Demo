@@ -1,4 +1,25 @@
 package edu.ucalgary.oop;
 
-public class InquiryAccess {
+import java.util.List;
+
+public class InquiryAccess<U> implements DatabaseObjectAccess<Inquiry, U> {
+    @Override
+    public List<Inquiry> getAll() {
+        return null;
+    }
+
+    @Override
+    public Inquiry getById(int id) {
+        return null;
+    }
+
+    @Override
+    public boolean updateInfo(U info) {
+        return false;
+    }
+
+    @Override
+    public boolean getInfo(U info) {
+        return false;
+    }
 }

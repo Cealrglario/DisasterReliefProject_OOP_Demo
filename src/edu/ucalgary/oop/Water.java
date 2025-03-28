@@ -1,4 +1,4 @@
 package edu.ucalgary.oop;
 
-public class Water {
+public class Water extends Supply {
 }

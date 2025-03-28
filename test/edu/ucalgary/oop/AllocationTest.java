@@ -1,24 +1,32 @@
 package edu.ucalgary.oop;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 public class AllocationTest {
-
-    @Test
-    public void getTimeAllocated() {
+    @Before
+    public void setUp() {
     }
 
     @Test
-    public void getLocationId() {
+    public void testAllocationConstructor() {
     }
 
     @Test
-    public void getAllocatedPersonId() {
+    public void testGetTimeAllocated() {
     }
 
     @Test
-    public void getAllocatedSupply() {
+    public void testGetLocationId() {
+    }
+
+    @Test
+    public void testGetAllocatedPersonId() {
+    }
+
+    @Test
+    public void testGetAllocatedSupply() {
     }
 }

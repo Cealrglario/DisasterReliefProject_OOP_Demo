@@ -1,4 +1,13 @@
 package edu.ucalgary.oop;
 
-public class PersonLocationAccess {
+public class PersonLocationAccess<T> implements DatabaseAssociationAccess<T> {
+    @Override
+    public boolean updateInfo(T info) {
+        return false;
+    }
+
+    @Override
+    public boolean getInfo(T info) {
+        return false;
+    }
 }

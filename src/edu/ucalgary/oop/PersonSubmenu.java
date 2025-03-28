@@ -1,4 +1,4 @@
 package edu.ucalgary.oop;
 
-public class PersonSubmenu {
+public class PersonSubmenu extends Menu {
 }

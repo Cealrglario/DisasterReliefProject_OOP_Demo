@@ -1,4 +1,4 @@
 package edu.ucalgary.oop;
 
-public class PersonalBelonging {
+public class PersonalBelonging extends Supply {
 }
