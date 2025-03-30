@@ -10,9 +10,15 @@ public class DisasterVictim extends Person {
     private final LocalDate ENTRY_DATE;
     private Stack<String> comments;
 
-    public DisasterVictim(int assignedId, String firstName, String gender, LocalDate dateOfEntry) {}
+    public DisasterVictim(int assignedId, String firstName, String gender, LocalDate dateOfEntry, String phoneNumber) {
+        super(assignedId, firstName, gender, phoneNumber);
+        this.ENTRY_DATE = dateOfEntry;
+    }
 
-    public DisasterVictim(int assignedId, String firstName, String gender, LocalDate dateOfBirth, LocalDate dateOfEntry) {}
+    public DisasterVictim(int assignedId, String firstName, String gender, LocalDate dateOfBirth, LocalDate dateOfEntry, String phoneNumber) {
+        super(assignedId, firstName, gender, dateOfBirth, phoneNumber);
+        this.ENTRY_DATE = dateOfEntry;
+    }
 
     public List<MedicalRecord> getMedicalRecords() {}
 
