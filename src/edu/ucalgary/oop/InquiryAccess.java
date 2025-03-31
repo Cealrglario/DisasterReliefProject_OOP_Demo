@@ -2,7 +2,7 @@ package edu.ucalgary.oop;
 
 import java.util.List;
 
-public class InquiryAccess<U> extends DatabaseObjectAccess<Inquiry, U> {
+public class InquiryAccess<U, V> extends DatabaseObjectAccess<Inquiry, U, V> {
     @Override
     public List<Inquiry> getAll() {
         return null;
@@ -14,12 +14,22 @@ public class InquiryAccess<U> extends DatabaseObjectAccess<Inquiry, U> {
     }
 
     @Override
-    public boolean updateInfo(U info) {
+    public boolean updateInfo(U infoToUpdate, V newInfo) {
         return false;
     }
 
     @Override
-    public boolean getInfo(U info) {
+    public boolean getInfo(U infoToGet) {
+        return false;
+    }
+
+    @Override
+    public boolean addEntry(Inquiry newEntry) {
+        return false;
+    }
+
+    @Override
+    public boolean removeEntry(Inquiry exEntry) {
         return false;
     }
 }

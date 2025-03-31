@@ -9,6 +9,10 @@ public class SupplyAccessTest {
     }
 
     @Test
+    public void testGetQueryResults() {
+    }
+
+    @Test
     public void testGetAll() {
     }
 

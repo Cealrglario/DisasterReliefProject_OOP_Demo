@@ -9,6 +9,10 @@ public class MedicalRecordAccessTest {
     }
 
     @Test
+    public void testGetQueryResults() {
+    }
+
+    @Test
     public void testGetAll() {
     }
 

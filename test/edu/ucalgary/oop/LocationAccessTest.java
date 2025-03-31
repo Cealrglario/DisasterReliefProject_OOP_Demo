@@ -9,6 +9,10 @@ public class LocationAccessTest {
     }
 
     @Test
+    public void testGetQueryResults() {
+    }
+
+    @Test
     public void testGetAll() {
     }
 

@@ -3,8 +3,16 @@ package edu.ucalgary.oop;
 import java.sql.ResultSet;
 import java.util.List;
 
-public abstract class DatabaseObjectAccess<T, U> {
+public abstract class DatabaseObjectAccess<T, U, V> {
     private ResultSet queryResults;
+
+    public ResultSet getQueryResults() {
+        return this.queryResults;
+    }
+
+    public void setQueryResults(ResultSet results) {
+        this.queryResults = results;
+    }
 
     public List<T> getAll() {
         return null;
@@ -14,13 +22,20 @@ public abstract class DatabaseObjectAccess<T, U> {
         return null;
     }
 
-    public boolean updateInfo(U info) {
+    public boolean updateInfo(U infoToUpdate, V newInfo) {
         return false;
     }
 
-    public boolean getInfo(U info) {
+    public boolean getInfo(U infoToGet) {
         return false;
     }
 
+    public boolean addEntry(T newEntry) {
+        return false;
+    }
+
+    public boolean removeEntry(T exEntry) {
+        return false;
+    }
 
 }

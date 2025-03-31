@@ -9,6 +9,10 @@ public class PersonAccessTest {
     }
 
     @Test
+    public void testGetQueryResults() {
+    }
+
+    @Test
     public void testGetAll() {
     }
 

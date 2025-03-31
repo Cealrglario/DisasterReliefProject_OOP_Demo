@@ -4,6 +4,10 @@ import org.junit.Test;
 
 public class SupplyAllocationAccessTest {
     @Test
+    public void testGetQueryResults() {
+    }
+
+    @Test
     public void testUpdateInfo() {
     }
 
