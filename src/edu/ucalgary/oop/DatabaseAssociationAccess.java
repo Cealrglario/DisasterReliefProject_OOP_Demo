@@ -1,6 +1,15 @@
 package edu.ucalgary.oop;
 
-public interface DatabaseAssociationAccess<T> {
-    public boolean updateInfo(T info);
-    public boolean getInfo(T info);
+import java.sql.ResultSet;
+
+public abstract class DatabaseAssociationAccess<T> {
+    private ResultSet queryResults;
+
+    public boolean updateInfo(T info) {
+        return false;
+    }
+
+    public boolean getInfo(T info) {
+        return false;
+    }
 }

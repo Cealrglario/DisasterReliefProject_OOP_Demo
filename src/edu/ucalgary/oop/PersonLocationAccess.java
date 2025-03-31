@@ -1,6 +1,6 @@
 package edu.ucalgary.oop;
 
-public class PersonLocationAccess<T> implements DatabaseAssociationAccess<T> {
+public class PersonLocationAccess<T> extends DatabaseAssociationAccess<T> {
     @Override
     public boolean updateInfo(T info) {
         return false;

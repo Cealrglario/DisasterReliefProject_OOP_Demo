@@ -6,11 +6,10 @@ import java.sql.ResultSet;
 public enum DatabaseConnectionManager {
     INSTANCE;
 
-    private static final String DATABASE_URL = "jdbc:postgresql://localhost/project";
-    private static final String USERNAME = "oop";
-    private static final String PASSWORD = "ucalgary";
+    public static final String DATABASE_URL = "jdbc:postgresql://localhost/project";
+    public static final String USERNAME = "oop";
+    public static final String PASSWORD = "ucalgary";
     private static Connection dbConnection;
-    private static ResultSet queryResults;
 
     public String getDatabaseUrl() {
         return this.DATABASE_URL;

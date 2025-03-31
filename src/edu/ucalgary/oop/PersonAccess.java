@@ -2,7 +2,7 @@ package edu.ucalgary.oop;
 
 import java.util.List;
 
-public class PersonAccess<U> implements DatabaseObjectAccess<Person, U> {
+public class PersonAccess<U> extends DatabaseObjectAccess<Person, U> {
     @Override
     public List<Person> getAll() {
         return null;

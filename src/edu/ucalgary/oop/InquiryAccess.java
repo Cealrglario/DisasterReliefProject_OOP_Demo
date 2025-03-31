@@ -2,7 +2,7 @@ package edu.ucalgary.oop;
 
 import java.util.List;
 
-public class InquiryAccess<U> implements DatabaseObjectAccess<Inquiry, U> {
+public class InquiryAccess<U> extends DatabaseObjectAccess<Inquiry, U> {
     @Override
     public List<Inquiry> getAll() {
         return null;

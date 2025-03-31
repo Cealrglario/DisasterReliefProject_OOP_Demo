@@ -2,7 +2,7 @@ package edu.ucalgary.oop;
 
 import java.util.List;
 
-public class LocationAccess<U> implements DatabaseObjectAccess<Location, U> {
+public class LocationAccess<U> extends DatabaseObjectAccess<Location, U> {
     @Override
     public List<Location> getAll() {
         return null;

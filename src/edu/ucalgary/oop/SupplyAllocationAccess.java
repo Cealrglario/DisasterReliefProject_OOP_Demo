@@ -1,6 +1,6 @@
 package edu.ucalgary.oop;
 
-public class SupplyAllocationAccess<T> implements DatabaseAssociationAccess<T> {
+public class SupplyAllocationAccess<T> extends DatabaseAssociationAccess<T> {
     @Override
     public boolean updateInfo(T info) {
         return false;

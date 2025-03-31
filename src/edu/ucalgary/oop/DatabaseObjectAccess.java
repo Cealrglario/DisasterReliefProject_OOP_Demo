@@ -1,11 +1,26 @@
 package edu.ucalgary.oop;
 
+import java.sql.ResultSet;
 import java.util.List;
 
-public interface DatabaseObjectAccess<T, U> {
-    public List<T> getAll();
-    public T getById(int id);
-    public boolean updateInfo(U info);
-    public boolean getInfo(U info);
+public abstract class DatabaseObjectAccess<T, U> {
+    private ResultSet queryResults;
+
+    public List<T> getAll() {
+        return null;
+    }
+
+    public T getById(int id) {
+        return null;
+    }
+
+    public boolean updateInfo(U info) {
+        return false;
+    }
+
+    public boolean getInfo(U info) {
+        return false;
+    }
+
 
 }
