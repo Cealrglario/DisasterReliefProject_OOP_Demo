@@ -9,17 +9,16 @@ public class Inquiry {
     private final int INQUIRER_ID;
     private final int MISSING_PERSON_ID;
     private final LocalDate INQUIRY_DATE;
-    private Stack<LinkedHashSet<String>> infoHistory;
-    private LinkedHashSet<String> infoProvided;
+    private Stack<String> infoHistory;
+    private String infoProvided;
     private int lastKnownLocationId;
 
 
-    public Inquiry(int inquiryId, int inquirerId, int missingPersonId, LocalDate dateOfInquiry, String infoProvided) {
-        this.INQUIRY_ID = inquiryId;
+    public Inquiry(int inquirerId, int missingPersonId, LocalDate dateOfInquiry, String infoProvided) {
         this.INQUIRER_ID = inquirerId;
         this.MISSING_PERSON_ID = missingPersonId;
         this.INQUIRY_DATE = LocalDate.now();
-        this.infoProvided.add(infoProvided);
+        this.infoProvided = infoProvided;
     }
 
     public int getInquiryId() {
@@ -38,11 +37,11 @@ public class Inquiry {
         return this.INQUIRY_DATE;
     }
 
-    public LinkedHashSet<String> getInfoProvided() {
+    public String getInfoProvided() {
         return this.infoProvided;
     }
 
-    public void setInfoProvided(LinkedHashSet<String> infoProvided) {}
+    public void setInfoProvided(String infoProvided) {}
 
     public void addInfo(String info) {}
 

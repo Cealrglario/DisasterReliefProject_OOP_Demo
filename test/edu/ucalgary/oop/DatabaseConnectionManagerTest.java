@@ -67,7 +67,7 @@ public class DatabaseConnectionManagerTest {
             assertFalse("An initialized connection should be open until closeDbConnection() is called",
                     connection.getDbConnection().isClosed());
         } catch (SQLException e) {
-            fail("SQLException occured while checking connection status:" + e.getMessage());
+            fail("SQLException occured while checking connection status: " + e.getMessage());
         }
 
         connection.closeDbConnection();
@@ -76,7 +76,7 @@ public class DatabaseConnectionManagerTest {
             assertTrue("The connection should be closed after calling closeDbConnection",
                     connection.getDbConnection().isClosed());
         } catch (SQLException e) {
-            fail("SQLException occured while checking connection status:" + e.getMessage());
+            fail("SQLException occured while checking connection status: " + e.getMessage());
         }
     }
 
