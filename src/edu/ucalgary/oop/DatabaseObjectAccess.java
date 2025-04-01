@@ -10,10 +10,6 @@ public abstract class DatabaseObjectAccess<T, U, V> {
         return this.queryResults;
     }
 
-    public void setQueryResults(ResultSet results) {
-        this.queryResults = results;
-    }
-
     public List<T> getAll() {
         return null;
     }

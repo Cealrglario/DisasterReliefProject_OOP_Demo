@@ -9,10 +9,6 @@ public abstract class DatabaseAssociationAccess<T, U, V> {
         return this.queryResults;
     }
 
-    public void setQueryResults(ResultSet results) {
-        this.queryResults = results;
-    }
-
     public boolean updateInfo(T infoToUpdate, V newInfo) {
         return false;
     }
