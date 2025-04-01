@@ -1,4 +1,4 @@
 package edu.ucalgary.oop;
 
-public class PersonLocationAccess<V> extends DatabaseAssociationAccess<Person, Location, V> {
+public class PersonLocationAccess<V, W> extends DatabaseAssociationAccess<Person, Location, V, W> {
 }
