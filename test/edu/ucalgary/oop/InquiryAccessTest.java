@@ -41,7 +41,7 @@ public class InquiryAccessTest {
             fail("SQLException occurred while testing: " + e.getMessage());
         }
 
-        assertNotNull("getQueryResults should retrieve a valid query", inquiryDbAccess.getQueryResults());
+        assertNotNull("getQueryResults() should retrieve a valid query", inquiryDbAccess.getQueryResults());
     }
 
     @Test
