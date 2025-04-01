@@ -7,6 +7,7 @@ import static org.junit.Assert.*;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 public class LocationAccessTest {
@@ -14,7 +15,7 @@ public class LocationAccessTest {
     private LocationAccess locationDbAccess;
     private Connection connection;
 
-    Location placeholderLocation = new Location(-1, "Test Location", "test");
+    Location placeholderLocation = new Location(-1, "Test Location", "Placeholder");
 
     @Before
     public void setUp() {
@@ -40,12 +41,13 @@ public class LocationAccessTest {
             fail("SQLException occurred while testing: " + e.getMessage());
         }
 
-        assertNotNull("getQueryResults should retrieve a valid query", locationDbAccess.getQueryResults());
+        assertNotNull("getQueryResults() should retrieve a valid query", locationDbAccess.getQueryResults());
     }
 
     @Test
     public void testGetAll() {
         List<Location> retrievedLocations;
+
         try {
             retrievedLocations = locationDbAccess.getAll();
         } catch (SQLException e) {
@@ -58,14 +60,15 @@ public class LocationAccessTest {
     @Test
     public void testGetById() {
         Location testLocation;
+
         try {
-            testLocation = locationDbAccess.getById(0);
+            testLocation = locationDbAccess.getById(-1);
         } catch (SQLException e) {
             fail("SQLException occurred while testing: " + e.getMessage());
         }
 
         assertEquals("The LOCATION_ID of testLocation should be equal to the id selected when calling getById()",
-                testLocation.getLocationId(), 0);
+                testLocation.getLocationId(), -1);
     }
 
     @Test
@@ -74,7 +77,7 @@ public class LocationAccessTest {
         Location updatedLocation;
 
         try {
-            originalLocation = locationDbAccess.getById(0);
+            originalLocation = locationDbAccess.getById(-1);
         } catch (SQLException e) {
             fail("SQLException occurred while testing: " + e.getMessage());
         }
@@ -86,7 +89,7 @@ public class LocationAccessTest {
         }
 
         try {
-            updatedLocation = locationDbAccess.getById(0);
+            updatedLocation = locationDbAccess.getById(-1);
         } catch (SQLException e) {
             fail("SQLException occurred while testing: " + e.getMessage());
         }
@@ -101,7 +104,7 @@ public class LocationAccessTest {
         String retrievedName;
 
         try {
-            testLocation = locationDbAccess.getById(0);
+            testLocation = locationDbAccess.getById(-1);
             retrievedName = locationDbAccess.getInfo("name");
         } catch (SQLException e) {
             fail("SQLException occurred while testing: " + e.getMessage());
@@ -116,13 +119,14 @@ public class LocationAccessTest {
         List<Location> locationsBeforeAdding;
         List<Location> locationsAfterAdding;
 
+        Location newLocation = new Location(-2, "New Test Location", "test add");
+
         try {
             locationsBeforeAdding = locationDbAccess.getAll();
         } catch (SQLException e) {
             fail("SQLException occurred while testing: " + e.getMessage());
         }
 
-        Location newLocation = new Location(2, "New Test Location", "456 Test Ave");
         try {
             locationDbAccess.addEntry(newLocation);
         } catch (SQLException e) {
@@ -137,6 +141,12 @@ public class LocationAccessTest {
 
         assertNotEquals("New location should be added in the database", locationsAfterAdding.toArray().length,
                 locationsBeforeAdding.toArray().length);
+
+        try {
+            locationDbAccess.removeEntry(newLocation);
+        } catch (SQLException e) {
+            fail("SQLException occurred while testing: " + e.getMessage());
+        }
     }
 
     @Test
@@ -144,7 +154,7 @@ public class LocationAccessTest {
         List<Location> locationsBeforeRemoving;
         List<Location> locationsAfterRemoving;
 
-        Location exLocation = new Location(2, "New Test Location", "ex location");
+        Location exLocation = new Location(-2, "New Test Location", "Test remove");
 
         try {
             locationDbAccess.addEntry(exLocation);
@@ -171,46 +181,35 @@ public class LocationAccessTest {
         }
 
         assertNotEquals("Unwanted location should be no longer be in the database",
-                locationsAfterRemoving.toArray().length, locationsBeforeRemoving.toArray().length);
+                locationsAfterRemoving.size(), locationsBeforeRemoving.size());
     }
 
-    @Test
-    public void testGetByNonExistentId() {
-        Location testLocation;
-
+    @Test (expected = SQLException.class)
+    public void testGetByNonExistentId() throws SQLException {
         try {
-            testLocation = locationDbAccess.getById(-999);
+            locationDbAccess.getById(-999);
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            throw new SQLException("SQLException occurred while testing: " + e.getMessage());
         }
-
-        assertNull("getById with non-existent ID should return null", testLocation);
     }
 
-    @Test
-    public void testUpdateInfoWithInvalidField() {
-        boolean success = true;
-
+    @Test (expected = SQLException.class)
+    public void testUpdateInfoWithInvalidField() throws SQLException {
         try {
             locationDbAccess.updateInfo("non_existent_field", "test value");
         } catch (SQLException e) {
-            success = false;
+            throw new SQLException("SQLException occurred while testing: " + e.getMessage());
         }
-
-        assertFalse("Trying to update a non-existent field should fail", success);
     }
 
-    @Test
-    public void testRemoveNonExistentEntry() {
-        Location nonExistentLocation = new Location(-999, "Non-existent", "Nowhere St");
-        boolean success = false;
+    @Test (expected = SQLException.class)
+    public void testRemoveEntryNotInDb() throws SQLException {
+        Location locationNotInDb = new Location(-999, "not in db test", "doesn't exist");
 
         try {
-            success = locationDbAccess.removeEntry(nonExistentLocation);
+            locationDbAccess.removeEntry(locationNotInDb);
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            throw new SQLException("SQLException occurred while testing: " + e.getMessage());
         }
-
-        assertFalse("Removing non-existent entry should return false", success);
     }
 }
