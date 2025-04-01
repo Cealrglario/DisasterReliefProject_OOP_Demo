@@ -4,7 +4,7 @@ public class Cot extends Supply {
     private String cotLocation;
 
     public Cot(int supplyId, String cotLocation) {
-        super(supplyId);
+        super(supplyId, "Cot");
         this.cotLocation = cotLocation;
     }
 

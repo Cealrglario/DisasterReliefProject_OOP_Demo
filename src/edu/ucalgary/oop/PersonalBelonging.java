@@ -4,7 +4,7 @@ public class PersonalBelonging extends Supply {
     private String description;
 
     public PersonalBelonging(int supplyId, String description) {
-        super(supplyId);
+        super(supplyId, "Personal belonging");
         this.description = description;
     }
 

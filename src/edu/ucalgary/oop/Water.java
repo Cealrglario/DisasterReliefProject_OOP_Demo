@@ -7,7 +7,7 @@ public class Water extends Supply {
     private boolean isExpired = false;
 
     public Water(int supplyId, boolean allocatedToVictim) {
-        super(supplyId);
+        super(supplyId, "Water");
         this.allocatedToVictim = allocatedToVictim;
     }
 
