@@ -180,6 +180,7 @@ public class InquiryAccessTest {
     @Test
     public void testGetByNonExistentId() {
         Inquiry testInquiry;
+
         try {
             testInquiry = inquiryDbAccess.getById(-999);
         } catch (SQLException e) {
@@ -199,7 +200,7 @@ public class InquiryAccessTest {
             success = false;
         }
 
-        assertFalse("Updating with invalid field name should fail", success);
+        assertFalse("Trying to update a non-existent field should fail", success);
     }
 
     @Test
@@ -213,6 +214,6 @@ public class InquiryAccessTest {
             fail("SQLException occurred while testing: " + e.getMessage());
         }
 
-        assertFalse("Removing non-existent entry should return false", success);
+        assertFalse("Removing non-existent entry (due to negative inquirerId) should return false", success);
     }
 }
