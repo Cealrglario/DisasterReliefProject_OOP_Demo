@@ -35,6 +35,14 @@ public class SupplyLocationAllocationAccessTest {
     }
 
     @Test
+    public void testGetAll() {
+    }
+
+    @Test
+    public void testGetById() {
+    }
+
+    @Test
     public void testAddEntry() {
     }
 

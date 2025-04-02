@@ -35,6 +35,14 @@ public class SupplyPersonAllocationAccessTest {
     }
 
     @Test
+    public void testGetAll() {
+    }
+
+    @Test
+    public void testGetById() {
+    }
+
+    @Test
     public void testAddEntry() {
     }
 
