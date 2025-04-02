@@ -119,13 +119,13 @@ public class InquiryAccessTest {
         List<Inquiry> inquiriesBeforeAdding;
         List<Inquiry> inquiriesAfterAdding;
 
+        Inquiry newInquiry = new Inquiry(2, 1, LocalDate.now(), "new inquiry");
+
         try {
             inquiriesBeforeAdding = inquiryDbAccess.getAll();
         } catch (SQLException e) {
             fail("SQLException occurred while testing: " + e.getMessage());
         }
-
-        Inquiry newInquiry = new Inquiry(2, 1, LocalDate.now(), "new inquiry");
 
         try {
             inquiryDbAccess.addEntry(newInquiry);
@@ -139,8 +139,8 @@ public class InquiryAccessTest {
             fail("SQLException occurred while testing: " + e.getMessage());
         }
 
-        assertNotEquals("New inquiry should be added in the database", inquiriesAfterAdding.toArray().length,
-                inquiriesBeforeAdding.toArray().length);
+        assertNotEquals("New inquiry should be added in the database", inquiriesAfterAdding.size(),
+                inquiriesBeforeAdding.size());
     }
 
     @Test
