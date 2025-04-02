@@ -24,12 +24,21 @@ public class PersonAccessTest {
         connection = connectionManager.getDbConnection();
         personDbAccess = new PersonAccess();
 
-        personDbAccess.addEntry(placeholderPerson);
+        try {
+            personDbAccess.addEntry(placeholderPerson);
+        } catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
     }
 
     @After
-    public void tearDown() {
-        personDbAccess.removeEntry(placeholderPerson);
+    public void tearDown() throws Exception {
+        try {
+            personDbAccess.removeEntry(placeholderPerson);
+        } catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
+
         connectionManager.closeDbConnection();
     }
 
@@ -185,7 +194,7 @@ public class PersonAccessTest {
     }
 
     @Test
-    public void testGetByNonExistentId() {
+    public void testGetByIdNotInDb() {
         Person testPerson;
 
         try {
@@ -194,7 +203,7 @@ public class PersonAccessTest {
             fail("SQLException occurred while testing: " + e.getMessage());
         }
 
-        assertNull("A null object should be returned if attempting to retrieve a non-existent Person",
+        assertNull("A null object should be returned if attempting to retrieve a Person that isn't in the database",
                 testPerson);
     }
 

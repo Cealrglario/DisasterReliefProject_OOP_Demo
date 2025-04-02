@@ -18,18 +18,27 @@ public class InquiryAccessTest {
     Inquiry placeholderInquiry = new Inquiry(-1, -1, LocalDate.now(), "placeholder");
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         connectionManager = DatabaseConnectionManager.INSTANCE;
         connectionManager.initializeDbConnection();
         connection = connectionManager.getDbConnection();
         inquiryDbAccess = new InquiryAccess();
 
-        inquiryDbAccess.addEntry(placeholderInquiry);
+        try {
+            inquiryDbAccess.addEntry(placeholderInquiry);
+        } catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
     }
 
     @After
-    public void tearDown() {
-        inquiryDbAccess.removeEntry(placeholderInquiry);
+    public void tearDown() throws Exception {
+        try {
+            inquiryDbAccess.removeEntry(placeholderInquiry);
+        } catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
+
         connectionManager.closeDbConnection();
     }
 
@@ -179,7 +188,7 @@ public class InquiryAccessTest {
     }
 
     @Test
-    public void testGetByNonExistentId() {
+    public void testGetByIdNotInDb() {
         Inquiry testInquiry;
 
         try {
@@ -188,7 +197,7 @@ public class InquiryAccessTest {
             fail("SQLException occurred while testing: " + e.getMessage());
         }
 
-        assertNull("A null object should be returned if attempting to retrieve a non-existent Inquiry",
+        assertNull("A null object should be returned if attempting to retrieve an Inquiry that isn't in the database",
                 testInquiry);
     }
 

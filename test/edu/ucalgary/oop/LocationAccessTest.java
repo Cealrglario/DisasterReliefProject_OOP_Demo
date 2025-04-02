@@ -18,18 +18,27 @@ public class LocationAccessTest {
     Location placeholderLocation = new Location(-1, "Test Location", "Placeholder");
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         connectionManager = DatabaseConnectionManager.INSTANCE;
         connectionManager.initializeDbConnection();
         connection = connectionManager.getDbConnection();
         locationDbAccess = new LocationAccess();
 
-        locationDbAccess.addEntry(placeholderLocation);
+        try {
+            locationDbAccess.addEntry(placeholderLocation);
+        } catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
     }
 
     @After
-    public void tearDown() {
-        locationDbAccess.removeEntry(placeholderLocation);
+    public void tearDown() throws Exception {
+        try {
+            locationDbAccess.removeEntry(placeholderLocation);
+        } catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
+
         connectionManager.closeDbConnection();
     }
 
@@ -185,7 +194,7 @@ public class LocationAccessTest {
     }
 
     @Test
-    public void testGetByNonExistentId() {
+    public void testGetByIdNotInDb() {
         Location testLocation;
 
         try {
@@ -194,7 +203,7 @@ public class LocationAccessTest {
             fail("SQLException occurred while testing: " + e.getMessage());
         }
 
-        assertNull("A null object should be returned if attempting to retrieve a non-existent Location",
+        assertNull("A null object should be returned if attempting to retrieve a Location that isn't in the database",
                 testLocation);
     }
 

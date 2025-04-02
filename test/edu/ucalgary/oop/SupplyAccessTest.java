@@ -26,12 +26,21 @@ public class SupplyAccessTest {
 
         placeholderSupply.setComments("Test comment");
 
-        supplyDbAccess.addEntry(placeholderSupply);
+        try {
+            supplyDbAccess.addEntry(placeholderSupply);
+        } catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
     }
 
     @After
-    public void tearDown() {
-        supplyDbAccess.removeEntry(placeholderSupply);
+    public void tearDown() throws Exception {
+        try {
+            supplyDbAccess.removeEntry(placeholderSupply);
+        } catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
+
         connectionManager.closeDbConnection();
     }
 
@@ -188,7 +197,7 @@ public class SupplyAccessTest {
     }
 
     @Test
-    public void testGetByNonExistentId() {
+    public void testGetByIdNotInDb() {
         Supply testSupply;
 
         try {
@@ -197,8 +206,8 @@ public class SupplyAccessTest {
             fail("SQLException occurred while testing: " + e.getMessage());
         }
 
-        assertNull("A null object should be returned if attempting to retrieve a non-existent Supply",
-                testSupply;
+        assertNull("A null object should be returned if attempting to retrieve a Supply that isn't in the database",
+                testSupply);
     }
 
     @Test
@@ -218,7 +227,7 @@ public class SupplyAccessTest {
     @Test
     public void testRemoveEntryNotInDb() {
         boolean success;
-        Blanket blanketNotInDb = new Blanket(-999);
+        Supply blanketNotInDb = new Blanket(-999);
 
         try {
             success = supplyDbAccess.removeEntry(blanketNotInDb);

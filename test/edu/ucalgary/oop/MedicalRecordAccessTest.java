@@ -24,12 +24,21 @@ public class MedicalRecordAccessTest {
         connection = connectionManager.getDbConnection();
         medicalRecordDbAccess = new MedicalRecordAccess();
 
-        medicalRecordDbAccess.addEntry(placeholderRecord);
+        try {
+            medicalRecordDbAccess.addEntry(placeholderRecord);
+        } catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
     }
 
     @After
-    public void tearDown() {
-        medicalRecordDbAccess.removeEntry(placeholderRecord);
+    public void tearDown() throws Exception {
+        try {
+            medicalRecordDbAccess.removeEntry(placeholderRecord);
+        } catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
+
         connectionManager.closeDbConnection();
     }
 
@@ -185,7 +194,7 @@ public class MedicalRecordAccessTest {
     }
 
     @Test
-    public void testGetByNonExistentId() {
+    public void testGetByIdNotInDb() {
         MedicalRecord testRecord;
 
         try {
@@ -194,7 +203,7 @@ public class MedicalRecordAccessTest {
             fail("SQLException occurred while testing: " + e.getMessage());
         }
 
-        assertNull("A null object should be returned if attempting to retrieve a non-existent MedicalRecord",
+        assertNull("A null object should be returned if attempting to retrieve a MedicalRecord that isn't in the database",
                 testRecord);
     }
 

@@ -21,18 +21,26 @@ public class PersonLocationAccessTest {
     Location placeholderLocation = new Location(-1, "Test Location", "Test");
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         connectionManager = DatabaseConnectionManager.INSTANCE;
         connectionManager.initializeDbConnection();
         connection = connectionManager.getDbConnection();
         personLocationDbAccess = new PersonLocationAccess();
 
-        personLocationDbAccess.addEntry(placeholderPerson, placeholderLocation);
+        try {
+            personLocationDbAccess.addEntry(placeholderPerson, placeholderLocation);
+        } catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
     }
 
-    @After
-    public void tearDown() {
-        personLocationDbAccess.removeEntry(placeholderPerson, placeholderLocation);
+    public void tearDown() throws Exception {
+        try {
+            personLocationDbAccess.removeEntry(placeholderPerson, placeholderLocation);
+        } catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
+
         connectionManager.closeDbConnection();
     }
 
@@ -70,8 +78,8 @@ public class PersonLocationAccessTest {
             fail("SQLException occurred while testing: " + e.getMessage());
         }
 
-        assertEquals("The retrieved person located within a location should match the expected person when calling getById()",
-                retrievedLocationOccupant.get(placeholderLocation), placeholderPerson);
+        assertEquals("The retrieved person's location should match the expected location when calling getById()",
+                retrievedLocationOccupant.get(placeholderPerson), placeholderLocation);
     }
 
     @Test
@@ -100,7 +108,7 @@ public class PersonLocationAccessTest {
             fail("SQLException occurred while testing: " + e.getMessage());
         }
 
-        assertNotEquals("New person should be added to location in the database", locationOccupantsAfterAdding.size(),
+        assertNotEquals("New person-location entry should be added to the database", locationOccupantsAfterAdding.size(),
                 locationOccupantsBeforeAdding.size());
 
         try {
@@ -142,7 +150,7 @@ public class PersonLocationAccessTest {
             fail("SQLException occurred while testing: " + e.getMessage());
         }
 
-        assertNotEquals("Unwanted inquiry should be no longer be in the database",
+        assertNotEquals("Unwanted person-location entry should be no longer be in the database",
                 locationOccupantsAfterRemoving.size(), locationOccupantsBeforeRemoving.size());
     }
 
@@ -172,7 +180,7 @@ public class PersonLocationAccessTest {
     }
 
     @Test
-    public void testGetByIdNonExistent() {
+    public void testGetByIdNotInDb() {
         Map<Person, Location> retrievedLocationOccupant;
 
         Person personNotInDb = new Person(-999, "Person not in db", "Male", "999-9999");
@@ -206,7 +214,7 @@ public class PersonLocationAccessTest {
     }
 
     @Test
-    public void testRemoveNonExistentEntry() {
+    public void testRemoveEntryNotInDb() {
         List<Map<Person, Location>> locationOccupantsBeforeRemoving;
         List<Map<Person, Location>> locationOccupantsAfterRemoving;
 
