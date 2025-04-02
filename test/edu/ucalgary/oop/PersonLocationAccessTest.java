@@ -49,7 +49,7 @@ public class PersonLocationAccessTest {
 
     @Test
     public void testGetAll() {
-        List<Map<Location, Person>> allRetrievedLocationOccupants;
+        List<Map<Person, Location>> allRetrievedLocationOccupants;
 
         try {
             allRetrievedLocationOccupants = personLocationDbAccess.getAll();
@@ -62,7 +62,7 @@ public class PersonLocationAccessTest {
 
     @Test
     public void testGetById() {
-        Map<Location, Person> retrievedLocationOccupant;
+        Map<Person, Location> retrievedLocationOccupant;
 
         try {
             retrievedLocationOccupant = personLocationDbAccess.getById(placeholderPerson, placeholderLocation);
@@ -76,8 +76,8 @@ public class PersonLocationAccessTest {
 
     @Test
     public void testAddEntry() {
-        List<Map<Location, Person>> locationOccupantsBeforeAdding;
-        List<Map<Location, Person>> locationOccupantsAfterAdding;
+        List<Map<Person, Location>> locationOccupantsBeforeAdding;
+        List<Map<Person, Location>> locationOccupantsAfterAdding;
 
         Person newPlaceholderPerson = new Person(-2, "Test Person 2", "Male", "222-2222");
         Location newPlaceholderLocation = new Location(-2, "Test Location 2", "Test");
@@ -102,12 +102,18 @@ public class PersonLocationAccessTest {
 
         assertNotEquals("New person should be added to location in the database", locationOccupantsAfterAdding.size(),
                 locationOccupantsBeforeAdding.size());
+
+        try {
+             personLocationDbAccess.removeEntry(newPlaceholderPerson, newPlaceholderLocation);
+        } catch (SQLException e) {
+            fail("SQLException occurred while testing: " + e.getMessage());
+        }
     }
 
     @Test
     public void testRemoveEntry() {
-        List<Map<Location, Person>> locationOccupantsBeforeRemoving;
-        List<Map<Location, Person>> locationOccupantsAfterRemoving;
+        List<Map<Person, Location>> locationOccupantsBeforeRemoving;
+        List<Map<Person, Location>> locationOccupantsAfterRemoving;
 
         Person exPlaceholderPerson = new Person(-2, "Test Person 2", "Male", "222-2222");
         Location exPlaceholderLocation = new Location(-2, "Test Location 2", "Test");

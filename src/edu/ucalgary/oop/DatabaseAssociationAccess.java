@@ -11,9 +11,9 @@ public abstract class DatabaseAssociationAccess<T, U> {
         return this.queryResults;
     }
 
-    public List<Map<U, T>> getAll() { return null; }
+    public List<Map<T, U>> getAll() { return null; }
 
-    public Map<U, T> getById(T entry1, U entry2) { return null; }
+    public Map<T, U> getById(T entry1, U entry2) { return null; }
 
     public boolean addEntry(T entry1, U entry2) {
         return false;
