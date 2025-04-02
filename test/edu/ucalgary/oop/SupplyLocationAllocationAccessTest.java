@@ -78,27 +78,27 @@ public class SupplyLocationAllocationAccessTest {
         }
 
         assertEquals("The retrieved location that a supply is located in should match the expected location when calling getById()",
-                placeholderLocation, allocation.get(placeholderSupply));
+                placeholderLocation.getLocationId(), allocation.get(placeholderSupply).getLocationId());
     }
 
     @Test
     public void testAddEntry() {
-        List<Map<Supply, Location>> allocationsBefore;
-        List<Map<Supply, Location>> allocationsAfter;
+        List<Map<Supply, Location>> allocationsBeforeAdding;
+        List<Map<Supply, Location>> allocationsAfterAdding;
 
         Supply newSupply = new Blanket(-2);
         Location newLocation = new Location(-2, "Test Location 2", "Test");
 
         try {
-            allocationsBefore = supplyLocationAllocationDbAccess.getAll();
+            allocationsBeforeAdding = supplyLocationAllocationDbAccess.getAll();
             supplyLocationAllocationDbAccess.addEntry(newSupply, newLocation);
-            allocationsAfter = supplyLocationAllocationDbAccess.getAll();
+            allocationsAfterAdding = supplyLocationAllocationDbAccess.getAll();
         } catch (SQLException e) {
             fail("SQLException occurred while testing: " + e.getMessage());
         }
 
         assertNotEquals("New supply-location entry should be added to the database",
-                allocationsBefore.size(), allocationsAfter.size());
+                allocationsBeforeAdding.size(), allocationsAfterAdding.size());
 
         try {
             supplyLocationAllocationDbAccess.removeEntry(newSupply, newLocation);
@@ -133,7 +133,7 @@ public class SupplyLocationAllocationAccessTest {
         Map<Supply, Location> allocation;
 
         Supply supplyNotInDb = new Blanket(-999);
-        Location locationNotInDb = new Location(-999, "Non-existent Location", "Test");
+        Location locationNotInDb = new Location(-999, "Location not in db", "Test");
 
         try {
             allocation = supplyLocationAllocationDbAccess.getById(supplyNotInDb, locationNotInDb);
@@ -147,39 +147,39 @@ public class SupplyLocationAllocationAccessTest {
 
     @Test
     public void testAddEntryThatAlreadyExists() {
-        List<Map<Supply, Location>> allocationsBefore;
-        List<Map<Supply, Location>> allocationsAfter;
+        List<Map<Supply, Location>> allocationsBeforeAdding;
+        List<Map<Supply, Location>> allocationsAfterAdding;
 
         try {
-            allocationsBefore = supplyLocationAllocationDbAccess.getAll();
+            allocationsBeforeAdding = supplyLocationAllocationDbAccess.getAll();
             supplyLocationAllocationDbAccess.addEntry(placeholderSupply, placeholderLocation);
-            allocationsAfter = supplyLocationAllocationDbAccess.getAll();
+            allocationsAfterAdding = supplyLocationAllocationDbAccess.getAll();
         } catch (SQLException e) {
             fail("SQLException occurred while testing addEntryThatAlreadyExists: " + e.getMessage());
         }
 
         assertEquals("Adding an existing supply-location entry should not increase the total count",
-                allocationsBefore.size(), allocationsAfter.size());
+                allocationsBeforeAdding.size(), allocationsAfterAdding.size());
     }
 
     @Test
     public void testRemoveEntryNotInDb() {
-        List<Map<Supply, Location>> allocationsBefore;
-        List<Map<Supply, Location>> allocationsAfter;
+        List<Map<Supply, Location>> allocationsBeforeRemoving;
+        List<Map<Supply, Location>> allocationsAfterRemoving;
 
         Supply supplyNotInDb = new Blanket(-999);
         Location locationNotInDb = new Location(-999, "Location not in db", "Test");
 
         try {
-            allocationsBefore = supplyLocationAllocationDbAccess.getAll();
+            allocationsBeforeRemoving = supplyLocationAllocationDbAccess.getAll();
             supplyLocationAllocationDbAccess.removeEntry(supplyNotInDb, locationNotInDb);
-            allocationsAfter = supplyLocationAllocationDbAccess.getAll();
+            allocationsAfterRemoving = supplyLocationAllocationDbAccess.getAll();
         } catch (SQLException e) {
             fail("SQLException occurred while testing removeEntryNotInDb: " + e.getMessage());
         }
 
         assertEquals("Removing an entry that isn't in the database should not affect the database",
-                allocationsBefore.size(), allocationsAfter.size());
+                allocationsBeforeRemoving.size(), allocationsAfterRemoving.size());
     }
 
     @Test
