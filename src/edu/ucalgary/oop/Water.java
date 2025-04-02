@@ -23,6 +23,6 @@ public class Water extends Supply {
 
     public void setIsExpired(boolean isExpired) {}
 
-    public void checkExpiration(LocalDateTime currentTime) {}
+    public void checkExpiration(LocalDateTime timeAllocated) {}
 }
 

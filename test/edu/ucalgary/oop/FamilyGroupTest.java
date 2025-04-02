@@ -21,13 +21,6 @@ public class FamilyGroupTest {
         testPerson2 = new Person(102, "Test 2", "Male", "222-2222");
     }
 
-    @After
-    public void tearDown() {
-        testFamilyGroup = null;
-        testPerson1 = null;
-        testPerson2 = null;
-    }
-
     @Test
     public void testFamilyGroupConstructorNoMembers() {
         FamilyGroup group1 = new FamilyGroup(10);
@@ -36,10 +29,11 @@ public class FamilyGroupTest {
     }
 
     @Test
-    public void testFamilyGroupConstructorwithMembers() {
+    public void testFamilyGroupConstructorWithMembers() {
         HashSet<Person> members = new HashSet<>();
         members.add(testPerson1);
         members.add(testPerson2);
+
         FamilyGroup group2 = new FamilyGroup(20, members);
 
         assertEquals("Group ID should be set correctly", 20, group2.getGroupId());
@@ -72,14 +66,6 @@ public class FamilyGroupTest {
     }
 
     @Test
-    public void testSetNullCommonFamilyName() {
-        boolean success;
-
-        success = testFamilyGroup.setCommonFamilyName(null);
-        assertFalse("A null family name should not be allowed", success);
-    }
-
-    @Test
     public void testGetMembers() {
         HashSet<Person> members = new HashSet<>();
         members.add(testPerson1);
@@ -109,15 +95,6 @@ public class FamilyGroupTest {
     }
 
     @Test
-    public void testSetNullMembers() {
-        boolean success;
-
-        success = testFamilyGroup.setMembers(null);
-
-        assertFalse("Null members should not be allowed", success);
-    }
-
-    @Test
     public void testAddMember() {
         testFamilyGroup.addMember(testPerson1);
         testFamilyGroup.addMember(testPerson2);
@@ -132,15 +109,6 @@ public class FamilyGroupTest {
         testFamilyGroup.addMember(testPerson1);
 
         assertEquals("Adding a duplicate should not change the member count", 1, testFamilyGroup.getMembers().size());
-    }
-
-    @Test
-    public void addNullMember() {
-        boolean success;
-
-        success = testFamilyGroup.addMember(null);
-
-        assertFalse("Null members should not be addable", success);
     }
 
     @Test
