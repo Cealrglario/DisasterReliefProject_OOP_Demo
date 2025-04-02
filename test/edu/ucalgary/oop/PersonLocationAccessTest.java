@@ -49,7 +49,7 @@ public class PersonLocationAccessTest {
         try {
             personLocationDbAccess.getAll();
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing getQueryResults: " + e.getMessage());
         }
 
         assertNotNull("getQueryResults() should retrieve a valid query", personLocationDbAccess.getQueryResults());
@@ -62,7 +62,7 @@ public class PersonLocationAccessTest {
         try {
             allRetrievedLocationOccupants = personLocationDbAccess.getAll();
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing getAll: " + e.getMessage());
         }
 
         assertFalse("getAll() should return a list of persons and their location", allRetrievedLocationOccupants.isEmpty());
@@ -75,7 +75,7 @@ public class PersonLocationAccessTest {
         try {
             retrievedLocationOccupant = personLocationDbAccess.getById(placeholderPerson, placeholderLocation);
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing getById: " + e.getMessage());
         }
 
         assertEquals("The retrieved person's location should match the expected location when calling getById()",
@@ -92,20 +92,10 @@ public class PersonLocationAccessTest {
 
         try {
             locationOccupantsBeforeAdding = personLocationDbAccess.getAll();
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
-        }
-
-        try {
             personLocationDbAccess.addEntry(newPlaceholderPerson, newPlaceholderLocation);
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
-        }
-
-        try {
             locationOccupantsAfterAdding = personLocationDbAccess.getAll();
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing addEntry: " + e.getMessage());
         }
 
         assertNotEquals("New person-location entry should be added to the database", locationOccupantsAfterAdding.size(),
@@ -114,7 +104,7 @@ public class PersonLocationAccessTest {
         try {
              personLocationDbAccess.removeEntry(newPlaceholderPerson, newPlaceholderLocation);
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing addEntry: " + e.getMessage());
         }
     }
 
@@ -128,26 +118,11 @@ public class PersonLocationAccessTest {
 
         try {
             personLocationDbAccess.addEntry(exPlaceholderPerson, exPlaceholderLocation);
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
-        }
-
-        try {
             locationOccupantsBeforeRemoving = personLocationDbAccess.getAll();
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
-        }
-
-        try {
             personLocationDbAccess.removeEntry(exPlaceholderPerson, exPlaceholderLocation);
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
-        }
-
-        try {
             locationOccupantsAfterRemoving = personLocationDbAccess.getAll();
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing removeEntry: " + e.getMessage());
         }
 
         assertNotEquals("Unwanted person-location entry should be no longer be in the database",
@@ -165,14 +140,9 @@ public class PersonLocationAccessTest {
 
         try {
             personLocationDbAccess.addEntry(testPerson, testLocation);
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
-        }
-
-        try {
             testOccupants = personLocationDbAccess.getOccupantsOfLocation(testLocation);
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing getOccupantsOfLocation: " + e.getMessage());
         }
 
         assertEquals("Retrieved Location occupants should match expected occupants", testLocation.getOccupants(),
@@ -189,7 +159,7 @@ public class PersonLocationAccessTest {
         try {
             retrievedLocationOccupant = personLocationDbAccess.getById(personNotInDb, locationNotInDb);
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing GetByIdNotInDb: " + e.getMessage());
         }
 
         assertNull("A null association map should be returned for a non-existent person/location association",
@@ -206,7 +176,7 @@ public class PersonLocationAccessTest {
             personLocationDbAccess.addEntry(placeholderPerson, placeholderLocation);
             locationOccupantsAfterAdding = personLocationDbAccess.getAll();
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing addEntryThatAlreadyExists: " + e.getMessage());
         }
 
         assertEquals("Adding an existing person-location entry should not increase the total count",
@@ -226,7 +196,7 @@ public class PersonLocationAccessTest {
             personLocationDbAccess.removeEntry(personNotInDb, locationNotInDb);
             locationOccupantsAfterRemoving = personLocationDbAccess.getAll();
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing removeEntryNotInDb: " + e.getMessage());
         }
 
         assertEquals("Removing an entry that isn't in the database should not affect the database",
@@ -241,7 +211,7 @@ public class PersonLocationAccessTest {
         try {
             testOccupants = personLocationDbAccess.getOccupantsOfLocation(emptyLocation);
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing getOccupantsOfLocationNoOccupants: " + e.getMessage());
         }
 
         assertNotNull("An empty occupant array should be returned if the location has no occupants",
@@ -255,9 +225,8 @@ public class PersonLocationAccessTest {
 
         try {
             success = personLocationDbAccess.addEntry(null, null);
-            fail("Exception should be thrown when adding a null person/location.");
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing addEntryWithNullArguments: " + e.getMessage());
         }
 
         assertFalse("addEntry() should return false when attempting to add a null entry",

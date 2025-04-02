@@ -49,7 +49,7 @@ public class SupplyAccessTest {
         try {
             supplyDbAccess.getAll();
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing getQueryResults: " + e.getMessage());
         }
 
         assertNotNull("getQueryResults() should retrieve a valid query", supplyDbAccess.getQueryResults());
@@ -62,7 +62,7 @@ public class SupplyAccessTest {
         try {
             retrievedSupplies = supplyDbAccess.getAll();
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing getAll: " + e.getMessage());
         }
 
         assertFalse("getAll() should return a list of Supplies", retrievedSupplies.isEmpty());
@@ -75,7 +75,7 @@ public class SupplyAccessTest {
         try {
             testSupply = supplyDbAccess.getById(-1);
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing getById: " + e.getMessage());
         }
 
         assertEquals("The SUPPLY_ID of testSupply should match the id selected when calling getById()",
@@ -89,20 +89,10 @@ public class SupplyAccessTest {
 
         try {
             originalSupply = supplyDbAccess.getById(-1);
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
-        }
-
-        try {
             supplyDbAccess.updateInfo("comments", "new comments");
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
-        }
-
-        try {
             updatedSupply = supplyDbAccess.getById(-1);
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing updateInfo: " + e.getMessage());
         }
 
         assertNotEquals("Comment should be updated as expected",
@@ -118,7 +108,7 @@ public class SupplyAccessTest {
             testSupply = supplyDbAccess.getById(-1);
             retrievedType = supplyDbAccess.getInfo("type");
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing getInfo: " + e.getMessage());
         }
 
         assertEquals("Retrieved type should be Blanket",
@@ -135,20 +125,10 @@ public class SupplyAccessTest {
 
         try {
             suppliesBeforeAdding = supplyDbAccess.getAll();
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
-        }
-
-        try {
             supplyDbAccess.addEntry(newSupply);
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
-        }
-
-        try {
             suppliesAfterAdding = supplyDbAccess.getAll();
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing addEntry: " + e.getMessage());
         }
 
         assertNotEquals("New supply should be added in the database",
@@ -157,7 +137,7 @@ public class SupplyAccessTest {
         try {
             supplyDbAccess.removeEntry(newSupply);
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing addEntry: " + e.getMessage());
         }
     }
 
@@ -170,26 +150,11 @@ public class SupplyAccessTest {
 
         try {
             supplyDbAccess.addEntry(exSupply);
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
-        }
-
-        try {
             suppliesBeforeRemoving = supplyDbAccess.getAll();
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
-        }
-
-        try {
             supplyDbAccess.removeEntry(exSupply);
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
-        }
-
-        try {
             suppliesAfterRemoving = supplyDbAccess.getAll();
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing removeEntry: " + e.getMessage());
         }
 
         assertNotEquals("Removed supply should no longer be in the database",
@@ -203,7 +168,7 @@ public class SupplyAccessTest {
         try {
             testSupply = supplyDbAccess.getById(-999);
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing getByIdNotInDb: " + e.getMessage());
         }
 
         assertNull("A null object should be returned if attempting to retrieve a Supply that isn't in the database",
@@ -217,7 +182,7 @@ public class SupplyAccessTest {
         try {
             success = supplyDbAccess.updateInfo("non_existent_field", "test value");
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing updateInfoWithInvalidField: " + e.getMessage());
         }
 
         assertFalse("updateInfo() should return false when trying to update a non-existent field",
@@ -232,7 +197,7 @@ public class SupplyAccessTest {
         try {
             success = supplyDbAccess.removeEntry(blanketNotInDb);
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing removeEntryNotInDb: " + e.getMessage());
         }
 
         assertFalse("removeEntry() should return false when trying to remove a Supply that isn't in the database",

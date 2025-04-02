@@ -47,7 +47,7 @@ public class InquiryAccessTest {
         try {
             inquiryDbAccess.getAll();
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing getQueryResults: " + e.getMessage());
         }
 
         assertNotNull("getQueryResults() should retrieve a valid query", inquiryDbAccess.getQueryResults());
@@ -60,7 +60,7 @@ public class InquiryAccessTest {
         try {
             retrievedInquiries = inquiryDbAccess.getAll();
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing getAll: " + e.getMessage());
         }
 
         assertFalse("getAll() should return a list of Inquiries", retrievedInquiries.isEmpty());
@@ -73,7 +73,7 @@ public class InquiryAccessTest {
         try {
             testInquiry = inquiryDbAccess.getById(0);
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing getById: " + e.getMessage());
         }
 
         assertEquals("The INQUIRY_ID of testInquiryId should be equal to the id selected when calling getById()",
@@ -87,21 +87,11 @@ public class InquiryAccessTest {
 
          try {
              originalInquiry = inquiryDbAccess.getById(0);
+             inquiryDbAccess.updateInfo("comments", "updated comment");
+             updatedInquiry = inquiryDbAccess.getById(0);
          } catch (SQLException e) {
-             fail("SQLException occurred while testing: " + e.getMessage());
+             fail("SQLException occurred while testing updateInfo: " + e.getMessage());
          }
-
-        try {
-            inquiryDbAccess.updateInfo("comments", "updated comment");
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
-        }
-
-        try {
-            updatedInquiry = inquiryDbAccess.getById(0);
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
-        }
 
         assertNotEquals("Inquiry information should be updated as expected",
                 originalInquiry.getInfoProvided(), updatedInquiry.getInfoProvided());
@@ -116,7 +106,7 @@ public class InquiryAccessTest {
             testInquiry = inquiryDbAccess.getById(0);
             retrievedComments = inquiryDbAccess.getInfo("comments");
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing getInfo: " + e.getMessage());
         }
 
         assertEquals("Retrieved info should match info in retrieved Inquiry", retrievedComments,
@@ -132,24 +122,20 @@ public class InquiryAccessTest {
 
         try {
             inquiriesBeforeAdding = inquiryDbAccess.getAll();
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
-        }
-
-        try {
             inquiryDbAccess.addEntry(newInquiry);
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
-        }
-
-        try {
             inquiriesAfterAdding = inquiryDbAccess.getAll();
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing addEntry: " + e.getMessage());
         }
 
-        assertNotEquals("New inquiry should be added in the database", inquiriesAfterAdding.size(),
+        assertNotEquals("New Inquiry should be added in the database", inquiriesAfterAdding.size(),
                 inquiriesBeforeAdding.size());
+
+        try {
+            inquiryDbAccess.removeEntry(newInquiry);
+        } catch (SQLException e) {
+            fail("SQLException occurred while testing addEntry: " + e.getMessage());
+        }
     }
 
     @Test
@@ -161,29 +147,14 @@ public class InquiryAccessTest {
 
         try {
             inquiryDbAccess.addEntry(exInquiry);
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
-        }
-
-        try {
             inquiriesBeforeRemoving = inquiryDbAccess.getAll();
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
-        }
-
-        try {
             inquiryDbAccess.removeEntry(exInquiry);
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
-        }
-
-        try {
             inquiriesAfterRemoving = inquiryDbAccess.getAll();
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing removeEntry: " + e.getMessage());
         }
 
-        assertNotEquals("Unwanted inquiry should be no longer be in the database",
+        assertNotEquals("Unwanted Inquiry should be no longer be in the database",
                 inquiriesAfterRemoving.size(), inquiriesBeforeRemoving.size());
     }
 
@@ -194,7 +165,7 @@ public class InquiryAccessTest {
         try {
             testInquiry = inquiryDbAccess.getById(-999);
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing getByIdNotInDb: " + e.getMessage());
         }
 
         assertNull("A null object should be returned if attempting to retrieve an Inquiry that isn't in the database",
@@ -208,7 +179,7 @@ public class InquiryAccessTest {
         try {
             success = inquiryDbAccess.updateInfo("non_existent_field", "test value");
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing updateInfoWithInvalidField: " + e.getMessage());
         }
 
         assertFalse("updateInfo() should return false when trying to update a non-existent field",
@@ -223,7 +194,7 @@ public class InquiryAccessTest {
         try {
             success = inquiryDbAccess.removeEntry(inquiryNotInDb);
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing removeEntryNotInDb: " + e.getMessage());
         }
 
         assertFalse("removeEntry() should return false when trying to remove an Inquiry that isn't in the database",

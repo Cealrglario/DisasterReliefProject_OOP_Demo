@@ -47,7 +47,7 @@ public class PersonAccessTest {
         try {
             personDbAccess.getAll();
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing getQueryResults: " + e.getMessage());
         }
 
         assertNotNull("getQueryResults() should retrieve a valid query", personDbAccess.getQueryResults());
@@ -60,7 +60,7 @@ public class PersonAccessTest {
         try {
             retrievedPersons = personDbAccess.getAll();
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing getAll: " + e.getMessage());
         }
 
         assertFalse("getAll() should return a list of Persons", retrievedPersons.isEmpty());
@@ -73,7 +73,7 @@ public class PersonAccessTest {
         try {
             testPerson = personDbAccess.getById(-1);
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing getById: " + e.getMessage());
         }
 
         assertEquals("The ASSIGNED_ID of testPerson should match the id selected when calling getById()",
@@ -87,20 +87,10 @@ public class PersonAccessTest {
 
         try {
             originalPerson = personDbAccess.getById(-1);
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
-        }
-
-        try {
             personDbAccess.updateInfo("first_name", "new name");
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
-        }
-
-        try {
             updatedPerson = personDbAccess.getById(-1);
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing updateInfo: " + e.getMessage());
         }
 
         assertNotEquals("Person first name should be updated as expected",
@@ -116,7 +106,7 @@ public class PersonAccessTest {
             testPerson = personDbAccess.getById(-1);
             retrievedFirstName = personDbAccess.getInfo("first_name");
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing getInfo: " + e.getMessage());
         }
 
         assertEquals("Retrieved first name should match first name in retrieved Person",
@@ -132,20 +122,10 @@ public class PersonAccessTest {
 
         try {
             personsBeforeAdding = personDbAccess.getAll();
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
-        }
-
-        try {
             personDbAccess.addEntry(newPerson);
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
-        }
-
-        try {
             personsAfterAdding = personDbAccess.getAll();
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing addEntry: " + e.getMessage());
         }
 
         assertNotEquals("New person should be added in the database",
@@ -154,7 +134,7 @@ public class PersonAccessTest {
         try {
             personDbAccess.removeEntry(newPerson);
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing addEntry: " + e.getMessage());
         }
     }
 
@@ -167,26 +147,11 @@ public class PersonAccessTest {
 
         try {
             personDbAccess.addEntry(exPerson);
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
-        }
-
-        try {
             personsBeforeRemoving = personDbAccess.getAll();
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
-        }
-
-        try {
             personDbAccess.removeEntry(exPerson);
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
-        }
-
-        try {
             personsAfterRemoving = personDbAccess.getAll();
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing removeEntry: " + e.getMessage());
         }
 
         assertNotEquals("Removed person should no longer be in the database",
@@ -200,7 +165,7 @@ public class PersonAccessTest {
         try {
             testPerson = personDbAccess.getById(-999);
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing getByIdNotInDb: " + e.getMessage());
         }
 
         assertNull("A null object should be returned if attempting to retrieve a Person that isn't in the database",
@@ -214,7 +179,7 @@ public class PersonAccessTest {
         try {
             success = personDbAccess.updateInfo("non_existent_field", "test value");
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing updateInfoWithInvalidField: " + e.getMessage());
         }
 
         assertFalse("updateInfo() should return false when trying to update a non-existent field",
@@ -229,7 +194,7 @@ public class PersonAccessTest {
         try {
             success = personDbAccess.removeEntry(personNotInDb);
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing removeEntryNotInDb: " + e.getMessage());
         }
 
         assertFalse("removeEntry() should return false when trying to remove a Person that isn't in the database",

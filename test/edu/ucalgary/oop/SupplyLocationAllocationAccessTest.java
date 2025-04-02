@@ -94,7 +94,7 @@ public class SupplyLocationAllocationAccessTest {
             supplyLocationAllocationDbAccess.addEntry(newSupply, newLocation);
             allocationsAfter = supplyLocationAllocationDbAccess.getAll();
         } catch (SQLException e) {
-            fail("SQLException occurred while testing addEntry: " + e.getMessage());
+            fail("SQLException occurred while testing: " + e.getMessage());
         }
 
         assertNotEquals("New supply-location entry should be added to the database",
@@ -103,7 +103,7 @@ public class SupplyLocationAllocationAccessTest {
         try {
             supplyLocationAllocationDbAccess.removeEntry(newSupply, newLocation);
         } catch (SQLException e) {
-            fail("SQLException occurred while cleaning up addEntry test: " + e.getMessage());
+            fail("SQLException occurred while testing addEntry: " + e.getMessage());
         }
     }
 
@@ -138,7 +138,7 @@ public class SupplyLocationAllocationAccessTest {
         try {
             allocation = supplyLocationAllocationDbAccess.getById(supplyNotInDb, locationNotInDb);
         } catch (SQLException e) {
-            fail("SQLException occurred while testing getByIdNonExistent: " + e.getMessage());
+            fail("SQLException occurred while testing getByIdNotInDb: " + e.getMessage());
         }
 
         assertNull("A null association map should be returned for a supply/location association that isn't in the database"
@@ -175,7 +175,7 @@ public class SupplyLocationAllocationAccessTest {
             supplyLocationAllocationDbAccess.removeEntry(supplyNotInDb, locationNotInDb);
             allocationsAfter = supplyLocationAllocationDbAccess.getAll();
         } catch (SQLException e) {
-            fail("SQLException occurred while testing removeNonExistentEntry: " + e.getMessage());
+            fail("SQLException occurred while testing removeEntryNotInDb: " + e.getMessage());
         }
 
         assertEquals("Removing an entry that isn't in the database should not affect the database",
@@ -189,7 +189,7 @@ public class SupplyLocationAllocationAccessTest {
         try {
             success = supplyLocationAllocationDbAccess.addEntry(null, null);
         } catch (SQLException e) {
-            fail("SQLException occurred while testing removeNonExistentEntry: " + e.getMessage());
+            fail("SQLException occurred while testing addEntryWithNullArguments: " + e.getMessage());
         }
 
         assertFalse("addEntry() should return false when attempting to add a null entry", success);

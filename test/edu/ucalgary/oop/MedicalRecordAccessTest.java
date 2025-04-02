@@ -47,7 +47,7 @@ public class MedicalRecordAccessTest {
         try {
             medicalRecordDbAccess.getAll();
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing getQueryResults: " + e.getMessage());
         }
 
         assertNotNull("getQueryResults() should retrieve a valid query", medicalRecordDbAccess.getQueryResults());
@@ -60,7 +60,7 @@ public class MedicalRecordAccessTest {
         try {
             retrievedRecords = medicalRecordDbAccess.getAll();
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing getAll: " + e.getMessage());
         }
 
         assertFalse("getAll() should return a list of MedicalRecords", retrievedRecords.isEmpty());
@@ -73,7 +73,7 @@ public class MedicalRecordAccessTest {
         try {
             testRecord = medicalRecordDbAccess.getById(-1);
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing getById: " + e.getMessage());
         }
 
         assertEquals("The MEDICAL_RECORD_ID of testRecord should match the id selected when calling getById()",
@@ -87,20 +87,10 @@ public class MedicalRecordAccessTest {
 
         try {
             originalRecord = medicalRecordDbAccess.getById(-1);
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
-        }
-
-        try {
             medicalRecordDbAccess.updateInfo("treatment_details", "Updated treatment details");
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
-        }
-
-        try {
             updatedRecord = medicalRecordDbAccess.getById(-1);
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing updateInfo: " + e.getMessage());
         }
 
         assertNotEquals("MedicalRecord treatment details should be updated as expected",
@@ -116,7 +106,7 @@ public class MedicalRecordAccessTest {
             testRecord = medicalRecordDbAccess.getById(-1);
             retrievedDetails = medicalRecordDbAccess.getInfo("treatment_details");
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing getInfo: " + e.getMessage());
         }
 
         assertEquals("Retrieved treatment details should match details in retrieved MedicalRecord",
@@ -132,29 +122,19 @@ public class MedicalRecordAccessTest {
 
         try {
             recordsBeforeAdding = medicalRecordDbAccess.getAll();
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
-        }
-
-        try {
             medicalRecordDbAccess.addEntry(newRecord);
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
-        }
-
-        try {
             recordsAfterAdding = medicalRecordDbAccess.getAll();
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing addEntry: " + e.getMessage());
         }
 
-        assertNotEquals("New medical record should be added in the database",
+        assertNotEquals("New MedicalRecord should be added in the database",
                 recordsAfterAdding.size(), recordsBeforeAdding.size());
 
         try {
             medicalRecordDbAccess.removeEntry(newRecord);
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing addEntry: " + e.getMessage());
         }
     }
 
@@ -167,29 +147,14 @@ public class MedicalRecordAccessTest {
 
         try {
             medicalRecordDbAccess.addEntry(exRecord);
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
-        }
-
-        try {
             recordsBeforeRemoving = medicalRecordDbAccess.getAll();
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
-        }
-
-        try {
             medicalRecordDbAccess.removeEntry(exRecord);
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
-    }
-
-        try {
             recordsAfterRemoving = medicalRecordDbAccess.getAll();
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing removeEntry: " + e.getMessage());
         }
 
-        assertNotEquals("Removed medical record should no longer be in the database",
+        assertNotEquals("Removed MedicalRecord should no longer be in the database",
                 recordsAfterRemoving.size(), recordsBeforeRemoving.size());
     }
 
@@ -200,7 +165,7 @@ public class MedicalRecordAccessTest {
         try {
             testRecord = medicalRecordDbAccess.getById(-999);
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing getByIdNotInDb: " + e.getMessage());
         }
 
         assertNull("A null object should be returned if attempting to retrieve a MedicalRecord that isn't in the database",
@@ -214,7 +179,7 @@ public class MedicalRecordAccessTest {
         try {
             success = medicalRecordDbAccess.updateInfo("non_existent_field", "test value");
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing updateInfoWithInvalidField: " + e.getMessage());
         }
 
         assertFalse("updateInfo() should return false when trying to update a non-existent field",
@@ -229,7 +194,7 @@ public class MedicalRecordAccessTest {
         try {
             success = medicalRecordDbAccess.removeEntry(recordNotInDb);
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing removeEntryNotInDb: " + e.getMessage());
         }
 
         assertFalse("removeEntry() should return false when trying to remove a MedicalRecord that isn't in the database",
