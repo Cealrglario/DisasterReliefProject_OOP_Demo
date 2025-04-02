@@ -12,7 +12,9 @@ public class Cot extends Supply {
         return cotLocation;
     }
 
-    public void setCotLocation(String cotLocation) {
+    public boolean setCotLocation(String cotLocation) {
         this.cotLocation = cotLocation;
+
+        return true;
     }
 }
