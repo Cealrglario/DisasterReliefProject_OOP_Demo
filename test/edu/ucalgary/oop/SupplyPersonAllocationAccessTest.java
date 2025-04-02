@@ -35,14 +35,6 @@ public class SupplyPersonAllocationAccessTest {
     }
 
     @Test
-    public void testUpdateInfo() {
-    }
-
-    @Test
-    public void testGetInfo() {
-    }
-
-    @Test
     public void testAddEntry() {
     }
 

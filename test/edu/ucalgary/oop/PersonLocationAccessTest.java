@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertNotEquals;
@@ -48,113 +49,119 @@ public class PersonLocationAccessTest {
     }
 
     @Test
-    public void testUpdateInfo() {
-        Inquiry originalInquiry;
-        Inquiry updatedInquiry;
+    public void testGetAll() {
+        List<Map<Location, Person>> allRetrievedLocationOccupants;
 
         try {
-            originalInquiry = personLocationDbAccess.getById(0);
+            allRetrievedLocationOccupants = personLocationDbAccess.getAll();
         } catch (SQLException e) {
             fail("SQLException occurred while testing: " + e.getMessage());
         }
 
-        try {
-            personLocationDbAccess.updateInfo("comments", "updated comment");
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
-        }
-
-        try {
-            updatedInquiry = personLocationDbAccess.getById(0);
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
-        }
-
-        assertNotEquals("Inquiry information should be updated as expected",
-                originalInquiry.getInfoProvided(), updatedInquiry.getInfoProvided());
+        assertFalse("getAll() should return a list of persons and their location", allRetrievedLocationOccupants.isEmpty());
     }
 
     @Test
-    public void testGetInfo() {
-        Inquiry testInquiry;
-        String retrievedComments;
+    public void testGetById() {
+        Map<Location, Person> retrievedLocationOccupant;
 
         try {
-            testInquiry = personLocationDbAccess.getById(0);
-            retrievedComments = personLocationDbAccess.getInfo("comments");
+            retrievedLocationOccupant = personLocationDbAccess.getById(placeholderPerson, placeholderLocation);
         } catch (SQLException e) {
             fail("SQLException occurred while testing: " + e.getMessage());
         }
 
-        assertEquals("Retrieved info should match info in retrieved Inquiry", retrievedComments,
-                testInquiry.getInfoProvided());
+        assertEquals("The retrieved person located within a location should match the expected person when calling getById()",
+                retrievedLocationOccupant.get(placeholderLocation), placeholderPerson);
     }
 
     @Test
     public void testAddEntry() {
-        List<Inquiry> inquiriesBeforeAdding;
-        List<Inquiry> inquiriesAfterAdding;
+        List<Map<Location, Person>> locationOccupantsBeforeAdding;
+        List<Map<Location, Person>> locationOccupantsAfterAdding;
+
+        Person newPlaceholderPerson = new Person(-2, "Test Person 2", "Male", "222-2222");
+        Location newPlaceholderLocation = new Location(-2, "Test Location 2", "Test");
 
         try {
-            inquiriesBeforeAdding = personLocationDbAccess.getAll();
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
-        }
-
-        Inquiry newInquiry = new Inquiry(2, 1, LocalDate.now(), "new inquiry");
-
-        try {
-            personLocationDbAccess.addEntry(newInquiry);
+            locationOccupantsBeforeAdding = personLocationDbAccess.getAll();
         } catch (SQLException e) {
             fail("SQLException occurred while testing: " + e.getMessage());
         }
 
         try {
-            inquiriesAfterAdding = personLocationDbAccess.getAll();
+            personLocationDbAccess.addEntry(newPlaceholderPerson, newPlaceholderLocation);
         } catch (SQLException e) {
             fail("SQLException occurred while testing: " + e.getMessage());
         }
 
-        assertNotEquals("New inquiry should be added in the database", inquiriesAfterAdding.toArray().length,
-                inquiriesBeforeAdding.toArray().length);
+        try {
+            locationOccupantsAfterAdding = personLocationDbAccess.getAll();
+        } catch (SQLException e) {
+            fail("SQLException occurred while testing: " + e.getMessage());
+        }
+
+        assertNotEquals("New person should be added to location in the database", locationOccupantsAfterAdding.size(),
+                locationOccupantsBeforeAdding.size());
     }
 
     @Test
     public void testRemoveEntry() {
-        List<Inquiry> inquiriesBeforeRemoving;
-        List<Inquiry> inquiriesAfterRemoving;
+        List<Map<Location, Person>> locationOccupantsBeforeRemoving;
+        List<Map<Location, Person>> locationOccupantsAfterRemoving;
 
-        Inquiry exInquiry = new Inquiry(2, 1, LocalDate.now(), "new inquiry");
+        Person exPlaceholderPerson = new Person(-2, "Test Person 2", "Male", "222-2222");
+        Location exPlaceholderLocation = new Location(-2, "Test Location 2", "Test");
 
         try {
-            personLocationDbAccess.addEntry(exInquiry);
+            personLocationDbAccess.addEntry(exPlaceholderPerson, exPlaceholderLocation);
         } catch (SQLException e) {
             fail("SQLException occurred while testing: " + e.getMessage());
         }
 
         try {
-            inquiriesBeforeRemoving = personLocationDbAccess.getAll();
+            locationOccupantsBeforeRemoving = personLocationDbAccess.getAll();
         } catch (SQLException e) {
             fail("SQLException occurred while testing: " + e.getMessage());
         }
 
         try {
-            personLocationDbAccess.removeEntry(exInquiry);
+            personLocationDbAccess.removeEntry(exPlaceholderPerson, exPlaceholderLocation);
         } catch (SQLException e) {
             fail("SQLException occurred while testing: " + e.getMessage());
         }
 
         try {
-            inquiriesAfterRemoving = personLocationDbAccess.getAll();
+            locationOccupantsAfterRemoving = personLocationDbAccess.getAll();
         } catch (SQLException e) {
             fail("SQLException occurred while testing: " + e.getMessage());
         }
 
         assertNotEquals("Unwanted inquiry should be no longer be in the database",
-                inquiriesAfterRemoving.size(), inquiriesBeforeRemoving.size());
+                locationOccupantsAfterRemoving.size(), locationOccupantsBeforeRemoving.size());
     }
 
     @Test
     public void testGetOccupantsOfLocation() {
+        Person[] testOccupants;
+        Location testLocation = new Location(-2, "Test location", "Test");
+        Person testPerson = new Person(-2, "Test Person 2", "Female", "222-2222");
+
+        testLocation.addOccupant(testPerson);
+
+        try {
+            personLocationDbAccess.addEntry(testPerson, testLocation);
+        } catch (SQLException e) {
+            fail("SQLException occurred while testing: " + e.getMessage());
+        }
+
+        try {
+            testOccupants = personLocationDbAccess.getOccupantsOfLocation(testLocation);
+        } catch (SQLException e) {
+            fail("SQLException occurred while testing: " + e.getMessage());
+        }
+
+        assertEquals("Retrieved Location occupants should match expected occupants", testLocation.getOccupants(),
+                testOccupants);
     }
 }
