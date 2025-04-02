@@ -9,6 +9,7 @@ public class FamilyGroup {
 
     public FamilyGroup(int groupId) {
         this.GROUP_ID = groupId;
+        this.members = new HashSet<>();
     }
 
     public FamilyGroup(int groupId, HashSet<Person> members) {
@@ -24,15 +25,15 @@ public class FamilyGroup {
         return this.commonFamilyName;
     }
 
-    public void setCommonFamilyName(String commonFamilyName) {}
+    public boolean setCommonFamilyName(String commonFamilyName) {}
 
     public HashSet<Person> getMembers() {
         return this.members;
     }
 
-    public void setMembers(HashSet<Person> members) {}
+    public boolean setMembers(HashSet<Person> members) {}
 
-    public void addMember(Person member) {}
+    public boolean addMember(Person member) {}
 
-    public void removeMember(Person exMember) {}
+    public boolean removeMember(Person exMember) {}
 }
