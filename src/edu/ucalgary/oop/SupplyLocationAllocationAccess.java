@@ -1,4 +1,4 @@
 package edu.ucalgary.oop;
 
-public class SupplyLocationAllocationAccess<V, W> extends DatabaseAssociationAccess<Supply, Location, V, W> {
+public class SupplyLocationAllocationAccess extends DatabaseAssociationAccess<Supply, Location> {
 }

@@ -1,25 +1,19 @@
 package edu.ucalgary.oop;
 
 import java.sql.ResultSet;
+import java.util.List;
+import java.util.Map;
 
-public abstract class DatabaseAssociationAccess<T, U, V, W> {
+public abstract class DatabaseAssociationAccess<T, U> {
     private ResultSet queryResults;
 
     public ResultSet getQueryResults() {
         return this.queryResults;
     }
 
-    public boolean getAll() { return false; }
+    public List<Map<U, T>> getAll() { return null; }
 
-    public boolean getById(T entry1, U entry2) { return false; }
-
-    public boolean updateInfo(T infoToUpdate, V newInfo) {
-        return false;
-    }
-
-    public W getInfo(T infoToGet, W infoType) {
-        return null;
-    }
+    public Map<U, T> getById(T entry1, U entry2) { return null; }
 
     public boolean addEntry(T entry1, U entry2) {
         return false;
