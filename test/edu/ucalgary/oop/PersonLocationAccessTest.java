@@ -149,6 +149,7 @@ public class PersonLocationAccessTest {
     @Test
     public void testGetOccupantsOfLocation() {
         Person[] testOccupants;
+
         Location testLocation = new Location(-2, "Test location", "Test");
         Person testPerson = new Person(-2, "Test Person 2", "Female", "222-2222");
 
@@ -168,5 +169,90 @@ public class PersonLocationAccessTest {
 
         assertEquals("Retrieved Location occupants should match expected occupants", testLocation.getOccupants(),
                 testOccupants);
+    }
+
+    @Test
+    public void testGetByIdNonExistent() {
+        Map<Person, Location> retrievedLocationOccupant;
+
+        Person personNotInDb = new Person(-999, "Person not in db", "Male", "999-9999");
+        Location locationNotInDb = new Location(-999, "Location not in db", "Test");
+
+        try {
+            retrievedLocationOccupant = personLocationDbAccess.getById(personNotInDb, locationNotInDb);
+        } catch (SQLException e) {
+            fail("SQLException occurred while testing: " + e.getMessage());
+        }
+
+        assertNull("A null association map should be returned for a non-existent person/location association",
+                retrievedLocationOccupant);
+    }
+
+    @Test
+    public void testAddEntryThatAlreadyExists() {
+        List<Map<Person, Location>> locationOccupantsBeforeAdding;
+        List<Map<Person, Location>> locationOccupantsAfterAdding;
+
+        try {
+            locationOccupantsBeforeAdding = personLocationDbAccess.getAll();
+            personLocationDbAccess.addEntry(placeholderPerson, placeholderLocation);
+            locationOccupantsAfterAdding = personLocationDbAccess.getAll();
+        } catch (SQLException e) {
+            fail("SQLException occurred while testing: " + e.getMessage());
+        }
+
+        assertEquals("Adding an existing person-location entry should not increase the total count",
+                locationOccupantsBeforeAdding.size(), locationOccupantsAfterAdding.size());
+    }
+
+    @Test
+    public void testRemoveNonExistentEntry() {
+        List<Map<Person, Location>> locationOccupantsBeforeRemoving;
+        List<Map<Person, Location>> locationOccupantsAfterRemoving;
+
+        Person personNotInDb = new Person(-999, "Person not in db", "Male", "999-9999");
+        Location locationNotInDb = new Location(-999, "Location not in db", "Test");
+
+        try {
+            locationOccupantsBeforeRemoving = personLocationDbAccess.getAll();
+            personLocationDbAccess.removeEntry(personNotInDb, locationNotInDb);
+            locationOccupantsAfterRemoving = personLocationDbAccess.getAll();
+        } catch (SQLException e) {
+            fail("SQLException occurred while testing: " + e.getMessage());
+        }
+
+        assertEquals("Removing an entry that isn't in the database should not affect the database",
+                locationOccupantsBeforeRemoving.size(), locationOccupantsAfterRemoving.size());
+    }
+
+    @Test
+    public void testGetOccupantsOfLocationNoOccupants() {
+        Person[] testOccupants;
+        Location emptyLocation = new Location(-997, "Empty Location", "Test");
+
+        try {
+            testOccupants = personLocationDbAccess.getOccupantsOfLocation(emptyLocation);
+        } catch (SQLException e) {
+            fail("SQLException occurred while testing: " + e.getMessage());
+        }
+
+        assertNotNull("An empty occupant array should be returned if the location has no occupants",
+                testOccupants);
+        assertEquals("Empty location should have zero occupants", 0, testOccupants.length);
+    }
+
+    @Test
+    public void testAddEntryWithNullArguments() {
+        boolean success;
+
+        try {
+            success = personLocationDbAccess.addEntry(null, null);
+            fail("Exception should be thrown when adding a null person/location.");
+        } catch (SQLException e) {
+            fail("SQLException occurred while testing: " + e.getMessage());
+        }
+
+        assertFalse("addEntry() should return false when attempting to add a null entry",
+                success);
     }
 }
