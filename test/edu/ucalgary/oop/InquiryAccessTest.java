@@ -178,32 +178,46 @@ public class InquiryAccessTest {
                 inquiriesAfterRemoving.size(), inquiriesBeforeRemoving.size());
     }
 
-    @Test (expected = SQLException.class)
-    public void testGetByNonExistentId() throws SQLException {
+    @Test
+    public void testGetByNonExistentId() {
+        Inquiry testInquiry;
+
         try {
-            inquiryDbAccess.getById(-999);
+            testInquiry = inquiryDbAccess.getById(-999);
         } catch (SQLException e) {
-            throw new SQLException("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing: " + e.getMessage());
         }
+
+        assertNull("A null object should be returned if attempting to retrieve a non-existent Inquiry",
+                testInquiry);
     }
 
-    @Test (expected = SQLException.class)
-    public void testUpdateInfoWithInvalidField() throws SQLException {
+    @Test
+    public void testUpdateInfoWithInvalidField() {
+        boolean success;
+
         try {
-            inquiryDbAccess.updateInfo("non_existent_field", "test value");
+            success = inquiryDbAccess.updateInfo("non_existent_field", "test value");
         } catch (SQLException e) {
-            throw new SQLException("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing: " + e.getMessage());
         }
+
+        assertFalse("updateInfo() should return false when trying to update a non-existent field",
+                success);
     }
 
-    @Test (expected = SQLException.class)
-    public void testRemoveEntryNotInDb() throws SQLException {
-        Inquiry inquiryNotInDb = new Inquiry(-999, -1, LocalDate.now(), "doesn't exist");
+    @Test
+    public void testRemoveEntryNotInDb() {
+        boolean success;
+        Inquiry inquiryNotInDb = new Inquiry(2, 1, LocalDate.now(), "new inquiry");
 
         try {
-            inquiryDbAccess.removeEntry(inquiryNotInDb);
+            success = inquiryDbAccess.removeEntry(inquiryNotInDb);
         } catch (SQLException e) {
-            throw new SQLException("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing: " + e.getMessage());
         }
+
+        assertFalse("removeEntry() should return false when trying to remove an Inquiry that isn't in the database",
+                success);
     }
 }

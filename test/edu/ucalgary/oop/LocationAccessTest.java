@@ -184,32 +184,46 @@ public class LocationAccessTest {
                 locationsAfterRemoving.size(), locationsBeforeRemoving.size());
     }
 
-    @Test (expected = SQLException.class)
-    public void testGetByNonExistentId() throws SQLException {
+    @Test
+    public void testGetByNonExistentId() {
+        Location testLocation;
+
         try {
-            locationDbAccess.getById(-999);
+            testLocation = locationDbAccess.getById(-999);
         } catch (SQLException e) {
-            throw new SQLException("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing: " + e.getMessage());
         }
+
+        assertNull("A null object should be returned if attempting to retrieve a non-existent Location",
+                testLocation);
     }
 
-    @Test (expected = SQLException.class)
-    public void testUpdateInfoWithInvalidField() throws SQLException {
+    @Test
+    public void testUpdateInfoWithInvalidField() {
+        boolean success;
+
         try {
-            locationDbAccess.updateInfo("non_existent_field", "test value");
+            success = locationDbAccess.updateInfo("non_existent_field", "test value");
         } catch (SQLException e) {
-            throw new SQLException("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing: " + e.getMessage());
         }
+
+        assertFalse("updateInfo() should return false when trying to update a non-existent field",
+                success);
     }
 
-    @Test (expected = SQLException.class)
-    public void testRemoveEntryNotInDb() throws SQLException {
-        Location locationNotInDb = new Location(-999, "not in db test", "doesn't exist");
+    @Test
+    public void testRemoveEntryNotInDb() {
+        boolean success;
+        Location locationNotInDb = new Location(-2, "New Test Location", "Test not in db");
 
         try {
-            locationDbAccess.removeEntry(locationNotInDb);
+            success = locationDbAccess.removeEntry(locationNotInDb);
         } catch (SQLException e) {
-            throw new SQLException("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing: " + e.getMessage());
         }
+
+        assertFalse("removeEntry() should return false when trying to remove a Location that isn't in the database",
+                success);
     }
 }

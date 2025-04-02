@@ -184,32 +184,46 @@ public class MedicalRecordAccessTest {
                 recordsAfterRemoving.size(), recordsBeforeRemoving.size());
     }
 
-    @Test (expected = SQLException.class)
-    public void testGetByNonExistentId() throws SQLException {
+    @Test
+    public void testGetByNonExistentId() {
+        MedicalRecord testRecord;
+
         try {
-            medicalRecordDbAccess.getById(-999);
+            testRecord = medicalRecordDbAccess.getById(-999);
         } catch (SQLException e) {
-            throw new SQLException("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing: " + e.getMessage());
         }
+
+        assertNull("A null object should be returned if attempting to retrieve a non-existent MedicalRecord",
+                testRecord);
     }
 
-    @Test (expected = SQLException.class)
-    public void testUpdateInfoWithInvalidField() throws SQLException {
+    @Test
+    public void testUpdateInfoWithInvalidField() {
+        boolean success;
+
         try {
-            medicalRecordDbAccess.updateInfo("non_existent_field", "test value");
+            success = medicalRecordDbAccess.updateInfo("non_existent_field", "test value");
         } catch (SQLException e) {
-            throw new SQLException("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing: " + e.getMessage());
         }
+
+        assertFalse("updateInfo() should return false when trying to update a non-existent field",
+                success);
     }
 
-    @Test (expected = SQLException.class)
-    public void testRemoveEntryNotInDb() throws SQLException {
-        MedicalRecord recordNotInDb = new MedicalRecord(-2, -1, "doesn't exist");
+    @Test
+    public void testRemoveEntryNotInDb() {
+        boolean success;
+        MedicalRecord recordNotInDb = new MedicalRecord(-2, -1, "Test not in db");
 
         try {
-            medicalRecordDbAccess.removeEntry(recordNotInDb);
+            success = medicalRecordDbAccess.removeEntry(recordNotInDb);
         } catch (SQLException e) {
-            throw new SQLException("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing: " + e.getMessage());
         }
+
+        assertFalse("removeEntry() should return false when trying to remove a MedicalRecord that isn't in the database",
+                success);
     }
 }

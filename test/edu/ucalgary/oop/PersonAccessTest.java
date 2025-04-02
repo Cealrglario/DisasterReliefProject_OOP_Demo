@@ -184,32 +184,46 @@ public class PersonAccessTest {
                 personsAfterRemoving.size(), personsBeforeRemoving.size());
     }
 
-    @Test (expected = SQLException.class)
-    public void testGetByNonExistentId() throws SQLException {
+    @Test
+    public void testGetByNonExistentId() {
+        Person testPerson;
+
         try {
-            personDbAccess.getById(-999);
+            testPerson = personDbAccess.getById(-999);
         } catch (SQLException e) {
-            throw new SQLException("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing: " + e.getMessage());
         }
+
+        assertNull("A null object should be returned if attempting to retrieve a non-existent Person",
+                testPerson);
     }
 
-    @Test (expected = SQLException.class)
-    public void testUpdateInfoWithInvalidField() throws SQLException {
+    @Test
+    public void testUpdateInfoWithInvalidField() {
+        boolean success;
+
         try {
-            personDbAccess.updateInfo("non_existent_field", "test value");
+            success = personDbAccess.updateInfo("non_existent_field", "test value");
         } catch (SQLException e) {
-            throw new SQLException("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing: " + e.getMessage());
         }
+
+        assertFalse("updateInfo() should return false when trying to update a non-existent field",
+                success);
     }
 
-    @Test (expected = SQLException.class)
-    public void testRemoveEntryNotInDb() throws SQLException {
-        Person personNotInDb = new Person(-2,  "Not In Db", "Non-binary", "444-4444");
+    @Test
+    public void testRemoveEntryNotInDb() {
+        boolean success;
+        Person personNotInDb = new Person(-2,  "Test Person", "Non-binary", "333-3333");
 
         try {
-            personDbAccess.removeEntry(personNotInDb);
+            success = personDbAccess.removeEntry(personNotInDb);
         } catch (SQLException e) {
-            throw new SQLException("SQLException occurred while testing: " + e.getMessage());
+            fail("SQLException occurred while testing: " + e.getMessage());
         }
+
+        assertFalse("removeEntry() should return false when trying to remove a Person that isn't in the database",
+                success);
     }
 }
