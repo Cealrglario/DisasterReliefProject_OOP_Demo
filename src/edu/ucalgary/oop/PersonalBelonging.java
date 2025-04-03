@@ -12,7 +12,9 @@ public class PersonalBelonging extends Supply {
         return this.description;
     }
 
-    public void setDescription(String description) {
+    public boolean setDescription(String description) {
         this.description = description;
+
+        return true;
     }
 }

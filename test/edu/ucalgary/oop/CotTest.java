@@ -9,7 +9,7 @@ public class CotTest {
 
     @Before
     public void setUp() {
-        testCot = new Cot(200, "110 B3");
+        testCot = new Cot(100, "110 B3");
     }
 
     @Test
