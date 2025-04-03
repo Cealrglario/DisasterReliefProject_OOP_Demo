@@ -12,27 +12,27 @@ public class WaterTest {
     private Water testWater;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         testWater = new Water(100, true);
     }
 
     @Test
     public void testWaterConstructor() {
-        assertEquals("Supply ID should be set correctly", 100, testWater.getSupplyId());
-        assertEquals("Type should be 'Water'", "Water", testWater.getType());
-        assertTrue("AllocatedToVictim should be true", testWater.getAllocatedToVictim());
+        assertEquals("supplyId should be set correctly", 100, testWater.getSupplyId());
+        assertEquals("type should be 'Water'", "Water", testWater.getType());
+        assertTrue("allocatedToVictim should be true", testWater.getAllocatedToVictim());
         assertFalse("Water should not be expired initially", testWater.getIsExpired());
     }
 
     @Test
     public void testGetAllocatedToVictim() {
-        assertTrue("getAllocatedToVictim should return true for waterAllocated", testWater.getAllocatedToVictim());
+        assertTrue("getAllocatedToVictim should be retrieved as expected", testWater.getAllocatedToVictim());
     }
 
     @Test
     public void testSetAllocatedToVictim() {
         testWater.setAllocatedToVictim(false);
-        assertFalse("After setting, allocatedToVictim should be false", testWater.getAllocatedToVictim());
+        assertFalse("allocatedToVictim should be set to false", testWater.getAllocatedToVictim());
     }
 
     @Test

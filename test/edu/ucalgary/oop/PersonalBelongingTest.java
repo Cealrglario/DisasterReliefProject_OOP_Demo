@@ -15,19 +15,19 @@ public class PersonalBelongingTest {
     @Test
     public void testPersonalBelongingConstructor() {
         assertEquals("testBelonging supply ID should be set correctly", 100, testBelonging.getSupplyId());
-        assertEquals("Type should be 'Personal belonging'", "Personal belonging", testBelonging.getType());
-        assertEquals("Description should be set correctly", "Test belonging", testBelonging.getDescription());
+        assertEquals("type should be 'Personal belonging'", "Personal belonging", testBelonging.getType());
+        assertEquals("description should be set correctly", "Test belonging", testBelonging.getDescription());
     }
 
     @Test
     public void testGetDescription() {
-        assertEquals("Description should be 'Test belonging'", "Test belonging", testBelonging.getDescription());
+        assertEquals("description should be retrieved as expected", "Test belonging", testBelonging.getDescription());
     }
 
     @Test
     public void testSetDescription() {
         testBelonging.setDescription("Jacket");
-        assertEquals("Description should be set to 'Jacket'", "Jacket", testBelonging.getDescription());
+        assertEquals("description should be set to 'Jacket'", "Jacket", testBelonging.getDescription());
     }
 
     @Test
