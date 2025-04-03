@@ -4,12 +4,12 @@ import java.util.Stack;
 
 public abstract class Supply {
     private final int SUPPLY_ID;
-    private String type;
+    private final String TYPE;
     private String comments;
 
     public Supply(int supplyId, String type) {
         this.SUPPLY_ID = supplyId;
-        this.type = type;
+        this.TYPE = type;
     }
 
     public int getSupplyId() {
@@ -25,10 +25,6 @@ public abstract class Supply {
     }
 
     public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
+        return TYPE;
     }
 }
