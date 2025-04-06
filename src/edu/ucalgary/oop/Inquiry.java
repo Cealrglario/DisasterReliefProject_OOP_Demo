@@ -9,12 +9,11 @@ public class Inquiry {
     private final int INQUIRER_ID;
     private final int MISSING_PERSON_ID;
     private final LocalDate INQUIRY_DATE;
-    private Stack<String> infoHistory;
     private String infoProvided;
     private int lastKnownLocationId;
 
-
-    public Inquiry(int inquirerId, int missingPersonId, LocalDate dateOfInquiry, String infoProvided) {
+    public Inquiry(int inquiryId, int inquirerId, int missingPersonId, LocalDate dateOfInquiry, String infoProvided) {
+        this.INQUIRY_ID = inquiryId;
         this.INQUIRER_ID = inquirerId;
         this.MISSING_PERSON_ID = missingPersonId;
         this.INQUIRY_DATE = LocalDate.now();
@@ -43,21 +42,10 @@ public class Inquiry {
 
     public void setInfoProvided(String infoProvided) {}
 
-    public void addInfo(String info) {}
-
-    public void removeInfo(int unwantedInfoIndex) {}
-
-    public void revertAddedInfo() {}
-
     public int getLastKnownLocationId() {
         return this.lastKnownLocationId;
     }
 
     public void setLastKnownLocationId(int locationId) {}
-
-    private void backupInfoProvided() {}
-
-    private void revertInfoChanges() {}
-
 }
 
