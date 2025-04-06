@@ -11,6 +11,7 @@ public class MedicalRecord {
     public MedicalRecord(int medicalRecordId, int locationId,  String treatmentDetails) {
         this.LOCATION_ID = locationId;
         this.MEDICAL_RECORD_ID = medicalRecordId;
+        this.treatmentDetails = treatmentDetails;
         this.TREATMENT_DATE = LocalDate.now();
     }
 
@@ -26,7 +27,9 @@ public class MedicalRecord {
         return this.treatmentDetails;
     }
 
-    public void setTreatmentDetails(String treatmentDetails) {}
+    public void setTreatmentDetails(String treatmentDetails) {
+        this.treatmentDetails = treatmentDetails;
+    }
 
     public LocalDate getTreatmentDate() {
         return this.TREATMENT_DATE;

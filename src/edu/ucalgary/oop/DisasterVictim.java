@@ -28,7 +28,7 @@ public class DisasterVictim extends Person {
 
     public void setPersonalBelongings(List<PersonalBelonging> personalBelongings) {}
 
-    public String getEntryDate() {}
+    public LocalDate getEntryDate() {}
 
     public Stack<String> getComments() {}
 
