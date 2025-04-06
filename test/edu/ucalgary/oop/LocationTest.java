@@ -1,93 +1,149 @@
-/*
-Copyright Ann Barcomb and Khawla Shnaikat, 2024-2025
-Licensed under GPL v3
-See LICENSE.txt for more information.
-*/
 package edu.ucalgary.oop;
 
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.ArrayList;
+import java.time.LocalDateTime;
 
 public class LocationTest {
-    private Location location;
-    private DisasterVictim victim;
-    private Supply supply;
+    Location testLocation;
+    Person testPerson;
+    Supply testSupply;
+    Allocation testAllocation;
 
     @Before
     public void setUp() {
-        // Initializing test objects before each test method
-        location = new Location("Shelter A", "1234 Shelter Ave");
-        victim = new DisasterVictim("John Doe", "2025-01-01");
-        supply = new Supply("Water Bottle", 10);
-    }
-
-    // Helper method to check if a supply is in the list
-    private boolean containsSupply(ArrayList<Supply> supplies, Supply supplyToCheck) {
-        return supplies.contains(supplyToCheck);
+        testLocation = new Location(1, "Test Location", "Test address");
+        testPerson = new Person(1, "Test 1", "Male", "111-1111");
+        testSupply = new Blanket(1);
+        testAllocation = new Allocation(testSupply, 1, 1, LocalDateTime.now());
+        testLocation.setOccupants(new ArrayList<>());
+        testLocation.setInventory(new ArrayList<>());
+        testLocation.setAllocations(new LinkedHashSet<>());
     }
 
     @Test
-    public void testConstructor() {
-        assertNotNull("Constructor should create a non-null Location object", location);
-        assertEquals("Constructor should set the name correctly", "Shelter A", location.getName());
-        assertEquals("Constructor should set the address correctly", "1234 Shelter Ave", location.getAddress());
+    public void testLocationConstructor() {
+        assertEquals("LOCATION_ID should be set as expected", 1, testLocation.getLocationId());
+        assertEquals("name should be set as expected", "Test Location", testLocation.getName());
+        assertEquals("address should be set as expected", "Test address", testLocation.getAddress());
+    }
+
+    @Test
+    public void testGetLocationId() {
+        assertEquals("LOCATION_ID should be retrieved as expected", 1, testLocation.getLocationId());
+    }
+
+    @Test
+    public void testGetName() {
+        assertEquals("name should be retrieved as expected", "Test Location", testLocation.getName());
     }
 
     @Test
     public void testSetName() {
-        String newName = "Shelter B";
-        location.setName(newName);
-        assertEquals("setName should update the name of the location", newName, location.getName());
+        testLocation.setName("Updated Location");
+        assertEquals("name should be updated as expected", "Updated Location", testLocation.getName());
+    }
+
+    @Test
+    public void testGetAddress() {
+        assertEquals("address should be retrieved as expected", "Test address", testLocation.getAddress());
     }
 
     @Test
     public void testSetAddress() {
-        String newAddress = "4321 Shelter Blvd";
-        location.setAddress(newAddress);
-        assertEquals("setAddress should update the address of the location", newAddress, location.getAddress());
+        testLocation.setAddress("New address");
+        assertEquals("address should be updated as expected", "New address", testLocation.getAddress());
+    }
+
+    @Test
+    public void testGetOccupants() {
+        assertNotNull("occupants should not be null", testLocation.getOccupants());
+        assertTrue("occupants should be empty initially", testLocation.getOccupants().isEmpty());
+    }
+
+    @Test
+    public void testSetOccupants() {
+        List<Person> newOccupants = new ArrayList<>();
+        newOccupants.add(testPerson);
+
+        testLocation.setOccupants(newOccupants);
+
+        assertEquals("occupants should be updated as expected", newOccupants, testLocation.getOccupants());
+    }
+
+    @Test
+    public void testGetInventory() {
+        assertNotNull("inventory should not be null", testLocation.getInventory());
+        assertTrue("inventory should be empty initially", testLocation.getInventory().isEmpty());
+    }
+
+    @Test
+    public void testSetInventory() {
+        List<Supply> newInventory = new ArrayList<>();
+        newInventory.add(testSupply);
+
+        testLocation.setInventory(newInventory);
+
+        assertEquals("inventory should be updated as expected", newInventory, testLocation.getInventory());
+    }
+
+    @Test
+    public void testGetAllocations() {
+        assertNotNull("allocations should not be null", testLocation.getAllocations());
+        assertTrue("allocations should be empty initially", testLocation.getAllocations().isEmpty());
+    }
+
+    @Test
+    public void testSetAllocations() {
+        LinkedHashSet<Allocation> newAllocations = new LinkedHashSet<>();
+        newAllocations.add(testAllocation);
+
+        testLocation.setAllocations(newAllocations);
+
+        assertEquals("allocations should be updated as expected", newAllocations, testLocation.getAllocations());
     }
 
     @Test
     public void testAddOccupant() {
-        location.addOccupant(victim);
-        assertTrue("addOccupant should add a disaster victim to the occupants list", location.getOccupants().contains(victim));
+        testLocation.addOccupant(testPerson);
+        assertTrue("occupant should be added to the list", testLocation.getOccupants().contains(testPerson));
     }
 
     @Test
     public void testRemoveOccupant() {
-        location.addOccupant(victim); // Ensure the victim is added first
-        location.removeOccupant(victim);
-        assertFalse("removeOccupant should remove the disaster victim from the occupants list", location.getOccupants().contains(victim));
+        testLocation.addOccupant(testPerson);
+        testLocation.removeOccupant(testPerson);
+        assertFalse("occupant should be removed from the list", testLocation.getOccupants().contains(testPerson));
     }
 
     @Test
-    public void testSetAndGetOccupants() {
-        ArrayList<DisasterVictim> newOccupants = new ArrayList<>();
-        newOccupants.add(victim);
-        location.setOccupants(newOccupants);
-        assertTrue("setOccupants should replace the occupants list with the new list", location.getOccupants().containsAll(newOccupants));
+    public void testAddInventory() {
+        testLocation.addInventory(testSupply);
+        assertTrue("supply should be added to inventory", testLocation.getInventory().contains(testSupply));
     }
 
     @Test
-    public void testAddSupply() {
-        location.addSupply(supply);
-        assertTrue("addSupply should add a supply to the supplies list", containsSupply(location.getSupplies(), supply));
+    public void testRemoveInventory() {
+        testLocation.addInventory(testSupply);
+        testLocation.removeInventory(testSupply);
+        assertFalse("supply should be removed from inventory", testLocation.getInventory().contains(testSupply));
     }
 
     @Test
-    public void testRemoveSupply() {
-        location.addSupply(supply); // Ensure the supply is added first
-        location.removeSupply(supply);
-        assertFalse("removeSupply should remove the supply from the supplies list", containsSupply(location.getSupplies(), supply));
+    public void testAddAllocation() {
+        testLocation.addAllocation(testAllocation);
+        assertTrue("allocation should be added", testLocation.getAllocations().contains(testAllocation));
     }
 
     @Test
-    public void testSetAndGetSupplies() {
-        ArrayList<Supply> newSupplies = new ArrayList<>();
-        newSupplies.add(supply);
-        location.setSupplies(newSupplies);
-        assertTrue("setSupplies should replace the supplies list with the new list", containsSupply(location.getSupplies(), supply));
+    public void testRemoveAllocation() {
+        testLocation.addAllocation(testAllocation);
+        testLocation.removeAllocation(testAllocation);
+        assertFalse("allocation should be removed", testLocation.getAllocations().contains(testAllocation));
     }
 }
