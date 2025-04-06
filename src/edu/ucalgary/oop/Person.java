@@ -55,9 +55,11 @@ public class Person {
 
     public void setPhoneNumber(String phoneNumber) {}
 
-    public Person[] getRelatives(FamilyGroup relatives) {
+    public Person[] getRelatives() {
         return null;
     }
+
+    public void setRelatives(Person[] relatives) {};
 
     public int getAssignedId() {
         return this.ASSIGNED_ID;
