@@ -20,6 +20,7 @@ public enum LanguageManager {
     private final String DEFAULT_LANGUAGE = "en-CA";
     private final String TRANSLATIONS_DIRECTORY = "data/";
     private Map<String, String> translationData = new HashMap<>();
+    private Map<String, String[]> menuTranslationData = new HashMap<>();
 
     public String getCurrentLanguage() {
         return this.currentLanguage;
@@ -58,6 +59,7 @@ public enum LanguageManager {
 
             // Clean up just in case a language gets configured more than once
             translationData.clear();
+            menuTranslationData.clear();
 
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
@@ -84,6 +86,29 @@ public enum LanguageManager {
                 }
             }
 
+            NodeList retrievedMenuTranslations = parsedTranslation.getElementsByTagName("menuTranslation");
+
+            for (int i = 0; i < retrievedMenuTranslations.getLength(); i++) {
+                Node node = retrievedMenuTranslations.item(i);
+
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    // The nodes have the 'Element' type ONCE RETRIEVED, but the nodes themselves haven't been cast to the Element type yet.
+                    // Casting is done here so that we can perform methods like .getAttribute() or getTextContent()
+                    Element element = (Element) node;
+
+                    String key = element.getElementsByTagName("key").item(0).getTextContent();
+                    String rawTranslation = element.getElementsByTagName("value").item(0).getTextContent();
+
+                    String[] translation = rawTranslation.split(",");
+
+                    for (int j = 0; j < translation.length; j++) {
+                        translation[i] = translation[i].trim().replace("\"", "");
+                    }
+
+                    menuTranslationData.put(key, translation);
+                }
+            }
+
             return true;
         } catch (Exception e) {
             System.out.println("Error parsing translation file at: " + TRANSLATIONS_DIRECTORY + currentLanguage + ".xml");
@@ -95,4 +120,6 @@ public enum LanguageManager {
     public String getTranslation(String key) {
         return translationData.get(key);
     }
+
+    public String[] getMenuTranslation(String key) { return menuTranslationData.get(key); }
 }

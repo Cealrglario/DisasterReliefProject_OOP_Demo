@@ -1,6 +1,6 @@
 <translation>
-  <key>Test</key>
-  <value>Test</value>
+  <key>test</key>
+  <value>test</value>
 </translation>
 
 <translation>
@@ -27,3 +27,14 @@
   <key>report_person</key>
   <value>%s entered the %s facility on %s.</value>
 </translation>
+
+<menuTranslation>
+  <key>main_menu_defaults</key>
+  <value>"1. Manage Persons", "2. Manage Locations", "3. Manage Inquiries",
+        "4. Manage Family Groups", "5. Manage Supplies"</value>
+</menuTranslation>
+
+<menuTranslation>
+  <key>test</key>
+  <value>"1. Test Option 1", "2. Test Option 2"</value>
+</menuTranslation>

@@ -36,12 +36,25 @@ public class LanguageManagerTest {
 
     @Test
     public void testGetTranslation() {
-        String expectedTranslation;
+        String retrievedTranslation;
         languageManager.configureLanguage("en-CA");
 
-        expectedTranslation = languageManager.getTranslation("Test");
+        retrievedTranslation = languageManager.getTranslation("test");
 
-        assertEquals("getTranslation() should retrieve the expected translation", "Test",
-                expectedTranslation);
+        assertEquals("getTranslation() should retrieve the expected translation", "test",
+                retrievedTranslation);
+    }
+
+    @Test
+    public void testGetMenuTranslation() {
+        String[] expectedTranslation = {"1. Test Option 1", "2. Test Option 2"};
+        String[] actualTranslation;
+
+        languageManager.configureLanguage("en-CA");
+
+        actualTranslation = languageManager.getMenuTranslation("test");
+
+        assertEquals("getMenuTranslation() should retrieve the expected menu translation", expectedTranslation,
+                actualTranslation);
     }
 }

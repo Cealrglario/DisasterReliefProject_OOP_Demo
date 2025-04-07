@@ -18,7 +18,6 @@ public class Main {
 
         userInput.close();
 
-        menuManager.initializeMenuLanguage();
         menuManager.startRunning();
 
         while(menuManager.getIsRunning()) {
