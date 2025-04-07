@@ -21,6 +21,10 @@ public enum LanguageManager {
     private final String TRANSLATIONS_DIRECTORY = "data/";
     private Map<String, String> translationData = new HashMap<>();
 
+    public String getCurrentLanguage() {
+        return this.currentLanguage;
+    }
+
     public boolean configureLanguage(String language) {
         currentLanguage = language;
         Matcher validateLanguage = LANGUAGE_FORMAT.matcher(language);
@@ -52,7 +56,7 @@ public enum LanguageManager {
                 return false;
             }
 
-            // Some clean up just to be sure
+            // Clean up just in case a language gets configured more than once
             translationData.clear();
 
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
