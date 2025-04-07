@@ -12,7 +12,7 @@ public class Main {
 
         languageManager.setCurrentLanguage(userInput.nextLine());
 
-        System.out.println("The language you selected is: " + languageManager.getCurrentLanguage());
+        userInput.close();
 
         menuManager.initializeMenuLanguage();
         menuManager.startRunning();
