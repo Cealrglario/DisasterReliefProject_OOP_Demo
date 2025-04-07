@@ -25,6 +25,7 @@ public enum MenuManager {
     }
 
     public void returnToMainMenu() {
+        menuHistory.clear();
         navigateToMenu(new MainMenu(languageManager.getMenuTranslation("main_menu_defaults")));
     }
 
