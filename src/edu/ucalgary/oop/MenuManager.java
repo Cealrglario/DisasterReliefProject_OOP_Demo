@@ -5,11 +5,14 @@ import java.util.Stack;
 public enum MenuManager {
     INSTANCE;
 
-    private static boolean isRunning;
-    private static Menu currentMenu;
-    private static Stack<Menu> menuHistory;
+    private boolean isRunning = false;
+    private Menu currentMenu;
+    private Stack<Menu> menuHistory;
+    private LanguageManager languageManager = LanguageManager.INSTANCE;
 
-    public void initializeMenuLanguage() {}
+    public Menu getCurrentMenu() {
+        return this.getCurrentMenu();
+    }
 
     public void navigateToMenu(Menu menu) {
         menuHistory.push(menu);
@@ -19,6 +22,10 @@ public enum MenuManager {
     public void backtrackMenus() {
         menuHistory.pop();
         currentMenu = menuHistory.peek();
+    }
+
+    public void returnToMainMenu() {
+        navigateToMenu(new MainMenu(languageManager.getMenuTranslation("main_menu_defaults")));
     }
 
     public void startRunning() {
