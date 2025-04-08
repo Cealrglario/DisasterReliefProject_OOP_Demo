@@ -25,5 +25,8 @@ public class PersonSubmenu extends Menu {
     public void managePersonInfo() {}
 
     public void getPersonRelatives() {}
+
+    @Override
+    public void processInput() {}
 }
 

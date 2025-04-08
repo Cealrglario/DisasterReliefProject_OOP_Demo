@@ -20,5 +20,8 @@ public class SupplySubmenu extends Menu {
     public void giveSupplyToLocation() {}
 
     public void checkWaterExpiration() {}
+
+    @Override
+    public void processInput() {}
 }
 

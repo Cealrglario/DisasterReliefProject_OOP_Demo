@@ -29,4 +29,7 @@ public class LocationSubmenu extends Menu {
     public void manageAllocations() {}
 
     public void viewAllocations() {}
+
+    @Override
+    public void processInput() {}
 }

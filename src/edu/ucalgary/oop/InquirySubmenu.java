@@ -24,4 +24,7 @@ public class InquirySubmenu extends Menu {
 
     public void manageInquiryInformation() {}
 
+    @Override
+    public void processInput() {}
+
 }

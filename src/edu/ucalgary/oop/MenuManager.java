@@ -11,7 +11,7 @@ public enum MenuManager {
     private LanguageManager languageManager = LanguageManager.INSTANCE;
 
     public Menu getCurrentMenu() {
-        return this.getCurrentMenu();
+        return this.currentMenu;
     }
 
     public void navigateToMenu(Menu menu) {

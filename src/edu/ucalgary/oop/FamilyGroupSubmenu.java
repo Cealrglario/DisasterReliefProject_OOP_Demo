@@ -16,4 +16,19 @@ public class FamilyGroupSubmenu extends Menu {
     public void viewFamilyMembers() {}
 
     public void manageFamilyGroup() {}
+
+    @Override
+    public void processInput() {
+        switch(intInput) {
+            case 1:
+                listAllFamilyGroups();
+                break;
+            case 2:
+                viewFamilyMembers();
+                break;
+            case 3:
+                manageFamilyGroup();
+                break;
+        }
+    }
 }

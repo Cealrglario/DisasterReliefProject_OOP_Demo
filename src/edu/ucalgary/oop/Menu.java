@@ -2,7 +2,16 @@ package edu.ucalgary.oop;
 
 public abstract class Menu {
     private String[] currentDisplay;
+    protected InputHandler inputHandler = new InputHandler();
+    protected MenuManager menuManager = MenuManager.INSTANCE;
+    protected LanguageManager languageManager = LanguageManager.INSTANCE;
     protected final String[] DEFAULT_OPTIONS;
+    protected int intInput;
+    protected boolean requiresIntInput = true;
+    protected int minIntInput;
+    protected int maxIntInput;
+    protected boolean stringEmptyAllowed;
+    protected boolean stringNumbersAllowed;
 
     public Menu(String[] defaultOptions) {
         this.DEFAULT_OPTIONS = defaultOptions;
@@ -12,15 +21,75 @@ public abstract class Menu {
         return this.currentDisplay;
     }
 
-    public void setCurrentDisplay(String[] newDisplay) {}
+    public void setCurrentDisplay(String[] newDisplay) {
+        this.currentDisplay = newDisplay;
+    }
 
     public String[] getDefaultOptions() {
         return this.DEFAULT_OPTIONS;
     }
 
-    public void handleDisplay() {}
+    public void handleDisplay() {
+        for (int i = 0; i < currentDisplay.length; i++) {
+            System.out.println(currentDisplay[i]);
+        }
+    }
 
-    public void handleInput() {}
+    public boolean requiresIntInput() {
+        return true;
+    }
 
-    public void returnToMainMenu() {}
+    public void handleIntInput() {
+        int intInput = inputHandler.getIntInput(minIntInput, maxIntInput);
+    }
+
+    public String handleStringInput() {
+        return inputHandler.getStringInput(stringEmptyAllowed, stringNumbersAllowed);
+    }
+
+    public void returnToMainMenu() {
+        menuManager.returnToMainMenu();
+    }
+
+    public boolean getRequiresIntInput() {
+        return requiresIntInput;
+    }
+
+    public void setRequiresIntInput(boolean requiresIntInput) {
+        this.requiresIntInput = requiresIntInput;
+    }
+
+    public int getMinIntInput() {
+        return minIntInput;
+    }
+
+    public void setMinIntInput(int minIntInput) {
+        this.minIntInput = minIntInput;
+    }
+
+    public int getMaxIntInput() {
+        return maxIntInput;
+    }
+
+    public void setMaxIntInput(int maxIntInput) {
+        this.maxIntInput = maxIntInput;
+    }
+
+    public boolean isStringEmptyAllowed() {
+        return stringEmptyAllowed;
+    }
+
+    public void setStringEmptyAllowed(boolean stringEmptyAllowed) {
+        this.stringEmptyAllowed = stringEmptyAllowed;
+    }
+
+    public boolean isStringNumbersAllowed() {
+        return stringNumbersAllowed;
+    }
+
+    public void setStringNumbersAllowed(boolean stringNumbersAllowed) {
+        this.stringNumbersAllowed = stringNumbersAllowed;
+    }
+
+    public abstract void processInput();
 }

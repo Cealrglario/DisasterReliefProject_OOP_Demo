@@ -4,4 +4,7 @@ public class MainMenu extends Menu {
     public MainMenu(String[] defaultOptions) {
         super(defaultOptions);
     }
+
+    @Override
+    public void processInput() {}
 }
