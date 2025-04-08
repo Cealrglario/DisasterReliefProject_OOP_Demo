@@ -30,7 +30,7 @@
 
 <menuTranslation>
   <key>main_menu_defaults</key>
-  <value>"1. Manage Persons", "2. Manage Locations", "3. Manage Inquiries",
+  <value>"Which menu would you like to navigate to? (Type in '1' for 'Manage Persons', for example)", "1. Manage Persons", "2. Manage Locations", "3. Manage Inquiries",
         "4. Manage Family Groups", "5. Manage Supplies"</value>
 </menuTranslation>
 
