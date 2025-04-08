@@ -1,7 +1,7 @@
 package edu.ucalgary.oop;
 
 public class FamilyGroupSubmenu extends Menu {
-    private final String[] MANAGE_GROUP_OPTIONS = new String[0];
+    private final String[] MANAGE_GROUP_OPTIONS = languageManager.getMenuTranslation("manage_family_group_options");
 
     public FamilyGroupSubmenu(String[] defaultOptions) {
         super(defaultOptions);
