@@ -43,8 +43,16 @@ public enum MenuManager {
 
     public void run() {
         currentMenu.handleDisplay();
-        currentMenu.handleInput();
+
+        if (currentMenu.requiresIntInput()) {
+            currentMenu.handleIntInput();
+        } else {
+            currentMenu.handleStringInput();
+        }
+
+        currentMenu.processInput();
     }
+
 
 }
 
