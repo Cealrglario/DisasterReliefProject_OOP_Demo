@@ -75,7 +75,7 @@ public abstract class Menu {
         this.maxIntInput = maxIntInput;
     }
 
-    public boolean isStringEmptyAllowed() {
+    public boolean getStringEmptyAllowed() {
         return stringEmptyAllowed;
     }
 
@@ -83,7 +83,7 @@ public abstract class Menu {
         this.stringEmptyAllowed = stringEmptyAllowed;
     }
 
-    public boolean isStringNumbersAllowed() {
+    public boolean getStringNumbersAllowed() {
         return stringNumbersAllowed;
     }
 
