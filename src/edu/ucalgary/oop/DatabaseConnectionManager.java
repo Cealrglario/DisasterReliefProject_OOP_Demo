@@ -31,9 +31,6 @@ public enum DatabaseConnectionManager {
         try {
             this.dbConnection = DriverManager.getConnection(this.DATABASE_URL, this.USERNAME, this.PASSWORD);
 
-            if (this.dbConnection != null) {
-                System.out.println("Database connection established successfully.");
-            }
         } catch (SQLException e) {
             System.out.println("Error connecting to database: " + e.getMessage());
         }
@@ -43,10 +40,6 @@ public enum DatabaseConnectionManager {
         try {
             if (!this.dbConnection.isClosed()) {
                 this.dbConnection.close();
-                System.out.println("Database connection is successfully closed.");
-            }
-            else {
-                System.out.println("Database connection is already closed.");
             }
         } catch (SQLException e) {
             System.out.println("Error closing database connection: " + e.getMessage());
