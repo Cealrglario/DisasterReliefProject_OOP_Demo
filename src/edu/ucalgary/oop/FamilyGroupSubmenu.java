@@ -11,7 +11,8 @@ public class FamilyGroupSubmenu extends Menu {
         return this.MANAGE_GROUP_OPTIONS;
     }
 
-    public void listAllFamilyGroups() {}
+    public void listAllFamilyGroups() {
+    }
 
     public void viewFamilyMembers() {}
 
