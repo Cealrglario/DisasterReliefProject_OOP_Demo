@@ -10,7 +10,7 @@ public class InputHandler {
         return 0;
     }
 
-    public String getStringInput(boolean emptyALlowed, boolean numbersAllowed) {
+    public String getStringInput(boolean emptyAllowed, boolean numbersAllowed) {
         return "";
     }
 

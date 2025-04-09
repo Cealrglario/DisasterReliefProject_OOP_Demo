@@ -25,15 +25,33 @@ public class FamilyGroup {
         return this.commonFamilyName;
     }
 
-    public boolean setCommonFamilyName(String commonFamilyName) {}
+    public boolean setCommonFamilyName(String commonFamilyName) {
+        if (commonFamilyName.isEmpty()) {
+            return false;
+        } else {
+            this.commonFamilyName = commonFamilyName;
+            return true;
+        }
+    }
 
     public HashSet<Person> getMembers() {
         return this.members;
     }
 
-    public boolean setMembers(HashSet<Person> members) {}
+    public void setMembers(HashSet<Person> members) {
+        this.members = members;
+    }
 
-    public boolean addMember(Person member) {}
+    public void addMember(Person member) {
+        this.members.add(member);
+    }
 
-    public boolean removeMember(Person exMember) {}
+    public boolean removeMember(Person exMember) {
+        if (members.contains(exMember)) {
+            members.remove(exMember);
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
