@@ -1,5 +1,6 @@
 package edu.ucalgary.oop;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import java.sql.SQLException;
@@ -15,7 +16,7 @@ public class DatabaseConnectionManagerTest {
 
     @Test
     public void testGetDatabaseUrl() {
-        String expectedUrl = "jdbc:postgresql:/localhost/project";
+        String expectedUrl = "jdbc:postgresql://localhost/ensf380project";
         assertEquals("Connection Manager URL should match the expected Database URL", expectedUrl,
                 connection.getDatabaseUrl());
     }
@@ -45,9 +46,9 @@ public class DatabaseConnectionManagerTest {
     }
 
     @Test
-    public void testInitializeDbConnection() {
-        assertNull("Before calling initializeDbConnection(), the connection should be null",
-                connection.getDbConnection());
+    public void testInitializeDbConnection() throws SQLException {
+        assertTrue("Before calling initializeDbConnection(), the connection should be closed",
+                connection.getDbConnection().isClosed());
 
         connection.initializeDbConnection();
 
@@ -86,6 +87,8 @@ public class DatabaseConnectionManagerTest {
 
         assertNotNull("Connection should still be valid after multiple initialization calls without closing",
                 connection.getDbConnection());
+
+        connection.closeDbConnection();
     }
 
     @Test
@@ -96,5 +99,7 @@ public class DatabaseConnectionManagerTest {
 
         assertNotNull("The connection should be valid after initialization, closing, and then re-initializing",
                 connection.getDbConnection());
+
+        connection.closeDbConnection();
     }
 }
