@@ -12,11 +12,16 @@ public class FamilyGroupSubmenu extends Menu {
     }
 
     public void listAllFamilyGroups() {
+        setCurrentDisplay(DEFAULT_OPTIONS);
     }
 
-    public void viewFamilyMembers() {}
+    public void viewFamilyMembers() {
+        setCurrentDisplay(DEFAULT_OPTIONS);
+    }
 
-    public void manageFamilyGroup() {}
+    public void manageFamilyGroup() {
+        setCurrentDisplay(DEFAULT_OPTIONS);
+    }
 
     @Override
     public void processInput() {

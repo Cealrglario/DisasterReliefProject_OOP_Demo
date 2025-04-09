@@ -57,9 +57,27 @@ public class FamilyGroupSubmenuTest {
 
     @Test
     public void viewFamilyMembers() {
+        captureOutput.reset();
+
+        Person testPerson = new Person(1, "Test", "Male", "111-1111");
+        FamilyGroup testFamilyGroup = new FamilyGroup(1);
+        testFamilyGroup.setCommonFamilyName("Test Family");
+        testFamilyGroup.addMember(testPerson);
+
+        PersonAccess<Integer> personDbAccess = new PersonAccess<>();
+        personDbAccess.addEntry(testPerson);
+        personDbAccess.getAllFamilyGroups();
+
+        testSubmenu.viewFamilyMembers();
+
+        String printedOutput = captureOutput.toString();
+
+        assertTrue("viewFamilyMembers() prints out a list of family members and their id",
+                printedOutput.contains("Test, ID: 1"));
     }
 
     @Test
     public void manageFamilyGroup() {
+        // TO DO
     }
 }
