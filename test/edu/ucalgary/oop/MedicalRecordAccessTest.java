@@ -22,7 +22,7 @@ public class MedicalRecordAccessTest {
         connectionManager = DatabaseConnectionManager.INSTANCE;
         connectionManager.initializeDbConnection();
         connection = connectionManager.getDbConnection();
-        medicalRecordDbAccess = new MedicalRecordAccess();
+        medicalRecordDbAccess = new MedicalRecordAccess<>();
 
         try {
             medicalRecordDbAccess.addEntry(placeholderRecord);
@@ -82,6 +82,7 @@ public class MedicalRecordAccessTest {
 
     @Test
     public void testUpdateInfo() {
+        medicalRecordDbAccess = new MedicalRecordAccess<String>();
         MedicalRecord originalRecord;
         MedicalRecord updatedRecord;
 
@@ -99,12 +100,13 @@ public class MedicalRecordAccessTest {
 
     @Test
     public void testGetInfo() {
+        medicalRecordDbAccess = new MedicalRecordAccess<String>();
         MedicalRecord testRecord;
         String retrievedDetails;
 
         try {
             testRecord = medicalRecordDbAccess.getById(-1);
-            retrievedDetails = medicalRecordDbAccess.getInfo("treatment_details");
+            retrievedDetails = medicalRecordDbAccess.getInfo("treatment_details", -1);
         } catch (SQLException e) {
             fail("SQLException occurred while testing getInfo: " + e.getMessage());
         }

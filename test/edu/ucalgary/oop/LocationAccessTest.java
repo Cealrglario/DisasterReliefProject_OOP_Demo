@@ -22,7 +22,7 @@ public class LocationAccessTest {
         connectionManager = DatabaseConnectionManager.INSTANCE;
         connectionManager.initializeDbConnection();
         connection = connectionManager.getDbConnection();
-        locationDbAccess = new LocationAccess();
+        locationDbAccess = new LocationAccess<>();
 
         try {
             locationDbAccess.addEntry(placeholderLocation);
@@ -82,6 +82,7 @@ public class LocationAccessTest {
 
     @Test
     public void testUpdateInfo() {
+        locationDbAccess = new LocationAccess<String>();
         Location originalLocation;
         Location updatedLocation;
 
@@ -99,12 +100,13 @@ public class LocationAccessTest {
 
     @Test
     public void testGetInfo() {
+        locationDbAccess = new LocationAccess<String>();
         Location testLocation;
         String retrievedName;
 
         try {
             testLocation = locationDbAccess.getById(-1);
-            retrievedName = locationDbAccess.getInfo("name");
+            retrievedName = locationDbAccess.getInfo("name", -1);
         } catch (SQLException e) {
             fail("SQLException occurred while testing getInfo: " + e.getMessage());
         }

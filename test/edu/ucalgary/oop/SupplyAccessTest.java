@@ -22,7 +22,7 @@ public class SupplyAccessTest {
         connectionManager = DatabaseConnectionManager.INSTANCE;
         connectionManager.initializeDbConnection();
         connection = connectionManager.getDbConnection();
-        supplyDbAccess = new SupplyAccess();
+        supplyDbAccess = new SupplyAccess<>();
 
         placeholderSupply.setComments("Test comment");
 
@@ -84,6 +84,7 @@ public class SupplyAccessTest {
 
     @Test
     public void testUpdateInfo() {
+        supplyDbAccess = new SupplyAccess<String>();
         Supply originalSupply;
         Supply updatedSupply;
 
@@ -101,12 +102,13 @@ public class SupplyAccessTest {
 
     @Test
     public void testGetInfo() {
-        Supply testSupply;
+        supplyDbAccess = new SupplyAccess<String>();
+        Supply testSupply;  
         String retrievedType;
 
         try {
             testSupply = supplyDbAccess.getById(-1);
-            retrievedType = supplyDbAccess.getInfo("type");
+            retrievedType = supplyDbAccess.getInfo("type", -1);
         } catch (SQLException e) {
             fail("SQLException occurred while testing getInfo: " + e.getMessage());
         }

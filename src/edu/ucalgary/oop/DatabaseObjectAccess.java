@@ -14,7 +14,7 @@ public abstract class DatabaseObjectAccess<T, U> {
         return null;
     }
 
-    public T getById(int id) {
+    public T getById(int idOfObject) {
         return null;
     }
 
@@ -22,7 +22,7 @@ public abstract class DatabaseObjectAccess<T, U> {
         return false;
     }
 
-    public U getInfo(String infoToGet, int id) {
+    public U getInfo(String infoToGet, int idOfObject) {
         return null;
     }
 

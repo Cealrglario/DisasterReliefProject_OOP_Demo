@@ -22,7 +22,7 @@ public class PersonAccessTest {
         connectionManager = DatabaseConnectionManager.INSTANCE;
         connectionManager.initializeDbConnection();
         connection = connectionManager.getDbConnection();
-        personDbAccess = new PersonAccess();
+        personDbAccess = new PersonAccess<>();
 
         try {
             personDbAccess.addEntry(placeholderPerson);
@@ -82,6 +82,7 @@ public class PersonAccessTest {
 
     @Test
     public void testUpdateInfo() {
+        personDbAccess = new PersonAccess<String>();
         Person originalPerson;
         Person updatedPerson;
 
@@ -99,12 +100,13 @@ public class PersonAccessTest {
 
     @Test
     public void testGetInfo() {
+        personDbAccess = new PersonAccess<String>();
         Person testPerson;
         String retrievedFirstName;
 
         try {
             testPerson = personDbAccess.getById(-1);
-            retrievedFirstName = personDbAccess.getInfo("first_name");
+            retrievedFirstName = personDbAccess.getInfo("first_name", -1);
         } catch (SQLException e) {
             fail("SQLException occurred while testing getInfo: " + e.getMessage());
         }

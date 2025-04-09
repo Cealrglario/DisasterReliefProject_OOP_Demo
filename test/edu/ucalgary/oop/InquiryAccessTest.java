@@ -15,14 +15,14 @@ public class InquiryAccessTest {
     private InquiryAccess inquiryDbAccess;
     private Connection connection;
 
-    Inquiry placeholderInquiry = new Inquiry(-1, -1, LocalDate.now(), "placeholder");
+    Inquiry placeholderInquiry = new Inquiry(-1, -1, -1, LocalDate.now(), "placeholder");
 
     @Before
     public void setUp() throws Exception {
         connectionManager = DatabaseConnectionManager.INSTANCE;
         connectionManager.initializeDbConnection();
         connection = connectionManager.getDbConnection();
-        inquiryDbAccess = new InquiryAccess();
+        inquiryDbAccess = new InquiryAccess<>();
 
         try {
             inquiryDbAccess.addEntry(placeholderInquiry);
@@ -82,6 +82,7 @@ public class InquiryAccessTest {
 
     @Test
     public void testUpdateInfo() {
+        inquiryDbAccess = new InquiryAccess<String>();
         Inquiry originalInquiry;
         Inquiry updatedInquiry;
 
@@ -99,12 +100,13 @@ public class InquiryAccessTest {
 
     @Test
     public void testGetInfo() {
+        inquiryDbAccess = new InquiryAccess<String>();
         Inquiry testInquiry;
         String retrievedComments;
 
         try {
             testInquiry = inquiryDbAccess.getById(0);
-            retrievedComments = inquiryDbAccess.getInfo("comments");
+            retrievedComments = inquiryDbAccess.getInfo("comments", 0);
         } catch (SQLException e) {
             fail("SQLException occurred while testing getInfo: " + e.getMessage());
         }
