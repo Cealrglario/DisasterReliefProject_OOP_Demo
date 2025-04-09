@@ -5,24 +5,18 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
 public class SupplyLocationAllocationAccessTest {
-    private DatabaseConnectionManager connectionManager;
     private SupplyLocationAllocationAccess supplyLocationAllocationDbAccess;
-    private Connection connection;
 
     Supply placeholderSupply = new Blanket(-1);
     Location placeholderLocation = new Location(-1, "Test Location", "Test");
 
     @Before
     public void setUp() throws Exception {
-        connectionManager = DatabaseConnectionManager.INSTANCE;
-        connectionManager.initializeDbConnection();
-        connection = connectionManager.getDbConnection();
         supplyLocationAllocationDbAccess = new SupplyLocationAllocationAccess();
 
         try {
@@ -39,8 +33,6 @@ public class SupplyLocationAllocationAccessTest {
         } catch (SQLException e) {
             throw new SQLException(e.getMessage());
         }
-
-        connectionManager.closeDbConnection();
     }
 
     @Test
@@ -56,8 +48,7 @@ public class SupplyLocationAllocationAccessTest {
 
     @Test
     public void testGetAll() {
-        List<Map<Supply, Location>> allAllocations
-                ;
+        List<Map<Supply, Location>> allAllocations = null;
         try {
             allAllocations = supplyLocationAllocationDbAccess.getAll();
         } catch (SQLException e) {
@@ -69,7 +60,7 @@ public class SupplyLocationAllocationAccessTest {
 
     @Test
     public void testGetById() {
-        Map<Supply, Location> allocation;
+        Map<Supply, Location> allocation = null;
 
         try {
             allocation = supplyLocationAllocationDbAccess.getById(placeholderSupply, placeholderLocation);
@@ -83,8 +74,8 @@ public class SupplyLocationAllocationAccessTest {
 
     @Test
     public void testAddEntry() {
-        List<Map<Supply, Location>> allocationsBeforeAdding;
-        List<Map<Supply, Location>> allocationsAfterAdding;
+        List<Map<Supply, Location>> allocationsBeforeAdding = null;
+        List<Map<Supply, Location>> allocationsAfterAdding = null;
 
         Supply newSupply = new Blanket(-2);
         Location newLocation = new Location(-2, "Test Location 2", "Test");
@@ -109,8 +100,8 @@ public class SupplyLocationAllocationAccessTest {
 
     @Test
     public void testRemoveEntry() {
-        List<Map<Supply, Location>> allocationsBeforeRemoving;
-        List<Map<Supply, Location>> allocationsAfterRemoving;
+        List<Map<Supply, Location>> allocationsBeforeRemoving = null;
+        List<Map<Supply, Location>> allocationsAfterRemoving = null;
 
         Supply testSupply = new Blanket(-2);
         Location testLocation = new Location(-2, "Test Location 2", "Test");
@@ -130,7 +121,7 @@ public class SupplyLocationAllocationAccessTest {
 
     @Test
     public void testGetByIdNotInDb() {
-        Map<Supply, Location> allocation;
+        Map<Supply, Location> allocation = null;
 
         Supply supplyNotInDb = new Blanket(-999);
         Location locationNotInDb = new Location(-999, "Location not in db", "Test");
@@ -147,8 +138,8 @@ public class SupplyLocationAllocationAccessTest {
 
     @Test
     public void testAddEntryThatAlreadyExists() {
-        List<Map<Supply, Location>> allocationsBeforeAdding;
-        List<Map<Supply, Location>> allocationsAfterAdding;
+        List<Map<Supply, Location>> allocationsBeforeAdding = null;
+        List<Map<Supply, Location>> allocationsAfterAdding = null;
 
         try {
             allocationsBeforeAdding = supplyLocationAllocationDbAccess.getAll();
@@ -164,8 +155,8 @@ public class SupplyLocationAllocationAccessTest {
 
     @Test
     public void testRemoveEntryNotInDb() {
-        List<Map<Supply, Location>> allocationsBeforeRemoving;
-        List<Map<Supply, Location>> allocationsAfterRemoving;
+        List<Map<Supply, Location>> allocationsBeforeRemoving = null;
+        List<Map<Supply, Location>> allocationsAfterRemoving = null;
 
         Supply supplyNotInDb = new Blanket(-999);
         Location locationNotInDb = new Location(-999, "Location not in db", "Test");
@@ -184,7 +175,7 @@ public class SupplyLocationAllocationAccessTest {
 
     @Test
     public void testAddEntryWithNullArguments() {
-        boolean success;
+        boolean success = true;
 
         try {
             success = supplyLocationAllocationDbAccess.addEntry(null, null);

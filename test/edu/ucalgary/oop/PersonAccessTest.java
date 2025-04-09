@@ -5,23 +5,16 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.List;
 
 public class PersonAccessTest {
-    private DatabaseConnectionManager connectionManager;
     private PersonAccess<String> personDbAccess;
-    private Connection connection;
 
     Person placeholderPerson = new Person(-1, "Test Person", "Female", "111-1111");
 
     @Before
     public void setUp() throws Exception {
-        connectionManager = DatabaseConnectionManager.INSTANCE;
-        connectionManager.initializeDbConnection();
-        connection = connectionManager.getDbConnection();
         personDbAccess = new PersonAccess<>();
 
         try {
@@ -38,8 +31,6 @@ public class PersonAccessTest {
         } catch (SQLException e) {
             throw new SQLException(e.getMessage());
         }
-
-        connectionManager.closeDbConnection();
     }
 
     @Test
@@ -55,7 +46,7 @@ public class PersonAccessTest {
 
     @Test
     public void testGetAll() {
-        List<Person> retrievedPersons;
+        List<Person> retrievedPersons = null;
 
         try {
             retrievedPersons = personDbAccess.getAll();
@@ -68,7 +59,7 @@ public class PersonAccessTest {
 
     @Test
     public void testGetById() {
-        Person testPerson;
+        Person testPerson = null;
 
         try {
             testPerson = personDbAccess.getById(-1);
@@ -82,8 +73,8 @@ public class PersonAccessTest {
 
     @Test
     public void testUpdateInfo() {
-        Person originalPerson;
-        Person updatedPerson;
+        Person originalPerson = null;
+        Person updatedPerson = null;
 
         try {
             originalPerson = personDbAccess.getById(-1);
@@ -99,8 +90,8 @@ public class PersonAccessTest {
 
     @Test
     public void testGetInfo() {
-        Person testPerson;
-        String retrievedFirstName;
+        Person testPerson = null;
+        String retrievedFirstName = null;
 
         try {
             testPerson = personDbAccess.getById(-1);
@@ -115,8 +106,8 @@ public class PersonAccessTest {
 
     @Test
     public void testAddEntry() {
-        List<Person> personsBeforeAdding;
-        List<Person> personsAfterAdding;
+        List<Person> personsBeforeAdding = null;
+        List<Person> personsAfterAdding = null;
 
         Person newPerson = new Person(-2, "New Test Person", "Male", "222-2222");
 
@@ -140,8 +131,8 @@ public class PersonAccessTest {
 
     @Test
     public void testRemoveEntry() {
-        List<Person> personsBeforeRemoving;
-        List<Person> personsAfterRemoving;
+        List<Person> personsBeforeRemoving = null;
+        List<Person> personsAfterRemoving = null;
 
         Person exPerson = new Person(-2,  "Ex Test Person", "Non-binary", "333-3333");
 
@@ -160,7 +151,7 @@ public class PersonAccessTest {
 
     @Test
     public void testGetByIdNotInDb() {
-        Person testPerson;
+        Person testPerson = null;
 
         try {
             testPerson = personDbAccess.getById(-999);
@@ -174,7 +165,7 @@ public class PersonAccessTest {
 
     @Test
     public void testUpdateInfoWithInvalidField() {
-        boolean success;
+        boolean success = true;
 
         try {
             success = personDbAccess.updateInfo("non_existent_field", "test value");
@@ -188,7 +179,7 @@ public class PersonAccessTest {
 
     @Test
     public void testRemoveEntryNotInDb() {
-        boolean success;
+        boolean success = true;
         Person personNotInDb = new Person(-2,  "Test Person", "Non-binary", "333-3333");
 
         try {

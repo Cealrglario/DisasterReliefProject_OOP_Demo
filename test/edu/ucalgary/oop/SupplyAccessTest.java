@@ -5,23 +5,16 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Stack;
 
 public class SupplyAccessTest {
-    private DatabaseConnectionManager connectionManager;
     private SupplyAccess<String> supplyDbAccess;
-    private Connection connection;
 
     Supply placeholderSupply = new Blanket(-1);
 
     @Before
     public void setUp() throws Exception {
-        connectionManager = DatabaseConnectionManager.INSTANCE;
-        connectionManager.initializeDbConnection();
-        connection = connectionManager.getDbConnection();
         supplyDbAccess = new SupplyAccess<>();
 
         placeholderSupply.setComments("Test comment");
@@ -40,8 +33,6 @@ public class SupplyAccessTest {
         } catch (SQLException e) {
             throw new SQLException(e.getMessage());
         }
-
-        connectionManager.closeDbConnection();
     }
 
     @Test
@@ -57,7 +48,7 @@ public class SupplyAccessTest {
 
     @Test
     public void testGetAll() {
-        List<Supply> retrievedSupplies;
+        List<Supply> retrievedSupplies = null;
 
         try {
             retrievedSupplies = supplyDbAccess.getAll();
@@ -70,7 +61,7 @@ public class SupplyAccessTest {
 
     @Test
     public void testGetById() {
-        Supply testSupply;
+        Supply testSupply = null;
 
         try {
             testSupply = supplyDbAccess.getById(-1);
@@ -84,8 +75,8 @@ public class SupplyAccessTest {
 
     @Test
     public void testUpdateInfo() {
-        Supply originalSupply;
-        Supply updatedSupply;
+        Supply originalSupply = null;
+        Supply updatedSupply = null;
 
         try {
             originalSupply = supplyDbAccess.getById(-1);
@@ -101,8 +92,8 @@ public class SupplyAccessTest {
 
     @Test
     public void testGetInfo() {
-        Supply testSupply;
-        String retrievedType;
+        Supply testSupply = null;
+        String retrievedType = null;
 
         try {
             testSupply = supplyDbAccess.getById(-1);
@@ -117,8 +108,8 @@ public class SupplyAccessTest {
 
     @Test
     public void testAddEntry() {
-        List<Supply> suppliesBeforeAdding;
-        List<Supply> suppliesAfterAdding;
+        List<Supply> suppliesBeforeAdding = null;
+        List<Supply> suppliesAfterAdding = null;
 
         Supply newSupply = new Blanket(-2);
         newSupply.setComments("Test add");
@@ -143,8 +134,8 @@ public class SupplyAccessTest {
 
     @Test
     public void testRemoveEntry() {
-        List<Supply> suppliesBeforeRemoving;
-        List<Supply> suppliesAfterRemoving;
+        List<Supply> suppliesBeforeRemoving = null;
+        List<Supply> suppliesAfterRemoving = null;
 
         Supply exSupply = new Blanket(-2);
 
@@ -163,7 +154,7 @@ public class SupplyAccessTest {
 
     @Test
     public void testGetByIdNotInDb() {
-        Supply testSupply;
+        Supply testSupply = null;
 
         try {
             testSupply = supplyDbAccess.getById(-999);
@@ -177,7 +168,7 @@ public class SupplyAccessTest {
 
     @Test
     public void testUpdateInfoWithInvalidField() {
-        boolean success;
+        boolean success = true;
 
         try {
             success = supplyDbAccess.updateInfo("non_existent_field", "test value");
@@ -191,7 +182,7 @@ public class SupplyAccessTest {
 
     @Test
     public void testRemoveEntryNotInDb() {
-        boolean success;
+        boolean success = true;
         Supply blanketNotInDb = new Blanket(-999);
 
         try {

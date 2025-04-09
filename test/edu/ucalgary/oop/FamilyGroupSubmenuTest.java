@@ -7,6 +7,7 @@ import static org.junit.Assert.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.sql.SQLException;
 
 public class FamilyGroupSubmenuTest {
     private FamilyGroupSubmenu testSubmenu;
@@ -29,13 +30,13 @@ public class FamilyGroupSubmenuTest {
     }
 
     @Test
-    public void getManageGroupOptions() {
+    public void testGetManageGroupOptions() {
         assertEquals("getManageGroupOptions() should retrieve MANAGE_GROUP_OPTIONS as expected",
                 languageManager.getMenuTranslation("manage_family_group_options"), testSubmenu.getManageGroupOptions());
     }
 
     @Test
-    public void listAllFamilyGroups() {
+    public void testListAllFamilyGroups() {
         captureOutput.reset();
 
         Person testPerson = new Person(1, "Test", "Male", "111-1111");
@@ -44,8 +45,12 @@ public class FamilyGroupSubmenuTest {
         testFamilyGroup.addMember(testPerson);
 
         PersonAccess<Integer> personDbAccess = new PersonAccess<>();
-        personDbAccess.addEntry(testPerson);
-        personDbAccess.getAllFamilyGroups();
+
+        try {
+            personDbAccess.addEntry(testPerson);
+        } catch (SQLException e) {
+            System.out.println("Error running testListAllFamilyGroups(): " + e.getMessage());
+        }
 
         testSubmenu.listAllFamilyGroups();
 
@@ -56,7 +61,7 @@ public class FamilyGroupSubmenuTest {
     }
 
     @Test
-    public void viewFamilyMembers() {
+    public void testViewFamilyMembers() {
         captureOutput.reset();
 
         Person testPerson = new Person(1, "Test", "Male", "111-1111");
@@ -65,8 +70,12 @@ public class FamilyGroupSubmenuTest {
         testFamilyGroup.addMember(testPerson);
 
         PersonAccess<Integer> personDbAccess = new PersonAccess<>();
-        personDbAccess.addEntry(testPerson);
-        personDbAccess.getAllFamilyGroups();
+
+        try {
+            personDbAccess.addEntry(testPerson);
+        } catch (SQLException e) {
+            System.out.println("Error running testViewFamilyMembers(): " + e.getMessage());
+        }
 
         testSubmenu.viewFamilyMembers();
 
@@ -77,7 +86,7 @@ public class FamilyGroupSubmenuTest {
     }
 
     @Test
-    public void manageFamilyGroup() {
+    public void testManageFamilyGroup() {
         // TO DO
     }
 }

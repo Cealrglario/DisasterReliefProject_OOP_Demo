@@ -5,24 +5,18 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
 public class SupplyPersonAllocationAccessTest {
-    private DatabaseConnectionManager connectionManager;
     private SupplyPersonAllocationAccess supplyPersonAllocationDbAccess;
-    private Connection connection;
 
     Supply placeholderSupply = new Blanket(-1);
     Person placeholderPerson = new Person(-1, "Test Person", "Male", "111-1111");
 
     @Before
     public void setUp() throws Exception {
-        connectionManager = DatabaseConnectionManager.INSTANCE;
-        connectionManager.initializeDbConnection();
-        connection = connectionManager.getDbConnection();
         supplyPersonAllocationDbAccess = new SupplyPersonAllocationAccess();
 
         try {
@@ -39,7 +33,6 @@ public class SupplyPersonAllocationAccessTest {
         } catch (SQLException e) {
             throw new SQLException(e.getMessage());
         }
-        connectionManager.closeDbConnection();
     }
 
     @Test
@@ -54,7 +47,7 @@ public class SupplyPersonAllocationAccessTest {
 
     @Test
     public void testGetAll() {
-        List<Map<Supply, Person>> allAllocations;
+        List<Map<Supply, Person>> allAllocations = null;
 
         try {
             allAllocations = supplyPersonAllocationDbAccess.getAll();
@@ -66,7 +59,7 @@ public class SupplyPersonAllocationAccessTest {
 
     @Test
     public void testGetById() {
-        Map<Supply, Person> allocation;
+        Map<Supply, Person> allocation = null;
 
         try {
             allocation = supplyPersonAllocationDbAccess.getById(placeholderSupply, placeholderPerson);
@@ -79,8 +72,8 @@ public class SupplyPersonAllocationAccessTest {
 
     @Test
     public void testAddEntry() {
-        List<Map<Supply, Person>> allocationsBeforeAdding;
-        List<Map<Supply, Person>> allocationsAfterAdding;
+        List<Map<Supply, Person>> allocationsBeforeAdding = null;
+        List<Map<Supply, Person>> allocationsAfterAdding = null;
 
         Supply newSupply = new Blanket(-2);
         Person newPerson = new Person(-2, "Test Person 2", "Male", "222-2222");
@@ -105,8 +98,8 @@ public class SupplyPersonAllocationAccessTest {
 
     @Test
     public void testRemoveEntry() {
-        List<Map<Supply, Person>> allocationsBeforeRemoving;
-        List<Map<Supply, Person>> allocationsAfterRemoving;
+        List<Map<Supply, Person>> allocationsBeforeRemoving = null;
+        List<Map<Supply, Person>> allocationsAfterRemoving = null;
 
         Supply testSupply = new Blanket(-2);
         Person testPerson = new Person(-2, "Test Person 2", "Male", "222-2222");
@@ -126,7 +119,7 @@ public class SupplyPersonAllocationAccessTest {
 
     @Test
     public void testGetByIdNotInDb() {
-        Map<Supply, Person> allocation;
+        Map<Supply, Person> allocation = null;
 
         Supply supplyNotInDb = new Blanket(-999);
         Person personNotInDb = new Person(-999, "Person not in db", "Male", "999-9999");
@@ -143,8 +136,8 @@ public class SupplyPersonAllocationAccessTest {
 
     @Test
     public void testAddEntryThatAlreadyExists() {
-        List<Map<Supply, Person>> allocationsBeforeAdding;
-        List<Map<Supply, Person>> allocationsAfterAdding;
+        List<Map<Supply, Person>> allocationsBeforeAdding = null;
+        List<Map<Supply, Person>> allocationsAfterAdding = null;
 
         try {
             allocationsBeforeAdding = supplyPersonAllocationDbAccess.getAll();
@@ -160,8 +153,8 @@ public class SupplyPersonAllocationAccessTest {
 
     @Test
     public void testRemoveEntryNotInDb() {
-        List<Map<Supply, Person>> allocationsBeforeRemoving;
-        List<Map<Supply, Person>> allocationsAfterRemoving;
+        List<Map<Supply, Person>> allocationsBeforeRemoving = null;
+        List<Map<Supply, Person>> allocationsAfterRemoving = null;
 
         Supply supplyNotInDb = new Blanket(-999);
         Person personNotInDb = new Person(-999, "Person not in db", "Male", "999-9999");
@@ -180,7 +173,7 @@ public class SupplyPersonAllocationAccessTest {
 
     @Test
     public void testAddEntryWithNullArguments() {
-        boolean success;
+        boolean success = true;
 
         try {
             success = supplyPersonAllocationDbAccess.addEntry(null, null);

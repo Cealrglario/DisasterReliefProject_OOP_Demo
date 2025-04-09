@@ -5,23 +5,16 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.List;
 
 public class LocationAccessTest {
-    private DatabaseConnectionManager connectionManager;
     private LocationAccess<String> locationDbAccess;
-    private Connection connection;
 
     Location placeholderLocation = new Location(-1, "Test Location", "Placeholder");
 
     @Before
     public void setUp() throws Exception {
-        connectionManager = DatabaseConnectionManager.INSTANCE;
-        connectionManager.initializeDbConnection();
-        connection = connectionManager.getDbConnection();
         locationDbAccess = new LocationAccess<>();
 
         try {
@@ -38,8 +31,6 @@ public class LocationAccessTest {
         } catch (SQLException e) {
             throw new SQLException(e.getMessage());
         }
-
-        connectionManager.closeDbConnection();
     }
 
     @Test
@@ -55,7 +46,7 @@ public class LocationAccessTest {
 
     @Test
     public void testGetAll() {
-        List<Location> retrievedLocations;
+        List<Location> retrievedLocations = null;
 
         try {
             retrievedLocations = locationDbAccess.getAll();
@@ -68,7 +59,7 @@ public class LocationAccessTest {
 
     @Test
     public void testGetById() {
-        Location testLocation;
+        Location testLocation = null;
 
         try {
             testLocation = locationDbAccess.getById(-1);
@@ -82,8 +73,8 @@ public class LocationAccessTest {
 
     @Test
     public void testUpdateInfo() {
-        Location originalLocation;
-        Location updatedLocation;
+        Location originalLocation = null;
+        Location updatedLocation = null;
 
         try {
             originalLocation = locationDbAccess.getById(-1);
@@ -99,8 +90,8 @@ public class LocationAccessTest {
 
     @Test
     public void testGetInfo() {
-        Location testLocation;
-        String retrievedName;
+        Location testLocation = null;
+        String retrievedName = null;
 
         try {
             testLocation = locationDbAccess.getById(-1);
@@ -115,8 +106,8 @@ public class LocationAccessTest {
 
     @Test
     public void testAddEntry() {
-        List<Location> locationsBeforeAdding;
-        List<Location> locationsAfterAdding;
+        List<Location> locationsBeforeAdding = null;
+        List<Location> locationsAfterAdding = null;
 
         Location newLocation = new Location(-2, "New Test Location", "test add");
 
@@ -140,8 +131,8 @@ public class LocationAccessTest {
 
     @Test
     public void testRemoveEntry() {
-        List<Location> locationsBeforeRemoving;
-        List<Location> locationsAfterRemoving;
+        List<Location> locationsBeforeRemoving = null;
+        List<Location> locationsAfterRemoving = null;
 
         Location exLocation = new Location(-2, "New Test Location", "Test remove");
 
@@ -160,7 +151,7 @@ public class LocationAccessTest {
 
     @Test
     public void testGetByIdNotInDb() {
-        Location testLocation;
+        Location testLocation = null;
 
         try {
             testLocation = locationDbAccess.getById(-999);
@@ -174,7 +165,7 @@ public class LocationAccessTest {
 
     @Test
     public void testUpdateInfoWithInvalidField() {
-        boolean success;
+        boolean success = true;
 
         try {
             success = locationDbAccess.updateInfo("non_existent_field", "test value");
@@ -188,7 +179,7 @@ public class LocationAccessTest {
 
     @Test
     public void testRemoveEntryNotInDb() {
-        boolean success;
+        boolean success = true;
         Location locationNotInDb = new Location(-2, "New Test Location", "Test not in db");
 
         try {

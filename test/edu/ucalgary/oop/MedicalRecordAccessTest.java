@@ -5,23 +5,16 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.List;
 
 public class MedicalRecordAccessTest {
-    private DatabaseConnectionManager connectionManager;
     private MedicalRecordAccess<String> medicalRecordDbAccess;
-    private Connection connection;
 
     MedicalRecord placeholderRecord = new MedicalRecord(-1, -1, "Placeholder");
 
     @Before
     public void setUp() throws Exception {
-        connectionManager = DatabaseConnectionManager.INSTANCE;
-        connectionManager.initializeDbConnection();
-        connection = connectionManager.getDbConnection();
         medicalRecordDbAccess = new MedicalRecordAccess<>();
 
         try {
@@ -38,8 +31,6 @@ public class MedicalRecordAccessTest {
         } catch (SQLException e) {
             throw new SQLException(e.getMessage());
         }
-
-        connectionManager.closeDbConnection();
     }
 
     @Test
@@ -55,7 +46,7 @@ public class MedicalRecordAccessTest {
 
     @Test
     public void testGetAll() {
-        List<MedicalRecord> retrievedRecords;
+        List<MedicalRecord> retrievedRecords = null;
 
         try {
             retrievedRecords = medicalRecordDbAccess.getAll();
@@ -68,7 +59,7 @@ public class MedicalRecordAccessTest {
 
     @Test
     public void testGetById() {
-        MedicalRecord testRecord;
+        MedicalRecord testRecord = null;
 
         try {
             testRecord = medicalRecordDbAccess.getById(-1);
@@ -82,8 +73,8 @@ public class MedicalRecordAccessTest {
 
     @Test
     public void testUpdateInfo() {
-        MedicalRecord originalRecord;
-        MedicalRecord updatedRecord;
+        MedicalRecord originalRecord = null;
+        MedicalRecord updatedRecord = null;
 
         try {
             originalRecord = medicalRecordDbAccess.getById(-1);
@@ -99,8 +90,8 @@ public class MedicalRecordAccessTest {
 
     @Test
     public void testGetInfo() {
-        MedicalRecord testRecord;
-        String retrievedDetails;
+        MedicalRecord testRecord = null;
+        String retrievedDetails = null;
 
         try {
             testRecord = medicalRecordDbAccess.getById(-1);
@@ -115,8 +106,8 @@ public class MedicalRecordAccessTest {
 
     @Test
     public void testAddEntry() {
-        List<MedicalRecord> recordsBeforeAdding;
-        List<MedicalRecord> recordsAfterAdding;
+        List<MedicalRecord> recordsBeforeAdding = null;
+        List<MedicalRecord> recordsAfterAdding = null;
 
         MedicalRecord newRecord = new MedicalRecord(-2, -1, "Test add record");
 
@@ -140,8 +131,8 @@ public class MedicalRecordAccessTest {
 
     @Test
     public void testRemoveEntry() {
-        List<MedicalRecord> recordsBeforeRemoving;
-        List<MedicalRecord> recordsAfterRemoving;
+        List<MedicalRecord> recordsBeforeRemoving = null;
+        List<MedicalRecord> recordsAfterRemoving = null;
 
         MedicalRecord exRecord = new MedicalRecord(-2, -1, "test remove record");
 
@@ -160,7 +151,7 @@ public class MedicalRecordAccessTest {
 
     @Test
     public void testGetByIdNotInDb() {
-        MedicalRecord testRecord;
+        MedicalRecord testRecord = null;
 
         try {
             testRecord = medicalRecordDbAccess.getById(-999);
@@ -174,7 +165,7 @@ public class MedicalRecordAccessTest {
 
     @Test
     public void testUpdateInfoWithInvalidField() {
-        boolean success;
+        boolean success = true;
 
         try {
             success = medicalRecordDbAccess.updateInfo("non_existent_field", "test value");
@@ -188,7 +179,7 @@ public class MedicalRecordAccessTest {
 
     @Test
     public void testRemoveEntryNotInDb() {
-        boolean success;
+        boolean success = true;
         MedicalRecord recordNotInDb = new MedicalRecord(-2, -1, "Test not in db");
 
         try {

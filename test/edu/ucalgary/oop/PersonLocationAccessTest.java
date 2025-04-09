@@ -4,7 +4,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -13,18 +12,13 @@ import static org.junit.Assert.*;
 import static org.junit.Assert.assertNotEquals;
 
 public class PersonLocationAccessTest {
-    private DatabaseConnectionManager connectionManager;
     private PersonLocationAccess personLocationDbAccess;
-    private Connection connection;
 
     Person placeholderPerson = new Person(-1, "Test Person", "Male", "111-1111");
     Location placeholderLocation = new Location(-1, "Test Location", "Test");
 
     @Before
     public void setUp() throws Exception {
-        connectionManager = DatabaseConnectionManager.INSTANCE;
-        connectionManager.initializeDbConnection();
-        connection = connectionManager.getDbConnection();
         personLocationDbAccess = new PersonLocationAccess();
 
         try {
@@ -34,14 +28,13 @@ public class PersonLocationAccessTest {
         }
     }
 
+    @After
     public void tearDown() throws Exception {
         try {
             personLocationDbAccess.removeEntry(placeholderPerson, placeholderLocation);
         } catch (SQLException e) {
             throw new SQLException(e.getMessage());
         }
-
-        connectionManager.closeDbConnection();
     }
 
     @Test
@@ -57,7 +50,7 @@ public class PersonLocationAccessTest {
 
     @Test
     public void testGetAll() {
-        List<Map<Person, Location>> allRetrievedLocationOccupants;
+        List<Map<Person, Location>> allRetrievedLocationOccupants  = null;
 
         try {
             allRetrievedLocationOccupants = personLocationDbAccess.getAll();
@@ -70,7 +63,7 @@ public class PersonLocationAccessTest {
 
     @Test
     public void testGetById() {
-        Map<Person, Location> retrievedLocationOccupant;
+        Map<Person, Location> retrievedLocationOccupant = null;
 
         try {
             retrievedLocationOccupant = personLocationDbAccess.getById(placeholderPerson, placeholderLocation);
@@ -84,8 +77,8 @@ public class PersonLocationAccessTest {
 
     @Test
     public void testAddEntry() {
-        List<Map<Person, Location>> locationOccupantsBeforeAdding;
-        List<Map<Person, Location>> locationOccupantsAfterAdding;
+        List<Map<Person, Location>> locationOccupantsBeforeAdding = null;
+        List<Map<Person, Location>> locationOccupantsAfterAdding = null;
 
         Person newPlaceholderPerson = new Person(-2, "Test Person 2", "Male", "222-2222");
         Location newPlaceholderLocation = new Location(-2, "Test Location 2", "Test");
@@ -110,8 +103,8 @@ public class PersonLocationAccessTest {
 
     @Test
     public void testRemoveEntry() {
-        List<Map<Person, Location>> locationOccupantsBeforeRemoving;
-        List<Map<Person, Location>> locationOccupantsAfterRemoving;
+        List<Map<Person, Location>> locationOccupantsBeforeRemoving = null;
+        List<Map<Person, Location>> locationOccupantsAfterRemoving = null;
 
         Person exPlaceholderPerson = new Person(-2, "Test Person 2", "Male", "222-2222");
         Location exPlaceholderLocation = new Location(-2, "Test Location 2", "Test");
@@ -131,7 +124,7 @@ public class PersonLocationAccessTest {
 
     @Test
     public void testGetOccupantsOfLocation() {
-        Person[] testOccupants;
+        Person[] testOccupants = null;
 
         Location testLocation = new Location(-2, "Test location", "Test");
         Person testPerson = new Person(-2, "Test Person 2", "Female", "222-2222");
@@ -151,7 +144,7 @@ public class PersonLocationAccessTest {
 
     @Test
     public void testGetByIdNotInDb() {
-        Map<Person, Location> retrievedLocationOccupant;
+        Map<Person, Location> retrievedLocationOccupant = null;
 
         Person personNotInDb = new Person(-999, "Person not in db", "Male", "999-9999");
         Location locationNotInDb = new Location(-999, "Location not in db", "Test");
@@ -168,8 +161,8 @@ public class PersonLocationAccessTest {
 
     @Test
     public void testAddEntryThatAlreadyExists() {
-        List<Map<Person, Location>> locationOccupantsBeforeAdding;
-        List<Map<Person, Location>> locationOccupantsAfterAdding;
+        List<Map<Person, Location>> locationOccupantsBeforeAdding = null;
+        List<Map<Person, Location>> locationOccupantsAfterAdding = null;
 
         try {
             locationOccupantsBeforeAdding = personLocationDbAccess.getAll();
@@ -185,8 +178,8 @@ public class PersonLocationAccessTest {
 
     @Test
     public void testRemoveEntryNotInDb() {
-        List<Map<Person, Location>> locationOccupantsBeforeRemoving;
-        List<Map<Person, Location>> locationOccupantsAfterRemoving;
+        List<Map<Person, Location>> locationOccupantsBeforeRemoving = null;
+        List<Map<Person, Location>> locationOccupantsAfterRemoving = null;
 
         Person personNotInDb = new Person(-999, "Person not in db", "Male", "999-9999");
         Location locationNotInDb = new Location(-999, "Location not in db", "Test");
@@ -205,7 +198,7 @@ public class PersonLocationAccessTest {
 
     @Test
     public void testGetOccupantsOfLocationNoOccupants() {
-        Person[] testOccupants;
+        Person[] testOccupants = null;
         Location emptyLocation = new Location(-997, "Empty Location", "Test");
 
         try {
@@ -221,7 +214,7 @@ public class PersonLocationAccessTest {
 
     @Test
     public void testAddEntryWithNullArguments() {
-        boolean success;
+        boolean success = true;
 
         try {
             success = personLocationDbAccess.addEntry(null, null);
