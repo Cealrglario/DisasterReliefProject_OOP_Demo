@@ -16,7 +16,7 @@ public class MenuManagerTest {
         menuManager = MenuManager.INSTANCE;
         languageManager = LanguageManager.INSTANCE;
         testMainMenu = new MainMenu(languageManager.getMenuTranslation("main_menu_defaults"));
-        testFamilyGroupSubmenu = new FamilyGroupSubmenu(languageManager.getMenuTranslation("family_group_menu_defaults"));
+        testFamilyGroupSubmenu = new FamilyGroupSubmenu(languageManager.getMenuTranslation("family_group_submenu_defaults"));
 
         menuManager.navigateToMenu(testMainMenu);
     }
