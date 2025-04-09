@@ -118,7 +118,7 @@ public class InquiryAccessTest {
         List<Inquiry> inquiriesBeforeAdding;
         List<Inquiry> inquiriesAfterAdding;
 
-        Inquiry newInquiry = new Inquiry(2, 1, LocalDate.now(), "new inquiry");
+        Inquiry newInquiry = new Inquiry(2, 2, 1, LocalDate.now(), "new inquiry");
 
         try {
             inquiriesBeforeAdding = inquiryDbAccess.getAll();
@@ -143,7 +143,7 @@ public class InquiryAccessTest {
         List<Inquiry> inquiriesBeforeRemoving;
         List<Inquiry> inquiriesAfterRemoving;
 
-        Inquiry exInquiry = new Inquiry(2, 1, LocalDate.now(), "new inquiry");
+        Inquiry exInquiry = new Inquiry(2, 2,1, LocalDate.now(), "new inquiry");
 
         try {
             inquiryDbAccess.addEntry(exInquiry);
@@ -189,7 +189,7 @@ public class InquiryAccessTest {
     @Test
     public void testRemoveEntryNotInDb() {
         boolean success;
-        Inquiry inquiryNotInDb = new Inquiry(2, 1, LocalDate.now(), "new inquiry");
+        Inquiry inquiryNotInDb = new Inquiry(2, 2, 1, LocalDate.now(), "new inquiry");
 
         try {
             success = inquiryDbAccess.removeEntry(inquiryNotInDb);
