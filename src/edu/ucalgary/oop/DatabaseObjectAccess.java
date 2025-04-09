@@ -1,37 +1,30 @@
 package edu.ucalgary.oop;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 public abstract class DatabaseObjectAccess<T, U> {
-    private ResultSet queryResults;
+    protected ResultSet queryResults;
+    protected DatabaseConnectionManager dbConnectionManager = DatabaseConnectionManager.INSTANCE;
 
     public ResultSet getQueryResults() {
         return this.queryResults;
     }
 
-    public List<T> getAll() {
+    public List<T> getAll() throws SQLException {
         return null;
     }
 
-    public T getById(int idOfObject) {
+    public T getById(int idOfObject) throws SQLException {
         return null;
     }
 
-    public boolean updateInfo(String infoToUpdate, U newInfo) {
+    public boolean updateInfo(String infoToUpdate, U newInfo, T objectToUpdate) throws SQLException {
         return false;
     }
 
-    public U getInfo(String infoToGet, int idOfObject) {
+    public U getInfo(String infoToGet, int idOfObject) throws SQLException {
         return null;
     }
-
-    public boolean addEntry(T newEntry) {
-        return false;
-    }
-
-    public boolean removeEntry(T exEntry) {
-        return false;
-    }
-
 }
