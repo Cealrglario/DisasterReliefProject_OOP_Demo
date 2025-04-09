@@ -3,7 +3,7 @@ package edu.ucalgary.oop;
 import java.sql.ResultSet;
 import java.util.List;
 
-public abstract class DatabaseObjectAccess<T, U, V, W> {
+public abstract class DatabaseObjectAccess<T, U> {
     private ResultSet queryResults;
 
     public ResultSet getQueryResults() {
@@ -18,11 +18,11 @@ public abstract class DatabaseObjectAccess<T, U, V, W> {
         return null;
     }
 
-    public boolean updateInfo(U infoToUpdate, V newInfo) {
+    public boolean updateInfo(String infoToUpdate, U newInfo) {
         return false;
     }
 
-    public W getInfo(U infoToGet, W infoType) {
+    public U getInfo(String infoToGet, int id) {
         return null;
     }
 
