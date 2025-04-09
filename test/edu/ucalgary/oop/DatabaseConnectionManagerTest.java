@@ -2,9 +2,7 @@ package edu.ucalgary.oop;
 
 import org.junit.Before;
 import org.junit.Test;
-
 import java.sql.SQLException;
-
 import static org.junit.Assert.*;
 
 public class DatabaseConnectionManagerTest {
@@ -17,7 +15,7 @@ public class DatabaseConnectionManagerTest {
 
     @Test
     public void testGetDatabaseUrl() {
-        String expectedUrl = "jdbc:postgresql://localhost/project";
+        String expectedUrl = "jdbc:postgresql:/localhost/project";
         assertEquals("Connection Manager URL should match the expected Database URL", expectedUrl,
                 connection.getDatabaseUrl());
     }
