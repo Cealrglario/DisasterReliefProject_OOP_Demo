@@ -12,7 +12,7 @@ import java.util.Stack;
 
 public class SupplyAccessTest {
     private DatabaseConnectionManager connectionManager;
-    private SupplyAccess supplyDbAccess;
+    private SupplyAccess<String> supplyDbAccess;
     private Connection connection;
 
     Supply placeholderSupply = new Blanket(-1);
@@ -84,7 +84,6 @@ public class SupplyAccessTest {
 
     @Test
     public void testUpdateInfo() {
-        supplyDbAccess = new SupplyAccess<String>();
         Supply originalSupply;
         Supply updatedSupply;
 
@@ -102,8 +101,7 @@ public class SupplyAccessTest {
 
     @Test
     public void testGetInfo() {
-        supplyDbAccess = new SupplyAccess<String>();
-        Supply testSupply;  
+        Supply testSupply;
         String retrievedType;
 
         try {

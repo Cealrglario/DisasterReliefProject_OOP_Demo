@@ -12,7 +12,7 @@ import java.util.List;
 
 public class LocationAccessTest {
     private DatabaseConnectionManager connectionManager;
-    private LocationAccess locationDbAccess;
+    private LocationAccess<String> locationDbAccess;
     private Connection connection;
 
     Location placeholderLocation = new Location(-1, "Test Location", "Placeholder");
@@ -82,7 +82,6 @@ public class LocationAccessTest {
 
     @Test
     public void testUpdateInfo() {
-        locationDbAccess = new LocationAccess<String>();
         Location originalLocation;
         Location updatedLocation;
 
@@ -100,7 +99,6 @@ public class LocationAccessTest {
 
     @Test
     public void testGetInfo() {
-        locationDbAccess = new LocationAccess<String>();
         Location testLocation;
         String retrievedName;
 

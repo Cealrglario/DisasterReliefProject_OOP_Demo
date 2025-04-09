@@ -12,7 +12,7 @@ import java.util.List;
 
 public class InquiryAccessTest {
     private DatabaseConnectionManager connectionManager;
-    private InquiryAccess inquiryDbAccess;
+    private InquiryAccess<String> inquiryDbAccess;
     private Connection connection;
 
     Inquiry placeholderInquiry = new Inquiry(-1, -1, -1, LocalDate.now(), "placeholder");
@@ -82,7 +82,6 @@ public class InquiryAccessTest {
 
     @Test
     public void testUpdateInfo() {
-        inquiryDbAccess = new InquiryAccess<String>();
         Inquiry originalInquiry;
         Inquiry updatedInquiry;
 
@@ -100,7 +99,6 @@ public class InquiryAccessTest {
 
     @Test
     public void testGetInfo() {
-        inquiryDbAccess = new InquiryAccess<String>();
         Inquiry testInquiry;
         String retrievedComments;
 

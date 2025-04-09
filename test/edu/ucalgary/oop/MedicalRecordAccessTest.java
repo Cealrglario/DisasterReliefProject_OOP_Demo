@@ -12,7 +12,7 @@ import java.util.List;
 
 public class MedicalRecordAccessTest {
     private DatabaseConnectionManager connectionManager;
-    private MedicalRecordAccess medicalRecordDbAccess;
+    private MedicalRecordAccess<String> medicalRecordDbAccess;
     private Connection connection;
 
     MedicalRecord placeholderRecord = new MedicalRecord(-1, -1, "Placeholder");
@@ -82,7 +82,6 @@ public class MedicalRecordAccessTest {
 
     @Test
     public void testUpdateInfo() {
-        medicalRecordDbAccess = new MedicalRecordAccess<String>();
         MedicalRecord originalRecord;
         MedicalRecord updatedRecord;
 
@@ -100,7 +99,6 @@ public class MedicalRecordAccessTest {
 
     @Test
     public void testGetInfo() {
-        medicalRecordDbAccess = new MedicalRecordAccess<String>();
         MedicalRecord testRecord;
         String retrievedDetails;
 

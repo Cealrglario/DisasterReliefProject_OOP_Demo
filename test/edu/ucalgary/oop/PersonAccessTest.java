@@ -12,7 +12,7 @@ import java.util.List;
 
 public class PersonAccessTest {
     private DatabaseConnectionManager connectionManager;
-    private PersonAccess personDbAccess;
+    private PersonAccess<String> personDbAccess;
     private Connection connection;
 
     Person placeholderPerson = new Person(-1, "Test Person", "Female", "111-1111");
@@ -82,7 +82,6 @@ public class PersonAccessTest {
 
     @Test
     public void testUpdateInfo() {
-        personDbAccess = new PersonAccess<String>();
         Person originalPerson;
         Person updatedPerson;
 
@@ -100,7 +99,6 @@ public class PersonAccessTest {
 
     @Test
     public void testGetInfo() {
-        personDbAccess = new PersonAccess<String>();
         Person testPerson;
         String retrievedFirstName;
 
