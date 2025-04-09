@@ -1,5 +1,6 @@
 package edu.ucalgary.oop;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Stack;
@@ -40,7 +41,17 @@ public class Inquiry {
         return this.infoProvided;
     }
 
-    public void setInfoProvided(String infoProvided) {}
+    public void setInfoProvided(String infoProvided) {
+        InquiryAccess<String> inquiryAccess = new InquiryAccess<>();
+
+        try {
+            inquiryAccess.updateInfo("comments", infoProvided, this);
+        } catch (SQLException e) {
+            System.out.println("Unknown database error occurred. Information will only update locally.");
+        }
+
+        this.infoProvided = infoProvided;
+    }
 
     public int getLastKnownLocationId() {
         return this.lastKnownLocationId;
