@@ -1,4 +1,8 @@
--- Each time this file is executed, it will reset the database to the original state defined below.  You can import this directly in your database by (a) manually entering the first three lines of commands form this file, (b) removing the first three lines of commands from this file, and (c) \i 'path_to_file\project.sql' (with appropriate use of \ or / based on OS).
+-- Each time this file is executed, it will reset the database to the original state defined below.  
+/* You can import this directly in your database by 
+(a) manually entering the first three lines of commands form this file, 
+(b) removing the first three lines of commands from this file, and 
+(c) execute: \i 'C:\\Users\\Carl Elgario\\Documents\\GitHub\\ENSF380_IndividualProject\\Instructions\\IA_instructions\\project.sql'; */
 
 -- During grading, TAs will assume that these tables exist, but will enter different values.  Thus you cannot assume that any of the values provided here exist, but you can assume the tables exist. You may assume that we will use only valid data in the SQL file.
 
