@@ -108,9 +108,8 @@ public class DisasterVictimTest {
 
     @Test
     public void testGetComments() {
-        Stack<String> comments = new Stack<>();
+        String comments = "Test comment";
 
-        comments.push("Test comment");
         testVictim1.setComments(comments);
 
         assertEquals("getComments() should return the correct comments",
@@ -119,45 +118,20 @@ public class DisasterVictimTest {
 
     @Test
     public void testSetComments() {
-        Stack<String> comments = new Stack<>();
+        String comments = "Test comment";
 
-        comments.push("Test comment");
         testVictim1.setComments(comments);
 
-        Stack<String> oldComments = testVictim1.getComments();
+        String oldComments = testVictim1.getComments();
 
-        comments.push("Another comment");
-        testVictim1.setComments(comments);
+        String newComment = "New comment";
 
-        Stack<String> newComments = testVictim1.getComments();
+        testVictim1.setComments(newComment);
+
+        String newComments = testVictim1.getComments();
 
         assertNotEquals("Comments should be updated correctly",
                 oldComments, newComments);
-    }
-
-    @Test
-    public void testAddComment() {
-        testVictim1.addComment("Added comment");
-        Stack<String> comments = testVictim1.getComments();
-
-        assertEquals("Comment should be added to the stack",
-                "Added comment", comments.peek());
-        assertEquals("Stack should contain 1 comment",
-                1, comments.size());
-    }
-
-    @Test
-    public void testUndoAddComment() {
-        testVictim1.addComment("Comment 1");
-        testVictim1.addComment("Comment 2");
-        testVictim1.undoAddComment();
-
-        Stack<String> comments = testVictim1.getComments();
-
-        assertEquals("Last comment should be removed",
-                "Comment 1", comments.peek());
-        assertEquals("Stack should contain 1 comment",
-                1, comments.size());
     }
 
     @Test

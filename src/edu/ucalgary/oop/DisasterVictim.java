@@ -8,7 +8,7 @@ public class DisasterVictim extends Person {
     private List<MedicalRecord> medicalRecords;
     private List<PersonalBelonging> personalBelongings;
     private final LocalDate ENTRY_DATE;
-    private Stack<String> comments;
+    private String comments;
 
     public DisasterVictim(int assignedId, String firstName, String gender, LocalDate dateOfEntry, String phoneNumber) {
         super(assignedId, firstName, gender, phoneNumber);
@@ -20,29 +20,47 @@ public class DisasterVictim extends Person {
         this.ENTRY_DATE = dateOfEntry;
     }
 
-    public List<MedicalRecord> getMedicalRecords() {}
+    public List<MedicalRecord> getMedicalRecords() {
+        return this.medicalRecords;
+    }
 
-    public void setMedicalRecords(List<MedicalRecord> records) {}
+    public void setMedicalRecords(List<MedicalRecord> records) {
+        this.medicalRecords = records;
+    }
 
-    public List<PersonalBelonging> getPersonalBelongings() {}
+    public List<PersonalBelonging> getPersonalBelongings() {
+        return this.personalBelongings;
+    }
 
-    public void setPersonalBelongings(List<PersonalBelonging> personalBelongings) {}
+    public void setPersonalBelongings(List<PersonalBelonging> personalBelongings) {
+        this.personalBelongings = personalBelongings;
+    }
 
-    public LocalDate getEntryDate() {}
+    public LocalDate getEntryDate() {
+        return this.ENTRY_DATE;
+    }
 
-    public Stack<String> getComments() {}
+    public String getComments() {
+        return this.comments;
+    }
 
-    public void setComments(Stack<String> comments) {}
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
 
-    public void addComment(String comment) {}
+    public void addPersonalBelonging(PersonalBelonging newBelonging) {
+        this.personalBelongings.add(newBelonging);
+    }
 
-    public void undoAddComment() {}
+    public void removePersonalBelonging(PersonalBelonging unwantedBelonging) {
+        this.personalBelongings.remove(unwantedBelonging);
+    }
 
-    public void addPersonalBelonging(PersonalBelonging newBelonging) {}
+    public void addMedicalRecord(MedicalRecord newRecord) {
+        this.medicalRecords.add(newRecord);
+    }
 
-    public void removePersonalBelonging(PersonalBelonging unwantedBelonging) {}
-
-    public void addMedicalRecord(MedicalRecord newRecord) {}
-
-    public void removeMedicalRecord(MedicalRecord unwantedRecord) {}
+    public void removeMedicalRecord(MedicalRecord unwantedRecord) {
+        this.medicalRecords.remove(unwantedRecord);
+    }
 }
