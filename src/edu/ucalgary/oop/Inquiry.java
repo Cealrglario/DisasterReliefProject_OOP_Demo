@@ -45,7 +45,7 @@ public class Inquiry {
         InquiryAccess<String> inquiryAccess = new InquiryAccess<>();
 
         try {
-            inquiryAccess.updateInfo("comments", infoProvided, this);
+            inquiryAccess.updateInfo("comments", infoProvided, this.INQUIRY_ID);
         } catch (SQLException e) {
             System.out.println("Unknown database error occurred. Information will only update locally.");
         }
