@@ -59,6 +59,7 @@ public class InquiryAccess<U> extends DatabaseObjectAccess<Inquiry, U> {
             retrievedInquiry.setLastKnownLocationId(locationId);
         } else {
             System.out.println("Error getting Inquiry by ID: Inquiry doesn't exist.");
+            return null;
         }
 
         myStmt.close();
@@ -108,15 +109,22 @@ public class InquiryAccess<U> extends DatabaseObjectAccess<Inquiry, U> {
 
     @Override
     public boolean updateInfo(String infoToUpdate, U newInfo, int inquiryId) throws SQLException {
+        int affectedRows;
+
         dbConnectionManager.initializeDbConnection();
         Connection dbConnect = dbConnectionManager.getDbConnection();
 
-        PreparedStatement myStmt = dbConnect.prepareStatement("UPDATE Inquiry SET " + infoToUpdate + " = " + newInfo +
-                " WHERE inquiry_id = ?");
+        PreparedStatement myStmt = dbConnect.prepareStatement("UPDATE Inquiry SET " + infoToUpdate + " = ? WHERE inquiry_id = ?");
 
-        myStmt.setInt(1, inquiryId);
+        myStmt.setObject(1, newInfo);
+        myStmt.setInt(2, inquiryId);
 
-        int affectedRows = myStmt.executeUpdate();
+        try {
+            affectedRows = myStmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Updating inquiry failed: Trying to update invalid field.");
+            return false;
+        }
 
         myStmt.close();
         dbConnectionManager.closeDbConnection();
@@ -137,7 +145,7 @@ public class InquiryAccess<U> extends DatabaseObjectAccess<Inquiry, U> {
         Connection dbConnect = dbConnectionManager.getDbConnection();
 
         Statement myStmt = dbConnect.createStatement();
-        queryResults = myStmt.executeQuery("SELECT " + infoToGet + "FROM Inquiry WHERE inquiry_id = " +
+        queryResults = myStmt.executeQuery("SELECT " + infoToGet + " FROM Inquiry WHERE inquiry_id = " +
                 inquiryId);
 
         if(queryResults.next()) {
