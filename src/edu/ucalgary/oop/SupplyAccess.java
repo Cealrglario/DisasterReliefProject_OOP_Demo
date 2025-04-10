@@ -21,16 +21,7 @@ public class SupplyAccess<U> extends DatabaseObjectAccess<Supply, U> {
             String type = queryResults.getString("type");
             String comments = queryResults.getString("comments");
 
-            Supply retrievedSupply = null;
-            if(type.equalsIgnoreCase("blanket")) {
-                retrievedSupply = new Blanket(supplyId);
-            } else if (type.equalsIgnoreCase("cot")) {
-                retrievedSupply = new Cot(supplyId, comments);
-            } else if (type.equalsIgnoreCase("water")) {
-                retrievedSupply = new Water(supplyId, false);
-            } else if (type.equalsIgnoreCase("personal item")) {
-                retrievedSupply = new PersonalBelonging(supplyId, comments);
-            }
+            Supply retrievedSupply = SupplyFactory.createSupply(supplyId, type, comments);
 
             retrievedSupplies.add(retrievedSupply);
         }
@@ -57,15 +48,7 @@ public class SupplyAccess<U> extends DatabaseObjectAccess<Supply, U> {
             String type = queryResults.getString("type");
             String comments = queryResults.getString("comments");
 
-            if(type.equalsIgnoreCase("blanket")) {
-                retrievedSupply = new Blanket(supplyId);
-            } else if (type.equalsIgnoreCase("cot")) {
-                retrievedSupply = new Cot(supplyId, comments);
-            } else if (type.equalsIgnoreCase("water")) {
-                retrievedSupply = new Water(supplyId, false);
-            } else if (type.equalsIgnoreCase("personal item")) {
-                retrievedSupply = new PersonalBelonging(supplyId, comments);
-            }
+            retrievedSupply = SupplyFactory.createSupply(supplyId, type, comments);
         } else {
             throw new SQLException("Error getting Supply by ID: Supply doesn't exist.");
         }
@@ -97,16 +80,7 @@ public class SupplyAccess<U> extends DatabaseObjectAccess<Supply, U> {
         try (ResultSet generatedKeys = myStmt.getGeneratedKeys()) {
             if (generatedKeys.next()) {
                 int supplyId = generatedKeys.getInt(1);
-
-                if(type.equalsIgnoreCase("blanket")) {
-                    newSupply = new Blanket(supplyId);
-                } else if (type.equalsIgnoreCase("cot")) {
-                    newSupply = new Cot(supplyId, comments);
-                } else if (type.equalsIgnoreCase("water")) {
-                    newSupply = new Water(supplyId, false);
-                } else if (type.equalsIgnoreCase("personal item")) {
-                    newSupply = new PersonalBelonging(supplyId, comments);
-                }
+                newSupply = SupplyFactory.createSupply(supplyId, type, comments);
             } else {
                 throw new SQLException("Creating supply failed, couldn't obtain supply ID.");
             }
