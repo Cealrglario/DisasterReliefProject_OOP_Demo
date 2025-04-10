@@ -20,11 +20,11 @@ public abstract class DatabaseObjectAccess<T, U> {
         return null;
     }
 
-    public boolean updateInfo(String infoToUpdate, U newInfo, T objectToUpdate) throws SQLException {
+    public boolean updateInfo(String infoToUpdate, U newInfo, int objectId) throws SQLException {
         return false;
     }
 
-    public U getInfo(String infoToGet, int idOfObject) throws SQLException {
+    public U getInfo(String infoToGet, int objectId) throws SQLException {
         return null;
     }
 }
