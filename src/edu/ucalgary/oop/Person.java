@@ -13,10 +13,17 @@ public class Person {
 
     public Person(int assignedId, String firstName, String gender, String phoneNumber) {
         this.ASSIGNED_ID = assignedId;
+        this.firstName = firstName;
+        this.gender = gender;
+        this.phoneNumber = phoneNumber;
     }
 
     public Person(int assignedId, String firstName, String gender, LocalDate dateOfBirth, String phoneNumber) {
         this.ASSIGNED_ID = assignedId;
+        this.firstName = firstName;
+        this.gender = gender;
+        this.dateOfBirth = dateOfBirth;
+        this.phoneNumber = phoneNumber;
     }
 
     public String getFirstName() {
