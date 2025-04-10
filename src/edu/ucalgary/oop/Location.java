@@ -13,6 +13,8 @@ public class Location {
 
     public Location(int locationId, String name, String address) {
         this.LOCATION_ID = locationId;
+        this.name = name;
+        this.address = address;
     }
 
     public int getLocationId() {
