@@ -1,6 +1,188 @@
 package edu.ucalgary.oop;
 
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SupplyAccess<U> extends DatabaseObjectAccess<Supply, U> {
+
+    @Override
+    public List<Supply> getAll() throws SQLException {
+        List<Supply> retrievedSupplies = new ArrayList<>();
+
+        dbConnectionManager.initializeDbConnection();
+        Connection dbConnect = dbConnectionManager.getDbConnection();
+
+        Statement myStmt = dbConnect.createStatement();
+        queryResults = myStmt.executeQuery("SELECT * FROM Supply");
+
+        while(queryResults.next()) {
+            int supplyId = queryResults.getInt("supply_id");
+            String type = queryResults.getString("type");
+            String comments = queryResults.getString("comments");
+
+            Supply retrievedSupply = null;
+            if(type.equalsIgnoreCase("blanket")) {
+                retrievedSupply = new Blanket(supplyId);
+            } else if (type.equalsIgnoreCase("cot")) {
+                retrievedSupply = new Cot(supplyId, comments);
+            } else if (type.equalsIgnoreCase("water")) {
+                retrievedSupply = new Water(supplyId, false);
+            } else if (type.equalsIgnoreCase("personal item")) {
+                retrievedSupply = new PersonalBelonging(supplyId, comments);
+            }
+
+            retrievedSupplies.add(retrievedSupply);
+        }
+
+        myStmt.close();
+        dbConnectionManager.closeDbConnection();
+
+        return retrievedSupplies;
+    }
+
+
+    @Override
+    public Supply getById(int idOfSupply) throws SQLException {
+        Supply retrievedSupply = null;
+
+        dbConnectionManager.initializeDbConnection();
+        Connection dbConnect = dbConnectionManager.getDbConnection();
+
+        Statement myStmt = dbConnect.createStatement();
+        queryResults = myStmt.executeQuery("SELECT * FROM Supply WHERE supply_id = " + idOfSupply);
+
+        if(queryResults.next()) {
+            int supplyId = queryResults.getInt("supply_id");
+            String type = queryResults.getString("type");
+            String comments = queryResults.getString("comments");
+
+            if(type.equalsIgnoreCase("blanket")) {
+                retrievedSupply = new Blanket(supplyId);
+            } else if (type.equalsIgnoreCase("cot")) {
+                retrievedSupply = new Cot(supplyId, comments);
+            } else if (type.equalsIgnoreCase("water")) {
+                retrievedSupply = new Water(supplyId, false);
+            } else if (type.equalsIgnoreCase("personal item")) {
+                retrievedSupply = new PersonalBelonging(supplyId, comments);
+            }
+        } else {
+            throw new SQLException("Error getting Supply by ID: Supply doesn't exist.");
+        }
+
+        myStmt.close();
+        dbConnectionManager.closeDbConnection();
+
+        return retrievedSupply;
+    }
+
+
+    public Supply addSupply(String type, String comments) throws SQLException {
+        dbConnectionManager.initializeDbConnection();
+        Connection dbConnect = dbConnectionManager.getDbConnection();
+
+        PreparedStatement myStmt = dbConnect.prepareStatement(
+                "INSERT INTO Supply (type, comments) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
+
+        myStmt.setString(1, type);
+        myStmt.setString(2, comments);
+
+        int affectedRows = myStmt.executeUpdate();
+
+        if (affectedRows == 0) {
+            throw new SQLException("Creating supply failed, no rows affected.");
+        }
+
+        Supply newSupply = null;
+        try (ResultSet generatedKeys = myStmt.getGeneratedKeys()) {
+            if (generatedKeys.next()) {
+                int supplyId = generatedKeys.getInt(1);
+
+                if(type.equalsIgnoreCase("blanket")) {
+                    newSupply = new Blanket(supplyId);
+                } else if (type.equalsIgnoreCase("cot")) {
+                    newSupply = new Cot(supplyId, comments);
+                } else if (type.equalsIgnoreCase("water")) {
+                    newSupply = new Water(supplyId, false);
+                } else if (type.equalsIgnoreCase("personal item")) {
+                    newSupply = new PersonalBelonging(supplyId, comments);
+                }
+            } else {
+                throw new SQLException("Creating supply failed, couldn't obtain supply ID.");
+            }
+        }
+
+        myStmt.close();
+        dbConnectionManager.closeDbConnection();
+
+        return newSupply;
+    }
+
+
+    @Override
+    public boolean updateInfo(String infoToUpdate, U newInfo, int supplyId) throws SQLException {
+        dbConnectionManager.initializeDbConnection();
+        Connection dbConnect = dbConnectionManager.getDbConnection();
+
+        PreparedStatement myStmt = dbConnect.prepareStatement("UPDATE Supply SET " + infoToUpdate + " = " + newInfo +
+                " WHERE supply_id = ?");
+
+        myStmt.setInt(1, supplyId);
+
+        int affectedRows = myStmt.executeUpdate();
+
+        myStmt.close();
+        dbConnectionManager.closeDbConnection();
+
+        if (affectedRows == 0) {
+            System.out.println("Updating supply failed, no rows affected.");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+
+    @Override
+    public U getInfo(String infoToGet, int supplyId) throws SQLException {
+        U retrievedInfo;
+
+        dbConnectionManager.initializeDbConnection();
+        Connection dbConnect = dbConnectionManager.getDbConnection();
+
+        Statement myStmt = dbConnect.createStatement();
+        queryResults = myStmt.executeQuery("SELECT " + infoToGet + "FROM Supply WHERE supply_id = " +
+                supplyId);
+
+        if(queryResults.next()) {
+            retrievedInfo = (U) queryResults.getObject(infoToGet);
+        } else {
+            System.out.println("Error retrieving info, results empty.");
+            return null;
+        }
+
+        myStmt.close();
+        dbConnectionManager.closeDbConnection();
+
+        return retrievedInfo;
+    }
+
+
+    public boolean removeSupply(Supply unwantedSupply) throws SQLException {
+        int unwantedSupplyId = unwantedSupply.getSupplyId();
+
+        dbConnectionManager.initializeDbConnection();
+        Connection dbConnect = dbConnectionManager.getDbConnection();
+
+        PreparedStatement myStmt = dbConnect.prepareStatement("DELETE FROM Supply WHERE supply_id = ?");
+
+        myStmt.setInt(1, unwantedSupplyId);
+
+        int rowsAffected = myStmt.executeUpdate();
+
+        myStmt.close();
+        dbConnectionManager.closeDbConnection();
+
+        return rowsAffected > 0;
+    }
 }
