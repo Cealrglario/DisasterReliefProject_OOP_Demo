@@ -105,20 +105,19 @@ public class InquiryAccess<U> extends DatabaseObjectAccess<Inquiry, U> {
     }
 
     @Override
-    public boolean updateInfo(String infoToUpdate, U newInfo, Inquiry inquiryToUpdate) throws SQLException {
+    public boolean updateInfo(String infoToUpdate, U newInfo, int inquiryId) throws SQLException {
         dbConnectionManager.initializeDbConnection();
         Connection dbConnect = dbConnectionManager.getDbConnection();
-
-        int idOfInquiry = inquiryToUpdate.getInquiryId();
 
         PreparedStatement myStmt = dbConnect.prepareStatement("UPDATE Inquiry SET " + infoToUpdate + " = " + newInfo +
                 " WHERE inquiry_id = ?");
 
-        myStmt.setInt(1, idOfInquiry);
+        myStmt.setInt(1, inquiryId);
 
         int affectedRows = myStmt.executeUpdate();
 
         myStmt.close();
+        dbConnectionManager.closeDbConnection();
 
         if (affectedRows == 0) {
             System.out.println("Updating inquiry failed, no rows affected.");
@@ -129,8 +128,27 @@ public class InquiryAccess<U> extends DatabaseObjectAccess<Inquiry, U> {
     }
 
     @Override
-    public U getInfo(String infoToGet, int idOfObject) throws SQLException {
-        return null;
+    public U getInfo(String infoToGet, int inquiryId) throws SQLException {
+        U retrievedInfo;
+
+        dbConnectionManager.initializeDbConnection();
+        Connection dbConnect = dbConnectionManager.getDbConnection();
+
+        Statement myStmt = dbConnect.createStatement();
+        queryResults = myStmt.executeQuery("SELECT " + infoToGet + "FROM Inquiry WHERE inquiry_id = " +
+                inquiryId);
+
+        if(queryResults.next()) {
+            retrievedInfo = (U) queryResults.getObject(infoToGet);
+        } else {
+            System.out.println("Error retrieving info, results empty.");
+            return null;
+        }
+
+        myStmt.close();
+        dbConnectionManager.closeDbConnection();
+
+        return retrievedInfo;
     }
 
 
