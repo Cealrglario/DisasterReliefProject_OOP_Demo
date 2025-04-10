@@ -78,9 +78,9 @@ public class InquiryAccessTest {
         Inquiry updatedInquiry = null;
 
          try {
-             originalInquiry = inquiryDbAccess.getById(1);
-             inquiryDbAccess.updateInfo("comments", "updated comment");
-             updatedInquiry = inquiryDbAccess.getById(1);
+             originalInquiry = inquiryDbAccess.getById(placeholderInquiry.getInquiryId());
+             inquiryDbAccess.updateInfo("comments", "updated comment", placeholderInquiry.getInquiryId());
+             updatedInquiry = inquiryDbAccess.getById(placeholderInquiry.getInquiryId());
          } catch (SQLException e) {
              fail("SQLException occurred while testing updateInfo: " + e.getMessage());
          }
@@ -95,8 +95,8 @@ public class InquiryAccessTest {
         String retrievedComments = null;
 
         try {
-            testInquiry = inquiryDbAccess.getById(1);
-            retrievedComments = inquiryDbAccess.getInfo("comments", 1);
+            testInquiry = inquiryDbAccess.getById(placeholderInquiry.getInquiryId());
+            retrievedComments = inquiryDbAccess.getInfo("comments", placeholderInquiry.getInquiryId());
         } catch (SQLException e) {
             fail("SQLException occurred while testing getInfo: " + e.getMessage());
         }
@@ -147,15 +147,17 @@ public class InquiryAccessTest {
                 inquiriesAfterRemoving.size(), inquiriesBeforeRemoving.size());
     }
 
-    @Test (expected = SQLException.class)
+    @Test
     public void testGetByIdNotInDb() throws SQLException {
-        Inquiry testInquiry;
+        Inquiry testInquiry = null;
 
         try {
             testInquiry = inquiryDbAccess.getById(-999);
         } catch (SQLException e) {
-            throw new SQLException();
+            fail("SQLException occurred while testing getByIdNotInDb: " + e.getMessage());
         }
+
+        assertNull("testInquiry should be null as it tries to retrieve a non-existent entry", testInquiry);
     }
 
     @Test
@@ -163,7 +165,7 @@ public class InquiryAccessTest {
         boolean success = true;
 
         try {
-            success = inquiryDbAccess.updateInfo("non_existent_field", "test value");
+            success = inquiryDbAccess.updateInfo("non_existent_field", "test value", placeholderInquiry.getInquiryId());
         } catch (SQLException e) {
             fail("SQLException occurred while testing updateInfoWithInvalidField: " + e.getMessage());
         }

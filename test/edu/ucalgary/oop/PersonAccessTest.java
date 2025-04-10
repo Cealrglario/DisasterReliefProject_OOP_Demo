@@ -11,14 +11,14 @@ import java.util.List;
 public class PersonAccessTest {
     private PersonAccess<String> personDbAccess;
 
-    Person placeholderPerson = new Person(-1, "Test Person", "Female", "111-1111");
+    Person placeholderPerson;
 
     @Before
     public void setUp() throws Exception {
         personDbAccess = new PersonAccess<>();
 
         try {
-            personDbAccess.addEntry(placeholderPerson);
+            personDbAccess.addPerson("Test person", "Female", null, "111-1111");
         } catch (SQLException e) {
             throw new SQLException(e.getMessage());
         }
@@ -27,7 +27,7 @@ public class PersonAccessTest {
     @After
     public void tearDown() throws Exception {
         try {
-            personDbAccess.removeEntry(placeholderPerson);
+            personDbAccess.removePerson(placeholderPerson);
         } catch (SQLException e) {
             throw new SQLException(e.getMessage());
         }
@@ -78,7 +78,7 @@ public class PersonAccessTest {
 
         try {
             originalPerson = personDbAccess.getById(-1);
-            personDbAccess.updateInfo("first_name", "new name");
+            personDbAccess.updateInfo("first_name", "new name", 1);
             updatedPerson = personDbAccess.getById(-1);
         } catch (SQLException e) {
             fail("SQLException occurred while testing updateInfo: " + e.getMessage());
@@ -109,11 +109,11 @@ public class PersonAccessTest {
         List<Person> personsBeforeAdding = null;
         List<Person> personsAfterAdding = null;
 
-        Person newPerson = new Person(-2, "New Test Person", "Male", "222-2222");
+        Person newPerson = null;
 
         try {
             personsBeforeAdding = personDbAccess.getAll();
-            personDbAccess.addEntry(newPerson);
+            newPerson = personDbAccess.addPerson("Ex Test Person", "Non-binary", null, "333-3333");
             personsAfterAdding = personDbAccess.getAll();
         } catch (SQLException e) {
             fail("SQLException occurred while testing addEntry: " + e.getMessage());
@@ -123,7 +123,7 @@ public class PersonAccessTest {
                 personsAfterAdding.size(), personsBeforeAdding.size());
 
         try {
-            personDbAccess.removeEntry(newPerson);
+            personDbAccess.removePerson(newPerson);
         } catch (SQLException e) {
             fail("SQLException occurred while testing addEntry: " + e.getMessage());
         }
@@ -137,9 +137,9 @@ public class PersonAccessTest {
         Person exPerson = new Person(-2,  "Ex Test Person", "Non-binary", "333-3333");
 
         try {
-            personDbAccess.addEntry(exPerson);
+            exPerson = personDbAccess.addPerson("Ex Test Person", "Non-binary", null, "333-3333");
             personsBeforeRemoving = personDbAccess.getAll();
-            personDbAccess.removeEntry(exPerson);
+            personDbAccess.removePerson(exPerson);
             personsAfterRemoving = personDbAccess.getAll();
         } catch (SQLException e) {
             fail("SQLException occurred while testing removeEntry: " + e.getMessage());
@@ -168,7 +168,7 @@ public class PersonAccessTest {
         boolean success = true;
 
         try {
-            success = personDbAccess.updateInfo("non_existent_field", "test value");
+            success = personDbAccess.updateInfo("non_existent_field", "test value", 1);
         } catch (SQLException e) {
             fail("SQLException occurred while testing updateInfoWithInvalidField: " + e.getMessage());
         }
@@ -180,10 +180,10 @@ public class PersonAccessTest {
     @Test
     public void testRemoveEntryNotInDb() {
         boolean success = true;
-        Person personNotInDb = new Person(-2,  "Test Person", "Non-binary", "333-3333");
+        Person personNotInDb = new Person(-999,  "Test Person", "Non-binary", "333-3333");
 
         try {
-            success = personDbAccess.removeEntry(personNotInDb);
+            success = personDbAccess.removePerson(personNotInDb);
         } catch (SQLException e) {
             fail("SQLException occurred while testing removeEntryNotInDb: " + e.getMessage());
         }

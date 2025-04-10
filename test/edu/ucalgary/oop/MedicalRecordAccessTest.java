@@ -11,14 +11,14 @@ import java.util.List;
 public class MedicalRecordAccessTest {
     private MedicalRecordAccess<String> medicalRecordDbAccess;
 
-    MedicalRecord placeholderRecord = new MedicalRecord(-1, -1, "Placeholder");
+    MedicalRecord placeholderRecord;
 
     @Before
     public void setUp() throws Exception {
         medicalRecordDbAccess = new MedicalRecordAccess<>();
 
         try {
-            medicalRecordDbAccess.addEntry(placeholderRecord);
+            placeholderRecord = medicalRecordDbAccess.addMedicalRecord(1, "Placeholder");
         } catch (SQLException e) {
             throw new SQLException(e.getMessage());
         }
@@ -27,7 +27,7 @@ public class MedicalRecordAccessTest {
     @After
     public void tearDown() throws Exception {
         try {
-            medicalRecordDbAccess.removeEntry(placeholderRecord);
+            medicalRecordDbAccess.removeMedicalRecord(placeholderRecord);
         } catch (SQLException e) {
             throw new SQLException(e.getMessage());
         }
@@ -62,7 +62,7 @@ public class MedicalRecordAccessTest {
         MedicalRecord testRecord = null;
 
         try {
-            testRecord = medicalRecordDbAccess.getById(-1);
+            testRecord = medicalRecordDbAccess.getById(1);
         } catch (SQLException e) {
             fail("SQLException occurred while testing getById: " + e.getMessage());
         }
@@ -77,9 +77,9 @@ public class MedicalRecordAccessTest {
         MedicalRecord updatedRecord = null;
 
         try {
-            originalRecord = medicalRecordDbAccess.getById(-1);
-            medicalRecordDbAccess.updateInfo("treatment_details", "Updated treatment details");
-            updatedRecord = medicalRecordDbAccess.getById(-1);
+            originalRecord = medicalRecordDbAccess.getById(1);
+            medicalRecordDbAccess.updateInfo("treatment_details", "Updated treatment details", 1);
+            updatedRecord = medicalRecordDbAccess.getById(1);
         } catch (SQLException e) {
             fail("SQLException occurred while testing updateInfo: " + e.getMessage());
         }
@@ -94,8 +94,8 @@ public class MedicalRecordAccessTest {
         String retrievedDetails = null;
 
         try {
-            testRecord = medicalRecordDbAccess.getById(-1);
-            retrievedDetails = medicalRecordDbAccess.getInfo("treatment_details", -1);
+            testRecord = medicalRecordDbAccess.getById(1);
+            retrievedDetails = medicalRecordDbAccess.getInfo("treatment_details", 1);
         } catch (SQLException e) {
             fail("SQLException occurred while testing getInfo: " + e.getMessage());
         }
@@ -109,11 +109,11 @@ public class MedicalRecordAccessTest {
         List<MedicalRecord> recordsBeforeAdding = null;
         List<MedicalRecord> recordsAfterAdding = null;
 
-        MedicalRecord newRecord = new MedicalRecord(-2, -1, "Test add record");
+        MedicalRecord newRecord = null;
 
         try {
             recordsBeforeAdding = medicalRecordDbAccess.getAll();
-            medicalRecordDbAccess.addEntry(newRecord);
+            newRecord = medicalRecordDbAccess.addMedicalRecord(2, "Test add record");
             recordsAfterAdding = medicalRecordDbAccess.getAll();
         } catch (SQLException e) {
             fail("SQLException occurred while testing addEntry: " + e.getMessage());
@@ -123,7 +123,7 @@ public class MedicalRecordAccessTest {
                 recordsAfterAdding.size(), recordsBeforeAdding.size());
 
         try {
-            medicalRecordDbAccess.removeEntry(newRecord);
+            medicalRecordDbAccess.removeMedicalRecord(newRecord);
         } catch (SQLException e) {
             fail("SQLException occurred while testing addEntry: " + e.getMessage());
         }
@@ -134,12 +134,12 @@ public class MedicalRecordAccessTest {
         List<MedicalRecord> recordsBeforeRemoving = null;
         List<MedicalRecord> recordsAfterRemoving = null;
 
-        MedicalRecord exRecord = new MedicalRecord(-2, -1, "test remove record");
+        MedicalRecord exRecord = null;
 
         try {
-            medicalRecordDbAccess.addEntry(exRecord);
+            exRecord = medicalRecordDbAccess.addMedicalRecord(2, "Test remove record");
             recordsBeforeRemoving = medicalRecordDbAccess.getAll();
-            medicalRecordDbAccess.removeEntry(exRecord);
+            medicalRecordDbAccess.removeMedicalRecord(exRecord);
             recordsAfterRemoving = medicalRecordDbAccess.getAll();
         } catch (SQLException e) {
             fail("SQLException occurred while testing removeEntry: " + e.getMessage());
@@ -168,7 +168,7 @@ public class MedicalRecordAccessTest {
         boolean success = true;
 
         try {
-            success = medicalRecordDbAccess.updateInfo("non_existent_field", "test value");
+            success = medicalRecordDbAccess.updateInfo("non_existent_field", "test value", 1);
         } catch (SQLException e) {
             fail("SQLException occurred while testing updateInfoWithInvalidField: " + e.getMessage());
         }
@@ -180,10 +180,10 @@ public class MedicalRecordAccessTest {
     @Test
     public void testRemoveEntryNotInDb() {
         boolean success = true;
-        MedicalRecord recordNotInDb = new MedicalRecord(-2, -1, "Test not in db");
+        MedicalRecord recordNotInDb = new MedicalRecord(-999, -1, "Test not in db");
 
         try {
-            success = medicalRecordDbAccess.removeEntry(recordNotInDb);
+            success = medicalRecordDbAccess.removeMedicalRecord(recordNotInDb);
         } catch (SQLException e) {
             fail("SQLException occurred while testing removeEntryNotInDb: " + e.getMessage());
         }

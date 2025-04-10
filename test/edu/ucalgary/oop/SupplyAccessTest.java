@@ -11,16 +11,14 @@ import java.util.List;
 public class SupplyAccessTest {
     private SupplyAccess<String> supplyDbAccess;
 
-    Supply placeholderSupply = new Blanket(-1);
+    Supply placeholderSupply;
 
     @Before
     public void setUp() throws Exception {
         supplyDbAccess = new SupplyAccess<>();
 
-        placeholderSupply.setComments("Test comment");
-
         try {
-            supplyDbAccess.addEntry(placeholderSupply);
+            placeholderSupply = supplyDbAccess.addSupply("Blanket", null);
         } catch (SQLException e) {
             throw new SQLException(e.getMessage());
         }
@@ -29,7 +27,7 @@ public class SupplyAccessTest {
     @After
     public void tearDown() throws Exception {
         try {
-            supplyDbAccess.removeEntry(placeholderSupply);
+            supplyDbAccess.removeSupply(placeholderSupply);
         } catch (SQLException e) {
             throw new SQLException(e.getMessage());
         }
@@ -64,13 +62,13 @@ public class SupplyAccessTest {
         Supply testSupply = null;
 
         try {
-            testSupply = supplyDbAccess.getById(-1);
+            testSupply = supplyDbAccess.getById(1);
         } catch (SQLException e) {
             fail("SQLException occurred while testing getById: " + e.getMessage());
         }
 
         assertEquals("The SUPPLY_ID of testSupply should match the id selected when calling getById()",
-                -1, testSupply.getSupplyId());
+                1, testSupply.getSupplyId());
     }
 
     @Test
@@ -79,9 +77,9 @@ public class SupplyAccessTest {
         Supply updatedSupply = null;
 
         try {
-            originalSupply = supplyDbAccess.getById(-1);
-            supplyDbAccess.updateInfo("comments", "new comments");
-            updatedSupply = supplyDbAccess.getById(-1);
+            originalSupply = supplyDbAccess.getById(1);
+            supplyDbAccess.updateInfo("comments", "new comments", 1);
+            updatedSupply = supplyDbAccess.getById(1);
         } catch (SQLException e) {
             fail("SQLException occurred while testing updateInfo: " + e.getMessage());
         }
@@ -96,8 +94,8 @@ public class SupplyAccessTest {
         String retrievedType = null;
 
         try {
-            testSupply = supplyDbAccess.getById(-1);
-            retrievedType = supplyDbAccess.getInfo("type", -1);
+            testSupply = supplyDbAccess.getById(1);
+            retrievedType = supplyDbAccess.getInfo("type", 1);
         } catch (SQLException e) {
             fail("SQLException occurred while testing getInfo: " + e.getMessage());
         }
@@ -111,12 +109,11 @@ public class SupplyAccessTest {
         List<Supply> suppliesBeforeAdding = null;
         List<Supply> suppliesAfterAdding = null;
 
-        Supply newSupply = new Blanket(-2);
-        newSupply.setComments("Test add");
+        Supply newSupply = null;
 
         try {
             suppliesBeforeAdding = supplyDbAccess.getAll();
-            supplyDbAccess.addEntry(newSupply);
+            newSupply = supplyDbAccess.addSupply("Blanket", null);
             suppliesAfterAdding = supplyDbAccess.getAll();
         } catch (SQLException e) {
             fail("SQLException occurred while testing addEntry: " + e.getMessage());
@@ -126,7 +123,7 @@ public class SupplyAccessTest {
                 suppliesAfterAdding.size(), suppliesBeforeAdding.size());
 
         try {
-            supplyDbAccess.removeEntry(newSupply);
+            supplyDbAccess.removeSupply(newSupply);
         } catch (SQLException e) {
             fail("SQLException occurred while testing addEntry: " + e.getMessage());
         }
@@ -137,12 +134,12 @@ public class SupplyAccessTest {
         List<Supply> suppliesBeforeRemoving = null;
         List<Supply> suppliesAfterRemoving = null;
 
-        Supply exSupply = new Blanket(-2);
+        Supply exSupply = null;
 
         try {
-            supplyDbAccess.addEntry(exSupply);
+            exSupply = supplyDbAccess.addSupply("Blanket", null);
             suppliesBeforeRemoving = supplyDbAccess.getAll();
-            supplyDbAccess.removeEntry(exSupply);
+            supplyDbAccess.removeSupply(exSupply);
             suppliesAfterRemoving = supplyDbAccess.getAll();
         } catch (SQLException e) {
             fail("SQLException occurred while testing removeEntry: " + e.getMessage());
@@ -171,7 +168,7 @@ public class SupplyAccessTest {
         boolean success = true;
 
         try {
-            success = supplyDbAccess.updateInfo("non_existent_field", "test value");
+            success = supplyDbAccess.updateInfo("non_existent_field", "test value", 1);
         } catch (SQLException e) {
             fail("SQLException occurred while testing updateInfoWithInvalidField: " + e.getMessage());
         }
@@ -186,7 +183,7 @@ public class SupplyAccessTest {
         Supply blanketNotInDb = new Blanket(-999);
 
         try {
-            success = supplyDbAccess.removeEntry(blanketNotInDb);
+            success = supplyDbAccess.removeSupply(blanketNotInDb);
         } catch (SQLException e) {
             fail("SQLException occurred while testing removeEntryNotInDb: " + e.getMessage());
         }
