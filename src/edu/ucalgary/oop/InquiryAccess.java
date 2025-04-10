@@ -58,7 +58,7 @@ public class InquiryAccess<U> extends DatabaseObjectAccess<Inquiry, U> {
             retrievedInquiry = new Inquiry(inquiryId, inquirerId, seekingId, dateOfInquiry, comments);
             retrievedInquiry.setLastKnownLocationId(locationId);
         } else {
-            throw new SQLException("Error getting Inquiry by ID: Inquiry doesn't exist.");
+            System.out.println("Error getting Inquiry by ID: Inquiry doesn't exist.");
         }
 
         myStmt.close();
@@ -84,7 +84,8 @@ public class InquiryAccess<U> extends DatabaseObjectAccess<Inquiry, U> {
         int affectedRows = myStmt.executeUpdate();
 
         if (affectedRows == 0) {
-            throw new SQLException("Creating inquiry failed, no rows affected.");
+            System.out.println("Creating inquiry failed, no rows affected.");
+            return null;
         }
 
         Inquiry newInquiry = null;
@@ -94,7 +95,8 @@ public class InquiryAccess<U> extends DatabaseObjectAccess<Inquiry, U> {
 
                 newInquiry = new Inquiry(inquiryId, inquirerId, missingPersonId, dateOfInquiry, infoProvided);
             } else {
-                throw new SQLException("Creating inquiry failed, couldn't obtain inquiry ID.");
+                System.out.println("Creating inquiry failed, couldn't obtain inquiry ID.");
+                return null;
             }
         }
 

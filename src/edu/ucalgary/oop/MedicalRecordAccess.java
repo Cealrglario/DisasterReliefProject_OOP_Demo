@@ -49,7 +49,8 @@ public class MedicalRecordAccess<U> extends DatabaseObjectAccess<MedicalRecord, 
 
             retrievedMedicalRecord = new MedicalRecord(medicalRecordId, locationId, treatmentDetails);
         } else {
-            throw new SQLException("Error getting MedicalRecord by ID: MedicalRecord doesn't exist.");
+            System.out.println("Error getting MedicalRecord by ID: MedicalRecord doesn't exist.");
+            return null;
         }
 
         myStmt.close();
@@ -73,7 +74,8 @@ public class MedicalRecordAccess<U> extends DatabaseObjectAccess<MedicalRecord, 
 
         int affectedRows = myStmt.executeUpdate();
         if (affectedRows == 0) {
-            throw new SQLException("Creating medical record failed, no rows affected.");
+            System.out.println("Creating medical record failed, no rows affected.");
+            return null;
         }
 
         MedicalRecord newMedicalRecord = null;
@@ -82,7 +84,8 @@ public class MedicalRecordAccess<U> extends DatabaseObjectAccess<MedicalRecord, 
                 int medicalRecordId = generatedKeys.getInt(1);
                 newMedicalRecord = new MedicalRecord(medicalRecordId, locationId, treatmentDetails);
             } else {
-                throw new SQLException("Creating medical record failed, couldn't obtain medical record ID.");
+                System.out.println("Creating medical record failed, couldn't obtain medical record ID.");
+                return null;
             }
         }
 

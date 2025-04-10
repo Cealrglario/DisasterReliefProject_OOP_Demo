@@ -50,7 +50,8 @@ public class SupplyAccess<U> extends DatabaseObjectAccess<Supply, U> {
 
             retrievedSupply = SupplyFactory.createSupply(supplyId, type, comments);
         } else {
-            throw new SQLException("Error getting Supply by ID: Supply doesn't exist.");
+            System.out.println("Error getting Supply by ID: Supply doesn't exist.");
+            return null;
         }
 
         myStmt.close();
@@ -82,7 +83,8 @@ public class SupplyAccess<U> extends DatabaseObjectAccess<Supply, U> {
                 int supplyId = generatedKeys.getInt(1);
                 newSupply = SupplyFactory.createSupply(supplyId, type, comments);
             } else {
-                throw new SQLException("Creating supply failed, couldn't obtain supply ID.");
+                System.out.println("Creating supply failed, couldn't obtain supply ID.");
+                return null;
             }
         }
 

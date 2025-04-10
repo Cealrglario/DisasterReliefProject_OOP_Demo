@@ -84,7 +84,8 @@ public class PersonAccess<U> extends DatabaseObjectAccess<Person, U> {
             retrievedPerson.setLastName(lastName);
             retrievedPerson.setInFamilyGroup(inFamilyGroup);
         } else {
-            throw new SQLException("Error getting Person by ID: Person doesn't exist.");
+            System.out.println("Error getting Person by ID: Person doesn't exist.");
+            return null;
         }
 
         myStmt.close();
@@ -114,7 +115,8 @@ public class PersonAccess<U> extends DatabaseObjectAccess<Person, U> {
 
         int affectedRows = myStmt.executeUpdate();
         if (affectedRows == 0) {
-            throw new SQLException("Creating person failed, no rows affected.");
+            System.out.println("Creating person failed, no rows affected.");
+            return null;
         }
 
         Person newPerson = null;
@@ -127,7 +129,8 @@ public class PersonAccess<U> extends DatabaseObjectAccess<Person, U> {
                     newPerson = new Person(assignedId, firstName, gender, phoneNumber);
                 }
             } else {
-                throw new SQLException("Creating person failed, couldn't obtain person ID.");
+                System.out.println("Creating person failed, couldn't obtain person ID.");
+                return null;
             }
         }
 

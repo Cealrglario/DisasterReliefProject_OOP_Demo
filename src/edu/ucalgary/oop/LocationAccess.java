@@ -49,7 +49,7 @@ public class LocationAccess<U> extends DatabaseObjectAccess<Location, U> {
 
             retrievedLocation = new Location(locationId, name, address);
         } else {
-            throw new SQLException("Error getting Location by ID: Location doesn't exist.");
+            System.out.println("Error getting Location by ID: Location doesn't exist.");
         }
 
         myStmt.close();
