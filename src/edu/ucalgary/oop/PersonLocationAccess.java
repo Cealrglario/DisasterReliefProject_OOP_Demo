@@ -8,7 +8,6 @@ import java.util.Map;
 
 public class PersonLocationAccess extends DatabaseAssociationAccess<Person, Location> {
 
-    @Override
     public List<Map<Person, Location>> getAll() throws SQLException {
         List<Map<Person, Location>> retrievedAssociations = new ArrayList<>();
 
@@ -40,7 +39,6 @@ public class PersonLocationAccess extends DatabaseAssociationAccess<Person, Loca
     }
 
 
-    @Override
     public Map<Person, Location> getById(Person person, Location location) throws SQLException {
         Map<Person, Location> retrievedAssociation = null;
 
@@ -73,7 +71,6 @@ public class PersonLocationAccess extends DatabaseAssociationAccess<Person, Loca
     }
 
 
-    @Override
     public boolean addEntry(Person person, Location location) throws SQLException {
         int affectedRows;
         PreparedStatement myStmt;
@@ -112,7 +109,6 @@ public class PersonLocationAccess extends DatabaseAssociationAccess<Person, Loca
     }
 
 
-    @Override
     public boolean removeEntry(Person person, Location location) throws SQLException {
         dbConnectionManager.initializeDbConnection();
         Connection dbConnect = dbConnectionManager.getDbConnection();
