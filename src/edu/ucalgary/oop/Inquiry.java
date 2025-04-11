@@ -42,14 +42,6 @@ public class Inquiry {
     }
 
     public void setInfoProvided(String infoProvided) {
-        InquiryAccess<String> inquiryAccess = new InquiryAccess<>();
-
-        try {
-            inquiryAccess.updateInfo("comments", infoProvided, this.INQUIRY_ID);
-        } catch (SQLException e) {
-            System.out.println("Unknown database error occurred. Information will only update locally.");
-        }
-
         this.infoProvided = infoProvided;
     }
 
@@ -57,6 +49,8 @@ public class Inquiry {
         return this.lastKnownLocationId;
     }
 
-    public void setLastKnownLocationId(int locationId) {}
+    public void setLastKnownLocationId(int locationId) {
+        this.lastKnownLocationId = locationId;
+    }
 }
 
