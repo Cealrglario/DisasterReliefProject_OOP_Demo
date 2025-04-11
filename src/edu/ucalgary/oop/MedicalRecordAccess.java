@@ -111,7 +111,7 @@ public class MedicalRecordAccess<U> extends DatabaseObjectAccess<MedicalRecord, 
         try {
             affectedRows = myStmt.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Updating medical record failed: Trying to update invalid field.");
+            System.out.println("Updating medical record failed: " + e.getMessage());
             return false;
         }
 

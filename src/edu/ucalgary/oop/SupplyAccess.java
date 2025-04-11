@@ -110,7 +110,7 @@ public class SupplyAccess<U> extends DatabaseObjectAccess<Supply, U> {
         try {
             affectedRows = myStmt.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Updating supply failed: Trying to update invalid field.");
+            System.out.println("Updating supply failed: " + e.getMessage());
             return false;
         }
 

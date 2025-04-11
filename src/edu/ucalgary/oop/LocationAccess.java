@@ -74,7 +74,7 @@ public class LocationAccess<U> extends DatabaseObjectAccess<Location, U> {
         try {
             affectedRows = myStmt.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Updating Location failed: Trying to update invalid field.");
+            System.out.println("Updating Location failed: " + e.getMessage());
             return false;
         }
 

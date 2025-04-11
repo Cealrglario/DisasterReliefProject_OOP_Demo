@@ -122,7 +122,7 @@ public class InquiryAccess<U> extends DatabaseObjectAccess<Inquiry, U> {
         try {
             affectedRows = myStmt.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Updating inquiry failed: Trying to update invalid field.");
+            System.out.println("Updating inquiry failed: " + e.getMessage());
             return false;
         }
 

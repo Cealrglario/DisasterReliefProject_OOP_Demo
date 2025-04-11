@@ -172,7 +172,7 @@ public class PersonAccess<U> extends DatabaseObjectAccess<Person, U> {
         try {
             affectedRows = myStmt.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Updating person failed: Trying to update invalid field.");
+            System.out.println("Updating person failed: " + e.getMessage());
             return false;
         }
         myStmt.close();
