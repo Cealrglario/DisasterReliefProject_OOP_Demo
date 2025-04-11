@@ -56,13 +56,4 @@ public enum LocationService {
         List<Person> occupants = personLocationAccess.getOccupantsOfLocation(location);
         location.setOccupants(occupants);
     }
-
-    public boolean saveLocation(Location location) throws SQLException {
-        boolean nameUpdated = locationAccess.updateInfo("name", location.getName(), location.getLocationId());
-        boolean addressUpdated = locationAccess.updateInfo("address", location.getAddress(), location.getLocationId());
-
-        refreshOccupants(location);
-
-        return nameUpdated && addressUpdated;
-    }
 }
