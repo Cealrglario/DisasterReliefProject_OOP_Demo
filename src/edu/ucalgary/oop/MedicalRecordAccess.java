@@ -50,6 +50,8 @@ public class MedicalRecordAccess<U> extends DatabaseObjectAccess<MedicalRecord, 
             retrievedMedicalRecord = new MedicalRecord(medicalRecordId, locationId, treatmentDetails);
         } else {
             System.out.println("Error getting MedicalRecord by ID: MedicalRecord doesn't exist.");
+            myStmt.close();
+            dbConnectionManager.closeDbConnection();
             return null;
         }
 
@@ -75,6 +77,8 @@ public class MedicalRecordAccess<U> extends DatabaseObjectAccess<MedicalRecord, 
         int affectedRows = myStmt.executeUpdate();
         if (affectedRows == 0) {
             System.out.println("Creating medical record failed, no rows affected.");
+            myStmt.close();
+            dbConnectionManager.closeDbConnection();
             return null;
         }
 
@@ -85,6 +89,8 @@ public class MedicalRecordAccess<U> extends DatabaseObjectAccess<MedicalRecord, 
                 newMedicalRecord = new MedicalRecord(medicalRecordId, locationId, treatmentDetails);
             } else {
                 System.out.println("Creating medical record failed, couldn't obtain medical record ID.");
+                myStmt.close();
+                dbConnectionManager.closeDbConnection();
                 return null;
             }
         }
@@ -112,6 +118,8 @@ public class MedicalRecordAccess<U> extends DatabaseObjectAccess<MedicalRecord, 
             affectedRows = myStmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Updating medical record failed: " + e.getMessage());
+            myStmt.close();
+            dbConnectionManager.closeDbConnection();
             return false;
         }
 
@@ -142,6 +150,8 @@ public class MedicalRecordAccess<U> extends DatabaseObjectAccess<MedicalRecord, 
             retrievedInfo = (U) queryResults.getObject(infoToGet);
         } else {
             System.out.println("Error retrieving info, results empty.");
+            myStmt.close();
+            dbConnectionManager.closeDbConnection();
             return null;
         }
 

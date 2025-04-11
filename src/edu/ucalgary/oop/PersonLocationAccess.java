@@ -61,6 +61,8 @@ public class PersonLocationAccess extends DatabaseAssociationAccess<Person, Loca
             retrievedAssociation.put(person, location);
         } else {
             System.out.println("Error getting PersonLocation by IDs: Association doesn't exist.");
+            myStmt.close();
+            dbConnectionManager.closeDbConnection();
             return null;
         }
 
@@ -85,6 +87,7 @@ public class PersonLocationAccess extends DatabaseAssociationAccess<Person, Loca
             myStmt.setInt(1, person.getAssignedId());
             myStmt.setInt(2, location.getLocationId());
         } else {
+            dbConnectionManager.closeDbConnection();
             return false;
         }
 
@@ -92,6 +95,8 @@ public class PersonLocationAccess extends DatabaseAssociationAccess<Person, Loca
             affectedRows = myStmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Adding person-location association failed: " + e.getMessage());
+            myStmt.close();
+            dbConnectionManager.closeDbConnection();
             return false;
         }
 

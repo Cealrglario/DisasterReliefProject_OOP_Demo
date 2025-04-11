@@ -50,6 +50,9 @@ public class LocationAccess<U> extends DatabaseObjectAccess<Location, U> {
             retrievedLocation = new Location(locationId, name, address);
         } else {
             System.out.println("Error getting Location by ID: Location doesn't exist.");
+            myStmt.close();
+            dbConnectionManager.closeDbConnection();
+            return null;
         }
 
         myStmt.close();
@@ -75,6 +78,8 @@ public class LocationAccess<U> extends DatabaseObjectAccess<Location, U> {
             affectedRows = myStmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Updating Location failed: " + e.getMessage());
+            myStmt.close();
+            dbConnectionManager.closeDbConnection();
             return false;
         }
 
@@ -105,6 +110,8 @@ public class LocationAccess<U> extends DatabaseObjectAccess<Location, U> {
             retrievedInfo = (U) queryResults.getObject(infoToGet);
         } else {
             System.out.println("Error retrieving info, results empty.");
+            myStmt.close();
+            dbConnectionManager.closeDbConnection();
             return null;
         }
 

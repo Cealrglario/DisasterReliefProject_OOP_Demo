@@ -101,6 +101,8 @@ public class PersonAccess<U> extends DatabaseObjectAccess<Person, U> {
             retrievedPerson.setInFamilyGroup(inFamilyGroup);
         } else {
             System.out.println("Error getting Person by ID: Person doesn't exist.");
+            myStmt.close();
+            dbConnectionManager.closeDbConnection();
             return null;
         }
 
@@ -132,6 +134,8 @@ public class PersonAccess<U> extends DatabaseObjectAccess<Person, U> {
         int affectedRows = myStmt.executeUpdate();
         if (affectedRows == 0) {
             System.out.println("Creating person failed, no rows affected.");
+            myStmt.close();
+            dbConnectionManager.closeDbConnection();
             return null;
         }
 
@@ -146,6 +150,8 @@ public class PersonAccess<U> extends DatabaseObjectAccess<Person, U> {
                 }
             } else {
                 System.out.println("Creating person failed, couldn't obtain person ID.");
+                myStmt.close();
+                dbConnectionManager.closeDbConnection();
                 return null;
             }
         }
@@ -173,6 +179,8 @@ public class PersonAccess<U> extends DatabaseObjectAccess<Person, U> {
             affectedRows = myStmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Updating person failed: " + e.getMessage());
+            myStmt.close();
+            dbConnectionManager.closeDbConnection();
             return false;
         }
         myStmt.close();
@@ -201,6 +209,8 @@ public class PersonAccess<U> extends DatabaseObjectAccess<Person, U> {
             retrievedInfo = (U) queryResults.getObject(infoToGet);
         } else {
             System.out.println("Error retrieving info, results empty.");
+            myStmt.close();
+            dbConnectionManager.closeDbConnection();
             return null;
         }
 

@@ -59,6 +59,8 @@ public class InquiryAccess<U> extends DatabaseObjectAccess<Inquiry, U> {
             retrievedInquiry.setLastKnownLocationId(locationId);
         } else {
             System.out.println("Error getting Inquiry by ID: Inquiry doesn't exist.");
+            myStmt.close();
+            dbConnectionManager.closeDbConnection();
             return null;
         }
 
@@ -86,6 +88,8 @@ public class InquiryAccess<U> extends DatabaseObjectAccess<Inquiry, U> {
 
         if (affectedRows == 0) {
             System.out.println("Creating inquiry failed, no rows affected.");
+            myStmt.close();
+            dbConnectionManager.closeDbConnection();
             return null;
         }
 
@@ -97,6 +101,8 @@ public class InquiryAccess<U> extends DatabaseObjectAccess<Inquiry, U> {
                 newInquiry = new Inquiry(inquiryId, inquirerId, missingPersonId, dateOfInquiry, infoProvided);
             } else {
                 System.out.println("Creating inquiry failed, couldn't obtain inquiry ID.");
+                myStmt.close();
+                dbConnectionManager.closeDbConnection();
                 return null;
             }
         }
@@ -123,6 +129,8 @@ public class InquiryAccess<U> extends DatabaseObjectAccess<Inquiry, U> {
             affectedRows = myStmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Updating inquiry failed: " + e.getMessage());
+            myStmt.close();
+            dbConnectionManager.closeDbConnection();
             return false;
         }
 
@@ -152,6 +160,8 @@ public class InquiryAccess<U> extends DatabaseObjectAccess<Inquiry, U> {
             retrievedInfo = (U) queryResults.getObject(infoToGet);
         } else {
             System.out.println("Error retrieving info, results empty.");
+            myStmt.close();
+            dbConnectionManager.closeDbConnection();
             return null;
         }
 

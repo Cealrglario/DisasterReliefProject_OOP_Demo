@@ -51,6 +51,8 @@ public class SupplyAccess<U> extends DatabaseObjectAccess<Supply, U> {
             retrievedSupply = SupplyFactory.createSupply(supplyId, type, comments);
         } else {
             System.out.println("Error getting Supply by ID: Supply doesn't exist.");
+            myStmt.close();
+            dbConnectionManager.closeDbConnection();
             return null;
         }
 
@@ -74,7 +76,10 @@ public class SupplyAccess<U> extends DatabaseObjectAccess<Supply, U> {
         int affectedRows = myStmt.executeUpdate();
 
         if (affectedRows == 0) {
-            throw new SQLException("Creating supply failed, no rows affected.");
+            System.out.println("Creating supply failed, no rows affected.");
+            myStmt.close();
+            dbConnectionManager.closeDbConnection();
+            return null;
         }
 
         Supply newSupply = null;
@@ -84,6 +89,8 @@ public class SupplyAccess<U> extends DatabaseObjectAccess<Supply, U> {
                 newSupply = SupplyFactory.createSupply(supplyId, type, comments);
             } else {
                 System.out.println("Creating supply failed, couldn't obtain supply ID.");
+                myStmt.close();
+                dbConnectionManager.closeDbConnection();
                 return null;
             }
         }
@@ -111,6 +118,8 @@ public class SupplyAccess<U> extends DatabaseObjectAccess<Supply, U> {
             affectedRows = myStmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Updating supply failed: " + e.getMessage());
+            myStmt.close();
+            dbConnectionManager.closeDbConnection();
             return false;
         }
 
@@ -141,6 +150,8 @@ public class SupplyAccess<U> extends DatabaseObjectAccess<Supply, U> {
             retrievedInfo = (U) queryResults.getObject(infoToGet);
         } else {
             System.out.println("Error retrieving info, results empty.");
+            myStmt.close();
+            dbConnectionManager.closeDbConnection();
             return null;
         }
 
