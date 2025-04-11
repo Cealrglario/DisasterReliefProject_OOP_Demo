@@ -1,5 +1,6 @@
 package edu.ucalgary.oop;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -15,6 +16,9 @@ public class Location {
         this.LOCATION_ID = locationId;
         this.name = name;
         this.address = address;
+        this.occupants = new ArrayList<>();
+        this.inventory = new ArrayList<>();
+        this.supplyAllocations = new LinkedHashSet<>();
     }
 
     public int getLocationId() {
@@ -51,9 +55,13 @@ public class Location {
 
     public void setAllocations (LinkedHashSet<Allocation> allocations) {}
 
-    public void addOccupant(Person newOccupant) {}
+    public void addOccupant(Person newOccupant) {
+        this.occupants.add(newOccupant);
+    }
 
-    public void removeOccupant(Person exOccupant) {}
+    public void removeOccupant(Person exOccupant) {
+        this.occupants.remove(exOccupant);
+    }
 
     public void addInventory(Supply newInventory) {}
 
