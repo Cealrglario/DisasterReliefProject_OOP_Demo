@@ -13,13 +13,20 @@ import static org.junit.Assert.assertNotEquals;
 
 public class PersonLocationAccessTest {
     private PersonLocationAccess personLocationDbAccess;
+    private PersonAccess<Object> personAccess;
+    private LocationAccess<Object> locationAccess;
 
-    Person placeholderPerson = new Person(-1, "Test Person", "Male", "111-1111");
-    Location placeholderLocation = new Location(-1, "Test Location", "Test");
+    Person placeholderPerson;
+    Location placeholderLocation;
 
     @Before
     public void setUp() throws Exception {
+        personAccess = new PersonAccess<>();
+        locationAccess = new LocationAccess<>();
         personLocationDbAccess = new PersonLocationAccess();
+
+        placeholderPerson = personAccess.addPerson("Test person", "Male", null, "111-1111");
+        placeholderLocation = locationAccess.getById(1);
 
         try {
             personLocationDbAccess.addEntry(placeholderPerson, placeholderLocation);
@@ -80,10 +87,13 @@ public class PersonLocationAccessTest {
         List<Map<Person, Location>> locationOccupantsBeforeAdding = null;
         List<Map<Person, Location>> locationOccupantsAfterAdding = null;
 
-        Person newPlaceholderPerson = new Person(-2, "Test Person 2", "Male", "222-2222");
-        Location newPlaceholderLocation = new Location(-2, "Test Location 2", "Test");
+        Person newPlaceholderPerson = null;
+        Location newPlaceholderLocation = null;
 
         try {
+            newPlaceholderPerson = personAccess.addPerson("Test Person 2", "Male", null, "222-2222");
+            newPlaceholderLocation = locationAccess.getById(2);
+
             locationOccupantsBeforeAdding = personLocationDbAccess.getAll();
             personLocationDbAccess.addEntry(newPlaceholderPerson, newPlaceholderLocation);
             locationOccupantsAfterAdding = personLocationDbAccess.getAll();
@@ -106,10 +116,13 @@ public class PersonLocationAccessTest {
         List<Map<Person, Location>> locationOccupantsBeforeRemoving = null;
         List<Map<Person, Location>> locationOccupantsAfterRemoving = null;
 
-        Person exPlaceholderPerson = new Person(-2, "Test Person 2", "Male", "222-2222");
-        Location exPlaceholderLocation = new Location(-2, "Test Location 2", "Test");
+        Person exPlaceholderPerson = null;
+        Location exPlaceholderLocation = null;
 
         try {
+            exPlaceholderPerson = personAccess.addPerson("Test Person 2", "Male", null, "222-2222");
+            exPlaceholderLocation = locationAccess.getById(2);
+
             personLocationDbAccess.addEntry(exPlaceholderPerson, exPlaceholderLocation);
             locationOccupantsBeforeRemoving = personLocationDbAccess.getAll();
             personLocationDbAccess.removeEntry(exPlaceholderPerson, exPlaceholderLocation);
@@ -124,15 +137,18 @@ public class PersonLocationAccessTest {
 
     @Test
     public void testGetOccupantsOfLocation() {
-        Person[] testOccupants = null;
+        List<Person> testOccupants = null;
 
-        Location testLocation = new Location(-2, "Test location", "Test");
-        Person testPerson = new Person(-2, "Test Person 2", "Female", "222-2222");
-
-        testLocation.addOccupant(testPerson);
+        Person testPerson = null;
+        Location testLocation = null;
 
         try {
-            personLocationDbAccess.addEntry(testPerson, testLocation);
+            testPerson = personAccess.getById(2);
+            testLocation = locationAccess.getById(2);
+
+            testLocation.addOccupant(testPerson);
+
+            personLocationDbAccess.getById(testPerson, testLocation);
             testOccupants = personLocationDbAccess.getOccupantsOfLocation(testLocation);
         } catch (SQLException e) {
             fail("SQLException occurred while testing getOccupantsOfLocation: " + e.getMessage());
@@ -198,7 +214,7 @@ public class PersonLocationAccessTest {
 
     @Test
     public void testGetOccupantsOfLocationNoOccupants() {
-        Person[] testOccupants = null;
+        List<Person> testOccupants = null;
         Location emptyLocation = new Location(-997, "Empty Location", "Test");
 
         try {
@@ -209,7 +225,7 @@ public class PersonLocationAccessTest {
 
         assertNotNull("An empty occupant array should be returned if the location has no occupants",
                 testOccupants);
-        assertEquals("Empty location should have zero occupants", 0, testOccupants.length);
+        assertEquals("Empty location should have zero occupants", 0, testOccupants.size());
     }
 
     @Test
