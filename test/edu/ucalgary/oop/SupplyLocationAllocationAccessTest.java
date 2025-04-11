@@ -148,14 +148,14 @@ public class SupplyLocationAllocationAccessTest {
     public void testGetSuppliesAtLocation() {
         List<Supply> testSupplies = null;
         Location testLocation = null;
-
+        
         try {
             testLocation = locationService.getLocation(1);
             testSupplies = supplyLocationDbAccess.getSuppliesAtLocation(testLocation);
         } catch (SQLException e) {
             fail("Error occurred while testing getSuppliesAtLocation: " + e.getMessage());
         }
-
+        
         assertFalse("Location should have at least one supply allocated", testSupplies.isEmpty());
     }
 
@@ -164,7 +164,7 @@ public class SupplyLocationAllocationAccessTest {
         Allocation retrievedAllocation = null;
         Supply supplyNotInDb = new Blanket(-999);
         Location locationNotInDb = new Location(-999, "Location not in db", "Test");
-
+        
         try {
             retrievedAllocation = supplyLocationDbAccess.getById(supplyNotInDb, locationNotInDb);
         } catch (SQLException e) {
