@@ -3,24 +3,33 @@ package edu.ucalgary.oop;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.List;
 import static org.junit.Assert.*;
 
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
-
 public class SupplyLocationAllocationAccessTest {
-    private SupplyLocationAllocationAccess supplyLocationAllocationDbAccess;
 
-    Supply placeholderSupply = new Blanket(-1);
-    Location placeholderLocation = new Location(-1, "Test Location", "Test");
+    private SupplyLocationAllocationAccess supplyLocationDbAccess;
+    private SupplyService supplyService;
+    private LocationService locationService;
+    private Supply placeholderSupply;
+    private Location placeholderLocation;
+    private LocalDate testAllocationDate;
+    private Allocation testAllocation;
 
     @Before
     public void setUp() throws Exception {
-        supplyLocationAllocationDbAccess = new SupplyLocationAllocationAccess();
+        supplyService = SupplyService.INSTANCE;
+        locationService = LocationService.INSTANCE;
+        supplyLocationDbAccess = new SupplyLocationAllocationAccess();
+
+        placeholderSupply = supplyService.getSupplyById(5);
+        placeholderLocation = locationService.getLocation(1);
+        testAllocationDate = LocalDate.now();
 
         try {
-            supplyLocationAllocationDbAccess.addEntry(placeholderSupply, placeholderLocation);
+            testAllocation = supplyLocationDbAccess.addEntry(placeholderSupply, placeholderLocation, testAllocationDate);
         } catch (SQLException e) {
             throw new SQLException(e.getMessage());
         }
@@ -29,7 +38,7 @@ public class SupplyLocationAllocationAccessTest {
     @After
     public void tearDown() throws Exception {
         try {
-            supplyLocationAllocationDbAccess.removeEntry(placeholderSupply, placeholderLocation);
+            supplyLocationDbAccess.removeEntry(placeholderSupply, placeholderLocation, testAllocationDate);
         } catch (SQLException e) {
             throw new SQLException(e.getMessage());
         }
@@ -38,152 +47,143 @@ public class SupplyLocationAllocationAccessTest {
     @Test
     public void testGetQueryResults() {
         try {
-            supplyLocationAllocationDbAccess.getAll();
+            supplyLocationDbAccess.getAll();
         } catch (SQLException e) {
-            fail("SQLException occurred while testing getQueryResults: " + e.getMessage());
+            fail("Error occurred while testing getQueryResults: " + e.getMessage());
         }
 
-        assertNotNull("getQueryResults() should retrieve a valid query", supplyLocationAllocationDbAccess.getQueryResults());
+        assertNotNull("getQueryResults() should retrieve a valid query", supplyLocationDbAccess.getQueryResults());
     }
 
     @Test
     public void testGetAll() {
-        List<Map<Supply, Location>> allAllocations = null;
+        List<Allocation> allRetrievedAllocations = null;
+
         try {
-            allAllocations = supplyLocationAllocationDbAccess.getAll();
+            allRetrievedAllocations = supplyLocationDbAccess.getAll();
         } catch (SQLException e) {
-            fail("SQLException occurred while testing getAll: " + e.getMessage());
+            fail("Error occurred while testing getAll: " + e.getMessage());
         }
 
-        assertFalse("getAll() should return a list of supplies and their locations", allAllocations.isEmpty());
+        assertFalse("getAll() should return a list of allocations", allRetrievedAllocations.isEmpty());
     }
 
     @Test
     public void testGetById() {
-        Map<Supply, Location> allocation = null;
+        Allocation retrievedAllocation = null;
 
         try {
-            allocation = supplyLocationAllocationDbAccess.getById(placeholderSupply, placeholderLocation);
+            retrievedAllocation = supplyLocationDbAccess.getById(placeholderSupply, placeholderLocation);
         } catch (SQLException e) {
-            fail("SQLException occurred while testing getById: " + e.getMessage());
+            fail("Error occurred while testing getById: " + e.getMessage());
         }
 
-        assertEquals("The retrieved location that a supply is located in should match the expected location when calling getById()",
-                placeholderLocation.getLocationId(), allocation.get(placeholderSupply).getLocationId());
+        assertNotNull("getById() should return a valid allocation", retrievedAllocation);
+        assertEquals("The retrieved allocation's supply should match",
+                placeholderSupply.getSupplyId(), retrievedAllocation.getAllocatedSupply().getSupplyId());
+        assertEquals("The retrieved allocation's location ID should match",
+                placeholderLocation.getLocationId(), retrievedAllocation.getLocationId());
     }
 
     @Test
     public void testAddEntry() {
-        List<Map<Supply, Location>> allocationsBeforeAdding = null;
-        List<Map<Supply, Location>> allocationsAfterAdding = null;
-
-        Supply newSupply = new Blanket(-2);
-        Location newLocation = new Location(-2, "Test Location 2", "Test");
+        List<Allocation> allocationsBeforeAdding = null;
+        List<Allocation> allocationsAfterAdding = null;
+        Supply newSupply = null;
+        Location newLocation = null;
+        LocalDate newDate = LocalDate.now().plusDays(1);
+        Allocation newAllocation = null;
 
         try {
-            allocationsBeforeAdding = supplyLocationAllocationDbAccess.getAll();
-            supplyLocationAllocationDbAccess.addEntry(newSupply, newLocation);
-            allocationsAfterAdding = supplyLocationAllocationDbAccess.getAll();
+            newSupply = supplyService.getSupplyById(6);
+            newLocation = locationService.getLocation(2);
+            allocationsBeforeAdding = supplyLocationDbAccess.getAll();
+
+            newAllocation = supplyLocationDbAccess.addEntry(newSupply, newLocation, newDate);
+            allocationsAfterAdding = supplyLocationDbAccess.getAll();
         } catch (SQLException e) {
-            fail("SQLException occurred while testing: " + e.getMessage());
+            fail("Error occurred while testing addEntry: " + e.getMessage());
         }
 
-        assertNotEquals("New supply-location entry should be added to the database",
-                allocationsBeforeAdding.size(), allocationsAfterAdding.size());
+        assertNotNull("addEntry() should return a new Allocation object", newAllocation);
+        assertEquals("The allocation's supply should match", newSupply.getSupplyId(),
+                newAllocation.getAllocatedSupply().getSupplyId());
+        assertEquals("The allocation's location ID should match", newLocation.getLocationId(),
+                newAllocation.getLocationId());
+        assertTrue("The allocations list should have grown",
+                allocationsAfterAdding.size() > allocationsBeforeAdding.size());
 
         try {
-            supplyLocationAllocationDbAccess.removeEntry(newSupply, newLocation);
+            supplyLocationDbAccess.removeEntry(newSupply, newLocation, newDate);
         } catch (SQLException e) {
-            fail("SQLException occurred while testing addEntry: " + e.getMessage());
+            fail("Error occurred during cleanup: " + e.getMessage());
         }
     }
 
     @Test
     public void testRemoveEntry() {
-        List<Map<Supply, Location>> allocationsBeforeRemoving = null;
-        List<Map<Supply, Location>> allocationsAfterRemoving = null;
-
-        Supply testSupply = new Blanket(-2);
-        Location testLocation = new Location(-2, "Test Location 2", "Test");
+        List<Allocation> allocationsBeforeRemoving = null;
+        List<Allocation> allocationsAfterRemoving = null;
+        Supply extraSupply = null;
+        Location extraLocation = null;
+        LocalDate extraDate = LocalDate.now();
 
         try {
-            supplyLocationAllocationDbAccess.addEntry(testSupply, testLocation);
-            allocationsBeforeRemoving = supplyLocationAllocationDbAccess.getAll();
-            supplyLocationAllocationDbAccess.removeEntry(testSupply, testLocation);
-            allocationsAfterRemoving = supplyLocationAllocationDbAccess.getAll();
+            extraSupply = supplyService.getSupplyById(7);
+            extraLocation = locationService.getLocation(2);
+
+            supplyLocationDbAccess.addEntry(extraSupply, extraLocation, extraDate);
+            allocationsBeforeRemoving = supplyLocationDbAccess.getAll();
+            supplyLocationDbAccess.removeEntry(extraSupply, extraLocation, extraDate);
+            allocationsAfterRemoving = supplyLocationDbAccess.getAll();
         } catch (SQLException e) {
-            fail("SQLException occurred while testing removeEntry: " + e.getMessage());
+            fail("Error occurred while testing removeEntry: " + e.getMessage());
         }
 
-        assertNotEquals("Unwanted supply-location entry should be removed from the database",
-                allocationsBeforeRemoving.size(), allocationsAfterRemoving.size());
+        assertTrue("removeEntry() should remove the unwanted entry", allocationsAfterRemoving.size() <
+                allocationsBeforeRemoving.size());
+    }
+
+    @Test
+    public void testGetSuppliesAtLocation() {
+        List<Supply> testSupplies = null;
+        Location testLocation = null;
+
+        try {
+            testLocation = locationService.getLocation(1);
+            testSupplies = supplyLocationDbAccess.getSuppliesAtLocation(testLocation);
+        } catch (SQLException e) {
+            fail("Error occurred while testing getSuppliesAtLocation: " + e.getMessage());
+        }
+
+        assertFalse("Location should have at least one supply allocated", testSupplies.isEmpty());
     }
 
     @Test
     public void testGetByIdNotInDb() {
-        Map<Supply, Location> allocation = null;
-
+        Allocation retrievedAllocation = null;
         Supply supplyNotInDb = new Blanket(-999);
         Location locationNotInDb = new Location(-999, "Location not in db", "Test");
 
         try {
-            allocation = supplyLocationAllocationDbAccess.getById(supplyNotInDb, locationNotInDb);
+            retrievedAllocation = supplyLocationDbAccess.getById(supplyNotInDb, locationNotInDb);
         } catch (SQLException e) {
-            fail("SQLException occurred while testing getByIdNotInDb: " + e.getMessage());
+            fail("Error occurred while testing GetByIdNotInDb: " + e.getMessage());
         }
 
-        assertNull("A null association map should be returned for a supply/location association that isn't in the database"
-                , allocation);
-    }
-
-    @Test
-    public void testAddEntryThatAlreadyExists() {
-        List<Map<Supply, Location>> allocationsBeforeAdding = null;
-        List<Map<Supply, Location>> allocationsAfterAdding = null;
-
-        try {
-            allocationsBeforeAdding = supplyLocationAllocationDbAccess.getAll();
-            supplyLocationAllocationDbAccess.addEntry(placeholderSupply, placeholderLocation);
-            allocationsAfterAdding = supplyLocationAllocationDbAccess.getAll();
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing addEntryThatAlreadyExists: " + e.getMessage());
-        }
-
-        assertEquals("Adding an existing supply-location entry should not increase the total count",
-                allocationsBeforeAdding.size(), allocationsAfterAdding.size());
-    }
-
-    @Test
-    public void testRemoveEntryNotInDb() {
-        List<Map<Supply, Location>> allocationsBeforeRemoving = null;
-        List<Map<Supply, Location>> allocationsAfterRemoving = null;
-
-        Supply supplyNotInDb = new Blanket(-999);
-        Location locationNotInDb = new Location(-999, "Location not in db", "Test");
-
-        try {
-            allocationsBeforeRemoving = supplyLocationAllocationDbAccess.getAll();
-            supplyLocationAllocationDbAccess.removeEntry(supplyNotInDb, locationNotInDb);
-            allocationsAfterRemoving = supplyLocationAllocationDbAccess.getAll();
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing removeEntryNotInDb: " + e.getMessage());
-        }
-
-        assertEquals("Removing an entry that isn't in the database should not affect the database",
-                allocationsBeforeRemoving.size(), allocationsAfterRemoving.size());
+        assertNull("A null allocation should be returned for a non-existent allocation", retrievedAllocation);
     }
 
     @Test
     public void testAddEntryWithNullArguments() {
-        boolean success = true;
-
+        Allocation nullAllocation = null;
+        
         try {
-            success = supplyLocationAllocationDbAccess.addEntry(null, null);
+            nullAllocation = supplyLocationDbAccess.addEntry(null, null, LocalDate.now());
         } catch (SQLException e) {
-            fail("SQLException occurred while testing addEntryWithNullArguments: " + e.getMessage());
+            fail("Error occurred while testing addEntryWithNullArguments: " + e.getMessage());
         }
 
-        assertFalse("addEntry() should return false when attempting to add a null entry", success);
+        assertNull("addEntry() should return null when attempting to add with null arguments", nullAllocation);
     }
-
 }

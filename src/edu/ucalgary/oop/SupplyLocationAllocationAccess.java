@@ -1,18 +1,15 @@
 package edu.ucalgary.oop;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class SupplyLocationAllocationAccess extends DatabaseAssociationAccess<Supply, Location> {
 
-    @Override
-    public List<Map<Supply, Location>> getAll() throws SQLException {
-        List<Map<Supply, Location>> retrievedAllocations = new ArrayList<>();
+    public List<Allocation> getAll() throws SQLException {
+        List<Allocation> retrievedAllocations = new ArrayList<>();
         SupplyService supplyService = SupplyService.INSTANCE;
-        LocationService locationService = LocationService.INSTANCE;
 
         dbConnectionManager.initializeDbConnection();
         Connection dbConnect = dbConnectionManager.getDbConnection();
@@ -22,16 +19,17 @@ public class SupplyLocationAllocationAccess extends DatabaseAssociationAccess<Su
 
         while(queryResults.next()) {
             Supply retrievedSupply;
-            Location retrievedLocation;
-            Map<Supply, Location> retrievedAllocation = new HashMap<>();
+            LocalDate retrievedAllocationDate;
 
             int retrievedSupplyId = queryResults.getInt("supply_id");
             int retrievedLocationId = queryResults.getInt("location_id");
+            retrievedAllocationDate = queryResults.getDate("allocation_date").toLocalDate();
 
             retrievedSupply = supplyService.getSupplyById(retrievedSupplyId);
-            retrievedLocation = locationService.getLocation(retrievedLocationId);
 
-            retrievedAllocation.put(retrievedSupply, retrievedLocation);
+            Allocation retrievedAllocation = new Allocation(retrievedSupply, null,
+                    retrievedLocationId, retrievedAllocationDate);
+
             retrievedAllocations.add(retrievedAllocation);
         }
 
@@ -42,11 +40,9 @@ public class SupplyLocationAllocationAccess extends DatabaseAssociationAccess<Su
     }
 
 
-    @Override
-    public Map<Supply, Location> getById(Supply supply, Location location) throws SQLException {
-        Map<Supply, Location> retrievedAllocation = new HashMap<>();
+    public Allocation getById(Supply supply, Location location) throws SQLException {
+        Allocation retrievedAllocation = null;
         SupplyService supplyService = SupplyService.INSTANCE;
-        LocationService locationService = LocationService.INSTANCE;
 
         dbConnectionManager.initializeDbConnection();
         Connection dbConnect = dbConnectionManager.getDbConnection();
@@ -61,17 +57,18 @@ public class SupplyLocationAllocationAccess extends DatabaseAssociationAccess<Su
 
         if(queryResults.next()) {
             Supply retrievedSupply;
-            Location retrievedLocation;
+            LocalDate retrievedAllocationDate;
 
             int retrievedSupplyId = queryResults.getInt("supply_id");
             int retrievedLocationId = queryResults.getInt("location_id");
+            retrievedAllocationDate = queryResults.getDate("allocation_date").toLocalDate();
 
             retrievedSupply = supplyService.getSupplyById(retrievedSupplyId);
-            retrievedLocation = locationService.getLocation(retrievedLocationId);
 
-            retrievedAllocation.put(retrievedSupply, retrievedLocation);
+            retrievedAllocation = new Allocation(retrievedSupply, null,
+                    retrievedLocationId, retrievedAllocationDate);
         } else {
-            System.out.println("Error getting SupplyAllocation by IDs: Association doesn't exist.");
+            System.out.println("Error getting SupplyAllocation by ID: Association doesn't exist.");
             return null;
         }
 
@@ -82,23 +79,24 @@ public class SupplyLocationAllocationAccess extends DatabaseAssociationAccess<Su
     }
 
 
-    @Override
-    public boolean addEntry(Supply supply, Location location) throws SQLException {
+    public Allocation addEntry(Supply supply, Location location, LocalDate allocationDate) throws SQLException {
         if (supply == null || location == null) {
-            return false;
+            return null;
         }
 
+        Allocation addedAllocation = new Allocation(supply, null, location.getLocationId(), allocationDate);
         int affectedRows;
 
         dbConnectionManager.initializeDbConnection();
         Connection dbConnect = dbConnectionManager.getDbConnection();
 
         PreparedStatement myStmt = dbConnect.prepareStatement(
-                "INSERT INTO SupplyAllocation (supply_id, person_id, location_id) VALUES (?, NULL, ?)"
+                "INSERT INTO SupplyAllocation (supply_id, person_id, location_id, allocation_date) VALUES (?, NULL, ?, ?)"
         );
 
         myStmt.setInt(1, supply.getSupplyId());
         myStmt.setInt(2, location.getLocationId());
+        myStmt.setDate(3, Date.valueOf(allocationDate));
 
         try {
             affectedRows = myStmt.executeUpdate();
@@ -106,7 +104,7 @@ public class SupplyLocationAllocationAccess extends DatabaseAssociationAccess<Su
             System.out.println("Adding supply-location allocation failed: " + e.getMessage());
             myStmt.close();
             dbConnectionManager.closeDbConnection();
-            return false;
+            return null;
         }
 
         myStmt.close();
@@ -114,24 +112,24 @@ public class SupplyLocationAllocationAccess extends DatabaseAssociationAccess<Su
 
         if (affectedRows == 0) {
             System.out.println("Adding supply-location allocation failed, no rows affected.");
-            return false;
+            return null;
         } else {
-            return true;
+            return addedAllocation;
         }
     }
 
 
-    @Override
-    public boolean removeEntry(Supply supply, Location location) throws SQLException {
+    public boolean removeEntry(Supply supply, Location location, LocalDate allocationDate) throws SQLException {
         dbConnectionManager.initializeDbConnection();
         Connection dbConnect = dbConnectionManager.getDbConnection();
 
         PreparedStatement myStmt = dbConnect.prepareStatement(
-                "DELETE FROM SupplyAllocation WHERE supply_id = ? AND location_id = ? AND person_id IS NULL"
+                "DELETE FROM SupplyAllocation WHERE supply_id = ? AND location_id = ? AND allocation_date = ? AND person_id IS NULL"
         );
 
         myStmt.setInt(1, supply.getSupplyId());
         myStmt.setInt(2, location.getLocationId());
+        myStmt.setDate(3, Date.valueOf(allocationDate));
 
         int rowsAffected = myStmt.executeUpdate();
 

@@ -1,21 +1,21 @@
 package edu.ucalgary.oop;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class Allocation {
     private final Supply ALLOCATED_SUPPLY;
-    private final int ALLOCATED_PERSON_ID;
+    private final Integer ALLOCATED_PERSON_ID;
     private final int LOCATION_ID;
-    private final LocalDateTime TIME_ALLOCATED;
+    private final LocalDate TIME_ALLOCATED;
 
-    public Allocation(Supply allocatedSupply, int allocatedPersonId, int locationId, LocalDateTime timeAllocated) {
+    public Allocation(Supply allocatedSupply, Integer allocatedPersonId, int locationId, LocalDate timeAllocated) {
         this.ALLOCATED_SUPPLY = allocatedSupply;
         this.ALLOCATED_PERSON_ID = allocatedPersonId;
         this.LOCATION_ID = locationId;
         this.TIME_ALLOCATED = timeAllocated;
     }
 
-    public LocalDateTime getTimeAllocated() {
+    public LocalDate getTimeAllocated() {
         return TIME_ALLOCATED;
     }
 
