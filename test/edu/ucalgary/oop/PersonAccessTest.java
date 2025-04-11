@@ -117,8 +117,8 @@ public class PersonAccessTest {
             fail("SQLException occurred while testing addEntry: " + e.getMessage());
         }
 
-        assertNotEquals("New person should be added in the database",
-                personsAfterAdding.size(), personsBeforeAdding.size());
+        assertTrue("New person should be added in the database",
+                personsAfterAdding.size() > personsBeforeAdding.size());
 
         try {
             personDbAccess.removePerson(newPerson);
@@ -143,8 +143,8 @@ public class PersonAccessTest {
             fail("SQLException occurred while testing removeEntry: " + e.getMessage());
         }
 
-        assertNotEquals("Removed person should no longer be in the database",
-                personsAfterRemoving.size(), personsBeforeRemoving.size());
+        assertTrue("Removed person should no longer be in the database",
+                personsAfterRemoving.size() < personsBeforeRemoving.size());
     }
 
     @Test

@@ -119,7 +119,7 @@ public class InquiryAccessTest {
             fail("SQLException occurred while testing addEntry: " + e.getMessage());
         }
 
-        assertNotEquals("New Inquiry should be added in the database", inquiriesAfterAdding.size(),
+        assertTrue("New Inquiry should be added in the database", inquiriesAfterAdding.size() >
                 inquiriesBeforeAdding.size());
 
         try {
@@ -143,8 +143,8 @@ public class InquiryAccessTest {
             fail("SQLException occurred while testing removeEntry: " + e.getMessage());
         }
 
-        assertNotEquals("Unwanted Inquiry should be no longer be in the database",
-                inquiriesAfterRemoving.size(), inquiriesBeforeRemoving.size());
+        assertTrue("Unwanted Inquiry should be no longer be in the database",
+                inquiriesAfterRemoving.size() < inquiriesBeforeRemoving.size());
     }
 
     @Test

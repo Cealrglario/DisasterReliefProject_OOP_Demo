@@ -117,8 +117,8 @@ public class MedicalRecordAccessTest {
             fail("SQLException occurred while testing addEntry: " + e.getMessage());
         }
 
-        assertNotEquals("New MedicalRecord should be added in the database",
-                recordsAfterAdding.size(), recordsBeforeAdding.size());
+        assertTrue("New MedicalRecord should be added in the database",
+                recordsAfterAdding.size() > recordsBeforeAdding.size());
 
         try {
             medicalRecordDbAccess.removeMedicalRecord(newRecord);
@@ -143,8 +143,8 @@ public class MedicalRecordAccessTest {
             fail("SQLException occurred while testing removeEntry: " + e.getMessage());
         }
 
-        assertNotEquals("Removed MedicalRecord should no longer be in the database",
-                recordsAfterRemoving.size(), recordsBeforeRemoving.size());
+        assertTrue("Removed MedicalRecord should no longer be in the database",
+                recordsAfterRemoving.size() < recordsBeforeRemoving.size());
     }
 
     @Test

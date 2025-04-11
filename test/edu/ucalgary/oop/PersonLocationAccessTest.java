@@ -31,7 +31,7 @@ public class PersonLocationAccessTest {
         try {
             personLocationDbAccess.addEntry(placeholderPerson, placeholderLocation);
         } catch (SQLException e) {
-            throw new SQLException(e.getMessage());
+            throw new SQLException("Error occurred during setup: " + e.getMessage());
         }
     }
 
@@ -40,7 +40,7 @@ public class PersonLocationAccessTest {
         try {
             personLocationDbAccess.removeEntry(placeholderPerson, placeholderLocation);
         } catch (SQLException e) {
-            throw new SQLException(e.getMessage());
+            throw new SQLException("Error occurred during tear down: " + e.getMessage());
         }
     }
 

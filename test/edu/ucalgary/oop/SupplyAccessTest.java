@@ -117,8 +117,8 @@ public class SupplyAccessTest {
             fail("SQLException occurred while testing addEntry: " + e.getMessage());
         }
 
-        assertNotEquals("New supply should be added in the database",
-                suppliesAfterAdding.size(), suppliesBeforeAdding.size());
+        assertTrue("New supply should be added in the database",
+                suppliesAfterAdding.size() > suppliesBeforeAdding.size());
 
         try {
             supplyDbAccess.removeSupply(newSupply);
@@ -143,8 +143,8 @@ public class SupplyAccessTest {
             fail("SQLException occurred while testing removeEntry: " + e.getMessage());
         }
 
-        assertNotEquals("Removed supply should no longer be in the database",
-                suppliesAfterRemoving.size(), suppliesBeforeRemoving.size());
+        assertTrue("Removed supply should no longer be in the database",
+                suppliesAfterRemoving.size() < suppliesBeforeRemoving.size());
     }
 
     @Test
