@@ -4,10 +4,10 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.ArrayList;
-import java.time.LocalDateTime;
 
 public class LocationTest {
     Location testLocation;
@@ -20,7 +20,7 @@ public class LocationTest {
         testLocation = new Location(1, "Test Location", "Test address");
         testPerson = new Person(1, "Test 1", "Male", "111-1111");
         testSupply = new Blanket(1);
-        testAllocation = new Allocation(testSupply, 1, 1, LocalDateTime.now());
+        testAllocation = new Allocation(testSupply, 1, 1, LocalDate.now());
         testLocation.setOccupants(new ArrayList<>());
         testLocation.setInventory(new ArrayList<>());
         testLocation.setAllocations(new LinkedHashSet<>());
