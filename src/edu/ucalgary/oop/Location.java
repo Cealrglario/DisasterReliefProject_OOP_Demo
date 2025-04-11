@@ -29,31 +29,41 @@ public class Location {
         return this.name;
     }
 
-    public void setName(String name) {}
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getAddress() {
         return this.address;
     }
 
-    public void setAddress(String address) {}
+    public void setAddress(String address) {
+        this.address = address;
 
+    }
     public List<Person> getOccupants() {
         return this.occupants;
     }
 
-    public void setOccupants(List<Person> occupants) {}
+    public void setOccupants(List<Person> occupants) {
+        this.occupants = occupants;
+    }
 
     public List<Supply> getInventory() {
         return this.inventory;
     }
 
-    public void setInventory(List<Supply> inventory) {}
+    public void setInventory(List<Supply> inventory) {
+        this.inventory = inventory;
+    }
 
     public LinkedHashSet<Allocation> getAllocations() {
         return this.supplyAllocations;
     }
 
-    public void setAllocations (LinkedHashSet<Allocation> allocations) {}
+    public void setAllocations (LinkedHashSet<Allocation> allocations) {
+        this.supplyAllocations = allocations;
+    }
 
     public void addOccupant(Person newOccupant) {
         this.occupants.add(newOccupant);
@@ -63,13 +73,21 @@ public class Location {
         this.occupants.remove(exOccupant);
     }
 
-    public void addInventory(Supply newInventory) {}
+    public void addInventory(Supply newInventory) {
+        this.inventory.add(newInventory);
+    }
 
-    public void removeInventory(Supply expiredInventory) {}
+    public void removeInventory(Supply expiredInventory) {
+        this.inventory.remove(expiredInventory);
+    }
 
-    public void addAllocation(Allocation allocation) {}
+    public void addAllocation(Allocation allocation) {
+        this.supplyAllocations.add(allocation);
+    }
 
-    public void removeAllocation(Allocation allocation) {}
+    public void removeAllocation(Allocation allocation) {
+        this.supplyAllocations.remove(allocation);
+    }
 
 }
 
