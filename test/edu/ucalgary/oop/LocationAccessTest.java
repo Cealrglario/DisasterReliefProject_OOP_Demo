@@ -1,6 +1,5 @@
 package edu.ucalgary.oop;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -67,8 +66,8 @@ public class LocationAccessTest {
             fail("SQLException occurred while testing updateInfo: " + e.getMessage());
         }
 
-        assertNotEquals("Location information should be updated as expected",
-                originalLocation.getName(), updatedLocation.getName());
+        assertEquals("Location information should be updated as expected",
+                "updated name", updatedLocation.getName());
     }
 
     @Test

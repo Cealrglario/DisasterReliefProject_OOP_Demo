@@ -15,6 +15,10 @@ public class SupplyFactory {
             supply = new PersonalBelonging(supplyId, comments);
         }
 
+        if(comments != null) {
+            supply.setComments(comments);
+        }
+
         return supply;
     }
 }

@@ -73,19 +73,17 @@ public class SupplyAccessTest {
 
     @Test
     public void testUpdateInfo() {
-        Supply originalSupply = null;
         Supply updatedSupply = null;
 
         try {
-            originalSupply = supplyDbAccess.getById(1);
             supplyDbAccess.updateInfo("comments", "new comments", 1);
             updatedSupply = supplyDbAccess.getById(1);
         } catch (SQLException e) {
             fail("SQLException occurred while testing updateInfo: " + e.getMessage());
         }
 
-        assertNotEquals("Comment should be updated as expected",
-                originalSupply.getComments(), updatedSupply.getComments());
+        assertEquals("Comment should be updated as expected",
+                "new comments", updatedSupply.getComments());
     }
 
     @Test
@@ -100,8 +98,8 @@ public class SupplyAccessTest {
             fail("SQLException occurred while testing getInfo: " + e.getMessage());
         }
 
-        assertEquals("Retrieved type should be Blanket",
-                testSupply.getType(), retrievedType);
+        assertEquals("Retrieved type should match actual type",
+                testSupply.getType().toLowerCase(), retrievedType);
     }
 
     @Test

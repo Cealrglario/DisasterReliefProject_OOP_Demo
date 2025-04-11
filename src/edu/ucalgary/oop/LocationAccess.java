@@ -61,15 +61,22 @@ public class LocationAccess<U> extends DatabaseObjectAccess<Location, U> {
 
     @Override
     public boolean updateInfo(String infoToUpdate, U newInfo, int locationId) throws SQLException {
+        int affectedRows;
+
         dbConnectionManager.initializeDbConnection();
         Connection dbConnect = dbConnectionManager.getDbConnection();
 
-        PreparedStatement myStmt = dbConnect.prepareStatement("UPDATE Location SET " + infoToUpdate + " = " + newInfo +
-                " WHERE location_id = ?");
+        PreparedStatement myStmt = dbConnect.prepareStatement("UPDATE Location SET " + infoToUpdate + " = ? WHERE location_id = ?");
 
-        myStmt.setInt(1, locationId);
+        myStmt.setObject(1, newInfo);
+        myStmt.setInt(2, locationId);
 
-        int affectedRows = myStmt.executeUpdate();
+        try {
+            affectedRows = myStmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Updating Location failed: Trying to update invalid field.");
+            return false;
+        }
 
         myStmt.close();
         dbConnectionManager.closeDbConnection();
@@ -91,7 +98,7 @@ public class LocationAccess<U> extends DatabaseObjectAccess<Location, U> {
         Connection dbConnect = dbConnectionManager.getDbConnection();
 
         Statement myStmt = dbConnect.createStatement();
-        queryResults = myStmt.executeQuery("SELECT " + infoToGet + "FROM Location WHERE location_id = " +
+        queryResults = myStmt.executeQuery("SELECT " + infoToGet + " FROM Location WHERE location_id = " +
                 locationId);
 
         if(queryResults.next()) {

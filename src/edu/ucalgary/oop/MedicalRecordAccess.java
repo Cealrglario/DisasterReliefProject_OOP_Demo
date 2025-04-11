@@ -98,15 +98,22 @@ public class MedicalRecordAccess<U> extends DatabaseObjectAccess<MedicalRecord, 
 
     @Override
     public boolean updateInfo(String infoToUpdate, U newInfo, int medicalRecordId) throws SQLException {
+        int affectedRows;
+
         dbConnectionManager.initializeDbConnection();
         Connection dbConnect = dbConnectionManager.getDbConnection();
 
-        PreparedStatement myStmt = dbConnect.prepareStatement("UPDATE MedicalRecord SET " + infoToUpdate + " = " + newInfo +
-                " WHERE medical_record_id = ?");
+        PreparedStatement myStmt = dbConnect.prepareStatement("UPDATE MedicalRecord SET " + infoToUpdate + " = ? WHERE medical_record_id = ?");
 
-        myStmt.setInt(1, medicalRecordId);
+        myStmt.setObject(1, newInfo);
+        myStmt.setInt(2, medicalRecordId);
 
-        int affectedRows = myStmt.executeUpdate();
+        try {
+            affectedRows = myStmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Updating medical record failed: Trying to update invalid field.");
+            return false;
+        }
 
         myStmt.close();
         dbConnectionManager.closeDbConnection();
@@ -128,7 +135,7 @@ public class MedicalRecordAccess<U> extends DatabaseObjectAccess<MedicalRecord, 
         Connection dbConnect = dbConnectionManager.getDbConnection();
 
         Statement myStmt = dbConnect.createStatement();
-        queryResults = myStmt.executeQuery("SELECT " + infoToGet + "FROM MedicalRecord WHERE medical_record_id = " +
+        queryResults = myStmt.executeQuery("SELECT " + infoToGet + " FROM MedicalRecord WHERE medical_record_id = " +
                 medicalRecordId);
 
         if(queryResults.next()) {

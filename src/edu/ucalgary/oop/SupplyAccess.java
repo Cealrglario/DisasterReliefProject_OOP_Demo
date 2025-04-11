@@ -97,15 +97,22 @@ public class SupplyAccess<U> extends DatabaseObjectAccess<Supply, U> {
 
     @Override
     public boolean updateInfo(String infoToUpdate, U newInfo, int supplyId) throws SQLException {
+        int affectedRows;
+
         dbConnectionManager.initializeDbConnection();
         Connection dbConnect = dbConnectionManager.getDbConnection();
 
-        PreparedStatement myStmt = dbConnect.prepareStatement("UPDATE Supply SET " + infoToUpdate + " = " + newInfo +
-                " WHERE supply_id = ?");
+        PreparedStatement myStmt = dbConnect.prepareStatement("UPDATE Supply SET " + infoToUpdate + " = ? WHERE supply_id = ?");
 
-        myStmt.setInt(1, supplyId);
+        myStmt.setObject(1, newInfo);
+        myStmt.setInt(2, supplyId);
 
-        int affectedRows = myStmt.executeUpdate();
+        try {
+            affectedRows = myStmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Updating supply failed: Trying to update invalid field.");
+            return false;
+        }
 
         myStmt.close();
         dbConnectionManager.closeDbConnection();
@@ -127,7 +134,7 @@ public class SupplyAccess<U> extends DatabaseObjectAccess<Supply, U> {
         Connection dbConnect = dbConnectionManager.getDbConnection();
 
         Statement myStmt = dbConnect.createStatement();
-        queryResults = myStmt.executeQuery("SELECT " + infoToGet + "FROM Supply WHERE supply_id = " +
+        queryResults = myStmt.executeQuery("SELECT " + infoToGet + " FROM Supply WHERE supply_id = " +
                 supplyId);
 
         if(queryResults.next()) {

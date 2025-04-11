@@ -68,24 +68,22 @@ public class MedicalRecordAccessTest {
         }
 
         assertEquals("The MEDICAL_RECORD_ID of testRecord should match the id selected when calling getById()",
-                -1, testRecord.getMedicalRecordId());
+                1, testRecord.getMedicalRecordId());
     }
 
     @Test
     public void testUpdateInfo() {
-        MedicalRecord originalRecord = null;
         MedicalRecord updatedRecord = null;
 
         try {
-            originalRecord = medicalRecordDbAccess.getById(1);
             medicalRecordDbAccess.updateInfo("treatment_details", "Updated treatment details", 1);
             updatedRecord = medicalRecordDbAccess.getById(1);
         } catch (SQLException e) {
             fail("SQLException occurred while testing updateInfo: " + e.getMessage());
         }
 
-        assertNotEquals("MedicalRecord treatment details should be updated as expected",
-                originalRecord.getTreatmentDetails(), updatedRecord.getTreatmentDetails());
+        assertEquals("MedicalRecord treatment details should be updated as expected",
+                "Updated treatment details", updatedRecord.getTreatmentDetails());
     }
 
     @Test

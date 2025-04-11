@@ -18,7 +18,7 @@ public class PersonAccess<U> extends DatabaseObjectAccess<Person, U> {
         queryResults = myStmt.executeQuery("SELECT * FROM Person");
 
         while(queryResults.next()) {
-            int assignedId = queryResults.getInt("assigned_id");
+            int assignedId = queryResults.getInt("person_id");
             String firstName = queryResults.getString("first_name");
             String lastName = queryResults.getString("last_name");
             String gender = queryResults.getString("gender");
@@ -31,7 +31,15 @@ public class PersonAccess<U> extends DatabaseObjectAccess<Person, U> {
             }
 
             String phoneNumber = queryResults.getString("phone_number");
-            boolean inFamilyGroup = queryResults.getBoolean("in_family_group");
+            Integer familyGroupId = queryResults.getInt("family_group");
+
+            boolean inFamilyGroup;
+
+            if(familyGroupId != null) {
+                inFamilyGroup = true;
+            } else {
+                inFamilyGroup = false;
+            }
 
             Person retrievedPerson;
             if(dateOfBirth != null) {
@@ -61,10 +69,10 @@ public class PersonAccess<U> extends DatabaseObjectAccess<Person, U> {
         Connection dbConnect = dbConnectionManager.getDbConnection();
 
         Statement myStmt = dbConnect.createStatement();
-        queryResults = myStmt.executeQuery("SELECT * FROM Person WHERE assigned_id = " + idOfPerson);
+        queryResults = myStmt.executeQuery("SELECT * FROM Person WHERE person_id = " + idOfPerson);
 
         if(queryResults.next()) {
-            int assignedId = queryResults.getInt("assigned_id");
+            int assignedId = queryResults.getInt("person_id");
             String firstName = queryResults.getString("first_name");
             String lastName = queryResults.getString("last_name");
             String gender = queryResults.getString("gender");
@@ -73,7 +81,15 @@ public class PersonAccess<U> extends DatabaseObjectAccess<Person, U> {
                 dateOfBirth = queryResults.getDate("date_of_birth").toLocalDate();
             }
             String phoneNumber = queryResults.getString("phone_number");
-            boolean inFamilyGroup = queryResults.getBoolean("in_family_group");
+            Integer familyGroupId = queryResults.getInt("family_group");
+
+            boolean inFamilyGroup;
+
+            if(familyGroupId != null) {
+                inFamilyGroup = true;
+            } else {
+                inFamilyGroup = false;
+            }
 
             if(dateOfBirth != null) {
                 retrievedPerson = new Person(assignedId, firstName, gender, dateOfBirth, phoneNumber);
@@ -119,7 +135,7 @@ public class PersonAccess<U> extends DatabaseObjectAccess<Person, U> {
             return null;
         }
 
-        Person newPerson = null;
+        Person newPerson;
         try (ResultSet generatedKeys = myStmt.getGeneratedKeys()) {
             if (generatedKeys.next()) {
                 int assignedId = generatedKeys.getInt(1);
@@ -143,16 +159,22 @@ public class PersonAccess<U> extends DatabaseObjectAccess<Person, U> {
 
     @Override
     public boolean updateInfo(String infoToUpdate, U newInfo, int personId) throws SQLException {
+        int affectedRows;
+
         dbConnectionManager.initializeDbConnection();
         Connection dbConnect = dbConnectionManager.getDbConnection();
 
-        PreparedStatement myStmt = dbConnect.prepareStatement("UPDATE Person SET " + infoToUpdate + " = " + newInfo +
-                " WHERE assigned_id = ?");
+        PreparedStatement myStmt = dbConnect.prepareStatement("UPDATE Person SET " + infoToUpdate + " = ? WHERE person_id = ?");
 
-        myStmt.setInt(1, personId);
+        myStmt.setObject(1, newInfo);
+        myStmt.setInt(2, personId);
 
-        int affectedRows = myStmt.executeUpdate();
-
+        try {
+            affectedRows = myStmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Updating person failed: Trying to update invalid field.");
+            return false;
+        }
         myStmt.close();
         dbConnectionManager.closeDbConnection();
 
@@ -164,7 +186,6 @@ public class PersonAccess<U> extends DatabaseObjectAccess<Person, U> {
         }
     }
 
-
     @Override
     public U getInfo(String infoToGet, int personId) throws SQLException {
         U retrievedInfo;
@@ -173,7 +194,7 @@ public class PersonAccess<U> extends DatabaseObjectAccess<Person, U> {
         Connection dbConnect = dbConnectionManager.getDbConnection();
 
         Statement myStmt = dbConnect.createStatement();
-        queryResults = myStmt.executeQuery("SELECT " + infoToGet + "FROM Person WHERE assigned_id = " +
+        queryResults = myStmt.executeQuery("SELECT " + infoToGet + " FROM Person WHERE person_id = " +
                 personId);
 
         if(queryResults.next()) {
@@ -190,13 +211,14 @@ public class PersonAccess<U> extends DatabaseObjectAccess<Person, U> {
     }
 
 
+
     public boolean removePerson(Person unwantedPerson) throws SQLException {
         int unwantedPersonId = unwantedPerson.getAssignedId();
 
         dbConnectionManager.initializeDbConnection();
         Connection dbConnect = dbConnectionManager.getDbConnection();
 
-        PreparedStatement myStmt = dbConnect.prepareStatement("DELETE FROM Person WHERE assigned_id = ?");
+        PreparedStatement myStmt = dbConnect.prepareStatement("DELETE FROM Person WHERE person_id = ?");
 
         myStmt.setInt(1, unwantedPersonId);
 

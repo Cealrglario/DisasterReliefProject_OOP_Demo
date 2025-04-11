@@ -18,7 +18,7 @@ public class PersonAccessTest {
         personDbAccess = new PersonAccess<>();
 
         try {
-            personDbAccess.addPerson("Test person", "Female", null, "111-1111");
+            placeholderPerson = personDbAccess.addPerson("Test person", "Female", null, "111-1111");
         } catch (SQLException e) {
             throw new SQLException(e.getMessage());
         }
@@ -62,30 +62,28 @@ public class PersonAccessTest {
         Person testPerson = null;
 
         try {
-            testPerson = personDbAccess.getById(-1);
+            testPerson = personDbAccess.getById(1);
         } catch (SQLException e) {
             fail("SQLException occurred while testing getById: " + e.getMessage());
         }
 
         assertEquals("The ASSIGNED_ID of testPerson should match the id selected when calling getById()",
-                -1, testPerson.getAssignedId());
+                1, testPerson.getAssignedId());
     }
 
     @Test
     public void testUpdateInfo() {
-        Person originalPerson = null;
         Person updatedPerson = null;
 
         try {
-            originalPerson = personDbAccess.getById(-1);
             personDbAccess.updateInfo("first_name", "new name", 1);
-            updatedPerson = personDbAccess.getById(-1);
+            updatedPerson = personDbAccess.getById(1);
         } catch (SQLException e) {
             fail("SQLException occurred while testing updateInfo: " + e.getMessage());
         }
 
-        assertNotEquals("Person first name should be updated as expected",
-                originalPerson.getFirstName(), updatedPerson.getFirstName());
+        assertEquals("Person first name should be updated as expected",
+                "new name", updatedPerson.getFirstName());
     }
 
     @Test
@@ -94,8 +92,8 @@ public class PersonAccessTest {
         String retrievedFirstName = null;
 
         try {
-            testPerson = personDbAccess.getById(-1);
-            retrievedFirstName = personDbAccess.getInfo("first_name", -1);
+            testPerson = personDbAccess.getById(1);
+            retrievedFirstName = personDbAccess.getInfo("first_name", 1);
         } catch (SQLException e) {
             fail("SQLException occurred while testing getInfo: " + e.getMessage());
         }
@@ -134,7 +132,7 @@ public class PersonAccessTest {
         List<Person> personsBeforeRemoving = null;
         List<Person> personsAfterRemoving = null;
 
-        Person exPerson = new Person(-2,  "Ex Test Person", "Non-binary", "333-3333");
+        Person exPerson;
 
         try {
             exPerson = personDbAccess.addPerson("Ex Test Person", "Non-binary", null, "333-3333");
