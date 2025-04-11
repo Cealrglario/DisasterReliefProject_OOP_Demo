@@ -25,7 +25,7 @@ public class PersonLocationAccessTest {
         locationAccess = new LocationAccess<>();
         personLocationDbAccess = new PersonLocationAccess();
 
-        placeholderPerson = personAccess.addPerson("Test person", "Male", null, "111-1111");
+        placeholderPerson = personAccess.getById(3);
         placeholderLocation = locationAccess.getById(1);
 
         try {
@@ -101,8 +101,8 @@ public class PersonLocationAccessTest {
             fail("SQLException occurred while testing addEntry: " + e.getMessage());
         }
 
-        assertNotEquals("New person-location entry should be added to the database", locationOccupantsAfterAdding.size(),
-                locationOccupantsBeforeAdding.size());
+        assertNotEquals("New person-location entry should be added to the database", locationOccupantsAfterAdding,
+                locationOccupantsBeforeAdding);
 
         try {
              personLocationDbAccess.removeEntry(newPlaceholderPerson, newPlaceholderLocation);
@@ -123,8 +123,8 @@ public class PersonLocationAccessTest {
             exPlaceholderPerson = personAccess.addPerson("Test Person 2", "Male", null, "222-2222");
             exPlaceholderLocation = locationAccess.getById(2);
 
-            personLocationDbAccess.addEntry(exPlaceholderPerson, exPlaceholderLocation);
             locationOccupantsBeforeRemoving = personLocationDbAccess.getAll();
+            personLocationDbAccess.addEntry(exPlaceholderPerson, exPlaceholderLocation);
             personLocationDbAccess.removeEntry(exPlaceholderPerson, exPlaceholderLocation);
             locationOccupantsAfterRemoving = personLocationDbAccess.getAll();
         } catch (SQLException e) {
@@ -132,24 +132,18 @@ public class PersonLocationAccessTest {
         }
 
         assertNotEquals("Unwanted person-location entry should be no longer be in the database",
-                locationOccupantsAfterRemoving.size(), locationOccupantsBeforeRemoving.size());
+                locationOccupantsAfterRemoving, locationOccupantsBeforeRemoving);
     }
 
     @Test
     public void testGetOccupantsOfLocation() {
         List<Person> testOccupants = null;
-
-        Person testPerson = null;
         Location testLocation = null;
 
         try {
-            testPerson = personAccess.getById(2);
             testLocation = locationAccess.getById(2);
-
-            testLocation.addOccupant(testPerson);
-
-            personLocationDbAccess.getById(testPerson, testLocation);
             testOccupants = personLocationDbAccess.getOccupantsOfLocation(testLocation);
+            testLocation.setOccupants(testOccupants);
         } catch (SQLException e) {
             fail("SQLException occurred while testing getOccupantsOfLocation: " + e.getMessage());
         }
@@ -194,22 +188,19 @@ public class PersonLocationAccessTest {
 
     @Test
     public void testRemoveEntryNotInDb() {
-        List<Map<Person, Location>> locationOccupantsBeforeRemoving = null;
-        List<Map<Person, Location>> locationOccupantsAfterRemoving = null;
+        boolean success = true;
 
         Person personNotInDb = new Person(-999, "Person not in db", "Male", "999-9999");
         Location locationNotInDb = new Location(-999, "Location not in db", "Test");
 
         try {
-            locationOccupantsBeforeRemoving = personLocationDbAccess.getAll();
-            personLocationDbAccess.removeEntry(personNotInDb, locationNotInDb);
-            locationOccupantsAfterRemoving = personLocationDbAccess.getAll();
+            success = personLocationDbAccess.removeEntry(personNotInDb, locationNotInDb);
         } catch (SQLException e) {
             fail("SQLException occurred while testing removeEntryNotInDb: " + e.getMessage());
         }
 
-        assertEquals("Removing an entry that isn't in the database should not affect the database",
-                locationOccupantsBeforeRemoving.size(), locationOccupantsAfterRemoving.size());
+        assertFalse("Removing an entry that isn't in the database should not affect the database",
+                success);
     }
 
     @Test
