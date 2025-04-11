@@ -9,6 +9,10 @@ public enum LocationService {
     private final LocationAccess<Object> locationAccess = new LocationAccess<>();
     private final PersonLocationAccess personLocationAccess = new PersonLocationAccess();
 
+    public Location getLocation(int locationId) throws SQLException {
+        return locationAccess.getById(locationId);
+    }
+
     public Location getLocationWithOccupants(int locationId) throws SQLException {
         Location retrievedLocation = locationAccess.getById(locationId);
         if (retrievedLocation == null) {
