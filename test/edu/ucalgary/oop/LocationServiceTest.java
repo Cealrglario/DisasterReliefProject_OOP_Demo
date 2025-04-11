@@ -47,8 +47,8 @@ public class LocationServiceTest {
         }
 
         for (int i = 0; i < retrievedLocations.size(); i++) {
-            assertNotNull("getAllLocations() should retrieve a valid list of Locations with occupants",
-                    retrievedLocations.get(i).getOccupants());
+            assertNotEquals("getAllLocations() should retrieve a valid list of Locations with occupants", 0,
+                    retrievedLocations.get(i).getOccupants().size());
         }
     }
 
@@ -159,9 +159,5 @@ public class LocationServiceTest {
 
         assertEquals("refreshOccupants() should refresh occupants in-memory and in database", retrievedOccupants.size(),
                 testLocation.getOccupants().size());
-    }
-
-    @Test
-    public void testSaveLocation() {
     }
 }

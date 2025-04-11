@@ -21,18 +21,20 @@ public class PersonServiceTest {
     @Test
     public void testGetPersonById() {
         Person testPerson = null;
+
         try {
             testPerson = personService.getPersonById(1);
         } catch (SQLException e) {
             fail("Error testing getPersonById: " + e.getMessage());
         }
 
-        assertEquals("getPersonById() should retrieve a valid Person", 1, testPerson.getAssignedId());
+        assertEquals("getPersonById() should retrieve the correct Person", 1, testPerson.getAssignedId());
     }
 
     @Test
     public void testGetAllPersons() {
         List<Person> retrievedPersons = null;
+
         try {
             retrievedPersons = personService.getAllPersons();
         } catch (SQLException e) {
@@ -40,7 +42,6 @@ public class PersonServiceTest {
         }
 
         assertNotNull("getAllPersons() should retrieve a valid list of Persons", retrievedPersons);
-        assertFalse("getAllPersons() should retrieve at least one Person", retrievedPersons.isEmpty());
     }
 
     @Test

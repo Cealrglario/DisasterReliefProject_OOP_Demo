@@ -27,7 +27,8 @@ public class MedicalRecordServiceTest {
             fail("Error testing getMedicalRecordById: " + e.getMessage());
         }
 
-        assertEquals("getMedicalRecordById() should retrieve the correct MedicalRecord", 1, testMedicalRecord.getMedicalRecordId());
+        assertEquals("getMedicalRecordById() should retrieve the correct MedicalRecord", 1,
+                testMedicalRecord.getMedicalRecordId());
     }
 
     @Test
@@ -57,7 +58,8 @@ public class MedicalRecordServiceTest {
 
         assertNotNull("addMedicalRecord() should create and return a valid MedicalRecord", testMedicalRecord);
         assertEquals("addMedicalRecord() should set the locationId correctly", testLocationId, testMedicalRecord.getLocationId());
-        assertEquals("addMedicalRecord() should set the treatmentDetails correctly", testTreatmentDetails, testMedicalRecord.getTreatmentDetails());
+        assertEquals("addMedicalRecord() should set the treatmentDetails correctly", testTreatmentDetails,
+                testMedicalRecord.getTreatmentDetails());
 
         try {
             medicalRecordService.removeMedicalRecord(testMedicalRecord);
@@ -76,7 +78,8 @@ public class MedicalRecordServiceTest {
             testMedicalRecord = medicalRecordService.addMedicalRecord(1, "Initial Treatment");
             medicalRecordService.updateTreatmentDetails(testMedicalRecord, newTreatmentDetails);
 
-            retrievedTreatmentDetails = (String) medicalRecordAccess.getInfo("treatment_details", testMedicalRecord.getMedicalRecordId());
+            retrievedTreatmentDetails = (String) medicalRecordAccess.getInfo("treatment_details",
+                    testMedicalRecord.getMedicalRecordId());
         } catch (SQLException e) {
             fail("Error testing updateTreatmentDetails: " + e.getMessage());
         }
