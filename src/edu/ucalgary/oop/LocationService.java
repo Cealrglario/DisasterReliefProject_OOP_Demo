@@ -1,6 +1,8 @@
 package edu.ucalgary.oop;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 public enum LocationService {
@@ -8,6 +10,7 @@ public enum LocationService {
 
     private final LocationAccess<Object> locationAccess = new LocationAccess<>();
     private final PersonLocationAccess personLocationAccess = new PersonLocationAccess();
+    private final SupplyLocationAllocationAccess supplyLocationAllocationAccess = new SupplyLocationAllocationAccess();
 
     public Location getLocation(int locationId) throws SQLException {
         return locationAccess.getById(locationId);
@@ -59,5 +62,33 @@ public enum LocationService {
     public void refreshOccupants(Location location) throws SQLException {
         List<Person> occupants = personLocationAccess.getOccupantsOfLocation(location);
         location.setOccupants(occupants);
+    }
+
+    public void refreshAllocations(Location location) throws SQLException {
+        List<Allocation> allAllocations = supplyLocationAllocationAccess.getAll();
+        LinkedHashSet<Allocation> locationAllocations = new LinkedHashSet<>();
+
+        for (int i = 0; i < allAllocations.size(); i++) {
+            if (allAllocations.get(i).getLocationId() == location.getLocationId()) {
+                locationAllocations.add(allAllocations.get(i));
+            }
+        }
+
+        location.setAllocations(locationAllocations);
+    }
+
+    public boolean addSupplyAllocation(Location location, Supply supply, LocalDate allocationDate) throws SQLException {
+        Allocation allocation = supplyLocationAllocationAccess.addEntry(supply, location, allocationDate);
+
+        if (allocation != null) {
+            location.addAllocation(allocation);
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean removeSupplyAllocation(Location location, Supply supply, LocalDate allocationDate) throws SQLException {
+        return supplyLocationAllocationAccess.removeEntry(supply, location, allocationDate);
     }
 }
