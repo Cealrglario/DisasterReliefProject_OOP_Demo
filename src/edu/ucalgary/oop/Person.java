@@ -30,37 +30,49 @@ public class Person {
         return this.firstName;
     }
 
-    public void setFirstName(String firstName) {}
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
     public String getLastName() {
         return this.lastName;
     }
 
-    public void setLastName(String lastName) {}
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
     public LocalDate getDateOfBirth() {
         return this.dateOfBirth;
     }
 
-    public void setDateOfBirth(LocalDate dateOfBirth) {}
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
 
     public String getGender() {
         return this.gender;
     }
 
-    public void setGender(String gender) {}
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
 
     public boolean getInFamilyGroup() {
         return this.inFamilyGroup;
     }
 
-    public void setInFamilyGroup(boolean inFamilyGroup) {}
+    public void setInFamilyGroup(boolean inFamilyGroup) {
+        this.inFamilyGroup = inFamilyGroup;
+    }
 
     public String getPhoneNumber() {
         return this.phoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {}
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
     public Person[] getRelatives() {
         return null;
