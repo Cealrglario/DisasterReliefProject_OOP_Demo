@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class DatabaseAssociationAccess<T, U> {
-    private ResultSet queryResults;
+    protected ResultSet queryResults;
+    protected DatabaseConnectionManager dbConnectionManager = DatabaseConnectionManager.INSTANCE;
 
     public ResultSet getQueryResults() {
         return this.queryResults;
