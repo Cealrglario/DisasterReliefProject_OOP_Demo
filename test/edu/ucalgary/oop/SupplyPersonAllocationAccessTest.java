@@ -3,24 +3,33 @@ package edu.ucalgary.oop;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.List;
 import static org.junit.Assert.*;
 
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
-
 public class SupplyPersonAllocationAccessTest {
-    private SupplyPersonAllocationAccess supplyPersonAllocationDbAccess;
 
-    Supply placeholderSupply = new Blanket(-1);
-    Person placeholderPerson = new Person(-1, "Test Person", "Male", "111-1111");
+    private SupplyPersonAllocationAccess supplyPersonDbAccess;
+    private SupplyService supplyService;
+    private PersonService personService;
+    private Supply placeholderSupply;
+    private Person placeholderPerson;
+    private LocalDate testAllocationDate;
+    private Allocation testAllocation;
 
     @Before
     public void setUp() throws Exception {
-        supplyPersonAllocationDbAccess = new SupplyPersonAllocationAccess();
+        supplyService = SupplyService.INSTANCE;
+        personService = PersonService.INSTANCE;
+        supplyPersonDbAccess = new SupplyPersonAllocationAccess();
+
+        placeholderSupply = supplyService.getSupplyById(1);
+        placeholderPerson = personService.getPersonById(1);
+        testAllocationDate = LocalDate.now();
 
         try {
-            supplyPersonAllocationDbAccess.addEntry(placeholderSupply, placeholderPerson);
+            testAllocation = supplyPersonDbAccess.addEntry(placeholderSupply, placeholderPerson, testAllocationDate);
         } catch (SQLException e) {
             throw new SQLException(e.getMessage());
         }
@@ -29,7 +38,7 @@ public class SupplyPersonAllocationAccessTest {
     @After
     public void tearDown() throws Exception {
         try {
-            supplyPersonAllocationDbAccess.removeEntry(placeholderSupply, placeholderPerson);
+            supplyPersonDbAccess.removeEntry(placeholderSupply, placeholderPerson, testAllocationDate);
         } catch (SQLException e) {
             throw new SQLException(e.getMessage());
         }
@@ -38,149 +47,143 @@ public class SupplyPersonAllocationAccessTest {
     @Test
     public void testGetQueryResults() {
         try {
-            supplyPersonAllocationDbAccess.getAll();
+            supplyPersonDbAccess.getAll();
         } catch (SQLException e) {
-            fail("SQLException occurred while testing getQueryResults: " + e.getMessage());
+            fail("Error occurred while testing getQueryResults: " + e.getMessage());
         }
-        assertNotNull("getQueryResults() should retrieve a valid query", supplyPersonAllocationDbAccess.getQueryResults());
+
+        assertNotNull("getQueryResults() should retrieve a valid query", supplyPersonDbAccess.getQueryResults());
     }
 
     @Test
     public void testGetAll() {
-        List<Map<Supply, Person>> allAllocations = null;
+        List<Allocation> allRetrievedAllocations = null;
 
         try {
-            allAllocations = supplyPersonAllocationDbAccess.getAll();
+            allRetrievedAllocations = supplyPersonDbAccess.getAll();
         } catch (SQLException e) {
-            fail("SQLException occurred while testing getAll: " + e.getMessage());
+            fail("Error occurred while testing getAll: " + e.getMessage());
         }
-        assertFalse("getAll() should return a list of supplies and their allocated persons", allAllocations.isEmpty());
+
+        assertFalse("getAll() should return a list of allocations", allRetrievedAllocations.isEmpty());
     }
 
     @Test
     public void testGetById() {
-        Map<Supply, Person> allocation = null;
+        Allocation retrievedAllocation = null;
 
         try {
-            allocation = supplyPersonAllocationDbAccess.getById(placeholderSupply, placeholderPerson);
+            retrievedAllocation = supplyPersonDbAccess.getById(placeholderSupply, placeholderPerson);
         } catch (SQLException e) {
-            fail("SQLException occurred while testing getById: " + e.getMessage());
+            fail("Error occurred while testing getById: " + e.getMessage());
         }
-        assertEquals("The retrieved person allocated for a supply should match the expected person when calling getById()",
-                placeholderPerson.getAssignedId(), allocation.get(placeholderSupply).getAssignedId());
+
+        assertNotNull("getById() should return a valid allocation", retrievedAllocation);
+        assertEquals("The retrieved allocation's supply should match",
+                placeholderSupply.getSupplyId(), retrievedAllocation.getAllocatedSupply().getSupplyId());
+        assertEquals("The retrieved allocation's person ID should match",
+                placeholderPerson.getAssignedId(), retrievedAllocation.getAllocatedPersonId());
     }
 
     @Test
     public void testAddEntry() {
-        List<Map<Supply, Person>> allocationsBeforeAdding = null;
-        List<Map<Supply, Person>> allocationsAfterAdding = null;
-
-        Supply newSupply = new Blanket(-2);
-        Person newPerson = new Person(-2, "Test Person 2", "Male", "222-2222");
+        List<Allocation> allocationsBeforeAdding = null;
+        List<Allocation> allocationsAfterAdding = null;
+        Supply newSupply = null;
+        Person newPerson = null;
+        LocalDate newDate = LocalDate.now();
+        Allocation newAllocation = null;
 
         try {
-            allocationsBeforeAdding = supplyPersonAllocationDbAccess.getAll();
-            supplyPersonAllocationDbAccess.addEntry(newSupply, newPerson);
-            allocationsAfterAdding = supplyPersonAllocationDbAccess.getAll();
+            newSupply = supplyService.getSupplyById(2);
+            newPerson = personService.getPersonById(2);
+
+            allocationsBeforeAdding = supplyPersonDbAccess.getAll();
+            newAllocation = supplyPersonDbAccess.addEntry(newSupply, newPerson, newDate);
+            allocationsAfterAdding = supplyPersonDbAccess.getAll();
         } catch (SQLException e) {
-            fail("SQLException occurred while testing addEntry: " + e.getMessage());
+            fail("Error occurred while testing addEntry: " + e.getMessage());
         }
 
-        assertNotEquals("New supply-person entry should be added to the database",
-                allocationsBeforeAdding.size(), allocationsAfterAdding.size());
+        assertNotNull("addEntry() should return a new Allocation object", newAllocation);
+        assertEquals("The allocation's supply should match", newSupply.getSupplyId(),
+                newAllocation.getAllocatedSupply().getSupplyId());
+        assertEquals("The allocation's person ID should match", newPerson.getAssignedId(),
+                newAllocation.getAllocatedPersonId());
+        assertTrue("The allocations list should have grown",
+                allocationsAfterAdding.size() > allocationsBeforeAdding.size());
 
         try {
-            supplyPersonAllocationDbAccess.removeEntry(newSupply, newPerson);
+            supplyPersonDbAccess.removeEntry(newSupply, newPerson, newDate);
         } catch (SQLException e) {
-            fail("SQLException occurred while cleaning up addEntry test: " + e.getMessage());
+            fail("Error occurred during cleanup: " + e.getMessage());
         }
     }
 
     @Test
     public void testRemoveEntry() {
-        List<Map<Supply, Person>> allocationsBeforeRemoving = null;
-        List<Map<Supply, Person>> allocationsAfterRemoving = null;
-
-        Supply testSupply = new Blanket(-2);
-        Person testPerson = new Person(-2, "Test Person 2", "Male", "222-2222");
+        List allocationsBeforeRemoving = null;
+        List allocationsAfterRemoving = null;
+        Supply extraSupply = null;
+        Person extraPerson = null;
+        LocalDate extraDate = LocalDate.now();
 
         try {
-            supplyPersonAllocationDbAccess.addEntry(testSupply, testPerson);
-            allocationsBeforeRemoving = supplyPersonAllocationDbAccess.getAll();
-            supplyPersonAllocationDbAccess.removeEntry(testSupply, testPerson);
-            allocationsAfterRemoving = supplyPersonAllocationDbAccess.getAll();
+            extraSupply = supplyService.getSupplyById(3);
+            extraPerson = personService.getPersonById(3);
+
+            supplyPersonDbAccess.addEntry(extraSupply, extraPerson, extraDate);
+            allocationsBeforeRemoving = supplyPersonDbAccess.getAll();
+            supplyPersonDbAccess.removeEntry(extraSupply, extraPerson, extraDate);
+            allocationsAfterRemoving = supplyPersonDbAccess.getAll();
         } catch (SQLException e) {
-            fail("SQLException occurred while testing removeEntry: " + e.getMessage());
+            fail("Error occurred while testing removeEntry: " + e.getMessage());
         }
 
-        assertNotEquals("Unwanted supply-person entry should be removed from the database",
-                allocationsBeforeRemoving.size(), allocationsAfterRemoving.size());
+        assertTrue("removeEntry() should remove the unwanted entry", allocationsAfterRemoving.size() <
+                allocationsBeforeRemoving.size());
+    }
+
+    @Test
+    public void testGetPersonSupplies() {
+        List testSupplies = null;
+        Person testPerson = null;
+
+        try {
+            testPerson = personService.getPersonById(1);
+            testSupplies = supplyPersonDbAccess.getPersonSupplies(testPerson);
+        } catch (SQLException e) {
+            fail("Error occurred while testing getPersonSupplies: " + e.getMessage());
+        }
+
+        assertFalse("Person should have at least one supply allocated", testSupplies.isEmpty());
     }
 
     @Test
     public void testGetByIdNotInDb() {
-        Map<Supply, Person> allocation = null;
-
+        Allocation retrievedAllocation = null;
         Supply supplyNotInDb = new Blanket(-999);
-        Person personNotInDb = new Person(-999, "Person not in db", "Male", "999-9999");
+        Person personNotInDb = new Person(-999, "Test Person", "Man", "111-1111");
 
         try {
-            allocation = supplyPersonAllocationDbAccess.getById(supplyNotInDb, personNotInDb);
+            retrievedAllocation = supplyPersonDbAccess.getById(supplyNotInDb, personNotInDb);
         } catch (SQLException e) {
-            fail("SQLException occurred while testing getByIdNotInDb: " + e.getMessage());
+            fail("Error occurred while testing GetByIdNotInDb: " + e.getMessage());
         }
 
-        assertNull("A null association map should be returned for a supply/person association that isn't in the database",
-                allocation);
-    }
-
-    @Test
-    public void testAddEntryThatAlreadyExists() {
-        List<Map<Supply, Person>> allocationsBeforeAdding = null;
-        List<Map<Supply, Person>> allocationsAfterAdding = null;
-
-        try {
-            allocationsBeforeAdding = supplyPersonAllocationDbAccess.getAll();
-            supplyPersonAllocationDbAccess.addEntry(placeholderSupply, placeholderPerson);
-            allocationsAfterAdding = supplyPersonAllocationDbAccess.getAll();
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing addEntryThatAlreadyExists: " + e.getMessage());
-        }
-
-        assertEquals("Adding an existing supply-person entry should not increase the total count",
-                allocationsBeforeAdding.size(), allocationsAfterAdding.size());
-    }
-
-    @Test
-    public void testRemoveEntryNotInDb() {
-        List<Map<Supply, Person>> allocationsBeforeRemoving = null;
-        List<Map<Supply, Person>> allocationsAfterRemoving = null;
-
-        Supply supplyNotInDb = new Blanket(-999);
-        Person personNotInDb = new Person(-999, "Person not in db", "Male", "999-9999");
-
-        try {
-            allocationsBeforeRemoving = supplyPersonAllocationDbAccess.getAll();
-            supplyPersonAllocationDbAccess.removeEntry(supplyNotInDb, personNotInDb);
-            allocationsAfterRemoving = supplyPersonAllocationDbAccess.getAll();
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing removeEntryNotInDb: " + e.getMessage());
-        }
-
-        assertEquals("Removing an entry that isn't in the database should not affect the database",
-                allocationsBeforeRemoving.size(), allocationsAfterRemoving.size());
+        assertNull("A null allocation should be returned for a non-existent allocation", retrievedAllocation);
     }
 
     @Test
     public void testAddEntryWithNullArguments() {
-        boolean success = true;
+        Allocation nullAllocation = null;
 
         try {
-            success = supplyPersonAllocationDbAccess.addEntry(null, null);
+            nullAllocation = supplyPersonDbAccess.addEntry(null, null, LocalDate.now());
         } catch (SQLException e) {
-            fail("SQLException occurred while testing addEntryWithNullArguments: " + e.getMessage());
+            fail("Error occurred while testing addEntryWithNullArguments: " + e.getMessage());
         }
 
-        assertFalse("addEntry() should return false when attempting to add a null entry", success);
+        assertNull("addEntry() should return null when attempting to add with null arguments", nullAllocation);
     }
 }

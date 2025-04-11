@@ -5,10 +5,10 @@ import java.time.LocalDate;
 public class Allocation {
     private final Supply ALLOCATED_SUPPLY;
     private final Integer ALLOCATED_PERSON_ID;
-    private final int LOCATION_ID;
+    private final Integer LOCATION_ID;
     private final LocalDate TIME_ALLOCATED;
 
-    public Allocation(Supply allocatedSupply, Integer allocatedPersonId, int locationId, LocalDate timeAllocated) {
+    public Allocation(Supply allocatedSupply, Integer allocatedPersonId, Integer locationId, LocalDate timeAllocated) {
         this.ALLOCATED_SUPPLY = allocatedSupply;
         this.ALLOCATED_PERSON_ID = allocatedPersonId;
         this.LOCATION_ID = locationId;
