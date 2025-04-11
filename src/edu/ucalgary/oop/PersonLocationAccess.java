@@ -112,9 +112,7 @@ public class PersonLocationAccess extends DatabaseAssociationAccess<Person, Loca
         dbConnectionManager.initializeDbConnection();
         Connection dbConnect = dbConnectionManager.getDbConnection();
 
-        PreparedStatement myStmt = dbConnect.prepareStatement(
-                "DELETE FROM PersonLocation WHERE person_id = ? AND location_id = ?"
-        );
+        PreparedStatement myStmt = dbConnect.prepareStatement("DELETE FROM PersonLocation WHERE person_id = ? AND location_id = ?");
 
         myStmt.setInt(1, person.getAssignedId());
         myStmt.setInt(2, location.getLocationId());
