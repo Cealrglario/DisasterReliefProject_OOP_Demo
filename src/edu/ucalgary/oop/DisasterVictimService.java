@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public enum DisasterVictimService {
     INSTANCE;
@@ -113,6 +114,25 @@ public enum DisasterVictimService {
     public void refreshDisasterVictim(DisasterVictim victim) throws SQLException {
         refreshSupplies(victim);
         refreshMedicalRecords(victim);
+    }
+
+
+    public Location getPersonLocation(Person person) {
+        PersonLocationAccess personLocationAccess = new PersonLocationAccess();
+        LocationAccess<Object> locationAccess = new LocationAccess<>();
+        Location retrievedLocation;
+
+        try {
+            Map<Integer, Integer> retrievedPersonsInLocations = personLocationAccess.getAll();
+            int retrievedLocationId = retrievedPersonsInLocations.get(person.getAssignedId());
+
+            retrievedLocation = locationAccess.getById(retrievedLocationId);
+        } catch (SQLException e) {
+            System.out.println("Failed to retrieve person's location ID: " + e.getMessage());
+            return null;
+        }
+
+        return retrievedLocation;
     }
 }
 
