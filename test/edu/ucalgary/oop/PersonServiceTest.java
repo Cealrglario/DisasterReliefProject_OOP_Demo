@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
@@ -143,6 +144,56 @@ public class PersonServiceTest {
             personService.removePerson(testPerson);
         } catch (SQLException e) {
             fail("Error testing updatePersonGender: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testUpdatePersonDateOfBirth() {
+        Person testPerson = null;
+        LocalDate newDateOfBirth = LocalDate.of(2000, 2, 2);
+        LocalDate retrievedDateOfBirth = null;
+
+        try {
+            testPerson = personService.addPerson("Test Person", "Male", LocalDate.now(), "111-1111");
+            personService.updatePersonDateOfBirth(testPerson, newDateOfBirth);
+
+            Date sqlDate = (Date) personAccess.getInfo("date_of_birth", testPerson.getAssignedId());
+            retrievedDateOfBirth = sqlDate.toLocalDate();
+        } catch (SQLException e) {
+            fail("Error testing updatePersonDateOfBirth: " + e.getMessage());
+        }
+
+        assertEquals("updatePersonDateOfBirth() should update the date of birth in-memory and in database",
+                testPerson.getDateOfBirth(), retrievedDateOfBirth);
+
+        try {
+            personService.removePerson(testPerson);
+        } catch (SQLException e) {
+            fail("Error testing updatePersonDateOfBirth: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testUpdateFamilyGroupStatus() {
+        Person testPerson = null;
+        Integer retrievedFamilyGroupId = null;
+
+        try {
+            testPerson = personService.addPerson("Test Person", "Male", LocalDate.now(), "111-1111");
+            personService.updateFamilyGroupStatus(testPerson, true, 5);
+
+            retrievedFamilyGroupId = (Integer) personAccess.getInfo("family_group", testPerson.getAssignedId());
+        } catch (SQLException e) {
+            fail("Error testing updatePersonDateOfBirth: " + e.getMessage());
+        }
+
+        assertEquals("updateFamilyGroupStatus() should update the family group status and ID in-memory and in database",
+                5, retrievedFamilyGroupId.intValue());
+
+        try {
+            personService.removePerson(testPerson);
+        } catch (SQLException e) {
+            fail("Error testing updatePersonDateOfBirth: " + e.getMessage());
         }
     }
 

@@ -52,6 +52,7 @@ public enum PersonService {
 
     public boolean updateFamilyGroupStatus(Person person, boolean inFamilyGroup, Integer familyGroupId) throws SQLException {
         person.setInFamilyGroup(inFamilyGroup);
+
         if (inFamilyGroup) {
             return personAccess.updateInfo("family_group", familyGroupId, person.getAssignedId());
         } else {
