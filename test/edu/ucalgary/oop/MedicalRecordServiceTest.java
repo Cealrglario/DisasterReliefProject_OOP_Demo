@@ -45,37 +45,13 @@ public class MedicalRecordServiceTest {
     }
 
     @Test
-    public void testAddMedicalRecord() {
-        MedicalRecord testMedicalRecord = null;
-        int testLocationId = 1;
-        String testTreatmentDetails = "Test Treatment";
-
-        try {
-            testMedicalRecord = medicalRecordService.addMedicalRecord(testLocationId, testTreatmentDetails);
-        } catch (SQLException e) {
-            fail("Error testing addMedicalRecord: " + e.getMessage());
-        }
-
-        assertNotNull("addMedicalRecord() should create and return a valid MedicalRecord", testMedicalRecord);
-        assertEquals("addMedicalRecord() should set the locationId correctly", testLocationId, testMedicalRecord.getLocationId());
-        assertEquals("addMedicalRecord() should set the treatmentDetails correctly", testTreatmentDetails,
-                testMedicalRecord.getTreatmentDetails());
-
-        try {
-            medicalRecordService.removeMedicalRecord(testMedicalRecord);
-        } catch (SQLException e) {
-            fail("Error testing addMedicalRecord: " + e.getMessage());
-        }
-    }
-
-    @Test
     public void testUpdateTreatmentDetails() {
         MedicalRecord testMedicalRecord = null;
         String newTreatmentDetails = "Updated Treatment";
         String retrievedTreatmentDetails = null;
 
         try {
-            testMedicalRecord = medicalRecordService.addMedicalRecord(1, "Initial Treatment");
+            testMedicalRecord = medicalRecordService.getMedicalRecordById(1);
             medicalRecordService.updateTreatmentDetails(testMedicalRecord, newTreatmentDetails);
 
             retrievedTreatmentDetails = (String) medicalRecordAccess.getInfo("treatment_details",
@@ -86,26 +62,5 @@ public class MedicalRecordServiceTest {
 
         assertEquals("updateTreatmentDetails() should update the treatment details in-memory and in database",
                 testMedicalRecord.getTreatmentDetails(), retrievedTreatmentDetails);
-
-        try {
-            medicalRecordService.removeMedicalRecord(testMedicalRecord);
-        } catch (SQLException e) {
-            fail("Error testing updateTreatmentDetails: " + e.getMessage());
-        }
-    }
-
-    @Test
-    public void testRemoveMedicalRecord() {
-        MedicalRecord testMedicalRecord = null;
-        boolean removalResult = false;
-
-        try {
-            testMedicalRecord = medicalRecordService.addMedicalRecord(1, "Test Remove");
-            removalResult = medicalRecordService.removeMedicalRecord(testMedicalRecord);
-        } catch (SQLException e) {
-            fail("Error testing removeMedicalRecord: " + e.getMessage());
-        }
-
-        assertTrue("removeMedicalRecord() should return true when successful", removalResult);
     }
 }

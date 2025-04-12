@@ -1,6 +1,5 @@
 package edu.ucalgary.oop;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -11,26 +10,9 @@ import java.util.List;
 public class MedicalRecordAccessTest {
     private MedicalRecordAccess<String> medicalRecordDbAccess;
 
-    MedicalRecord placeholderRecord;
-
     @Before
     public void setUp() throws Exception {
         medicalRecordDbAccess = new MedicalRecordAccess<>();
-
-        try {
-            placeholderRecord = medicalRecordDbAccess.addMedicalRecord(1, "Placeholder");
-        } catch (SQLException e) {
-            throw new SQLException(e.getMessage());
-        }
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        try {
-            medicalRecordDbAccess.removeMedicalRecord(placeholderRecord);
-        } catch (SQLException e) {
-            throw new SQLException(e.getMessage());
-        }
     }
 
     @Test
@@ -102,50 +84,6 @@ public class MedicalRecordAccessTest {
                 retrievedDetails, testRecord.getTreatmentDetails());
     }
 
-    @Test
-    public void testAddEntry() {
-        List<MedicalRecord> recordsBeforeAdding = null;
-        List<MedicalRecord> recordsAfterAdding = null;
-
-        MedicalRecord newRecord = null;
-
-        try {
-            recordsBeforeAdding = medicalRecordDbAccess.getAll();
-            newRecord = medicalRecordDbAccess.addMedicalRecord(2, "Test add record");
-            recordsAfterAdding = medicalRecordDbAccess.getAll();
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing addEntry: " + e.getMessage());
-        }
-
-        assertTrue("New MedicalRecord should be added in the database",
-                recordsAfterAdding.size() > recordsBeforeAdding.size());
-
-        try {
-            medicalRecordDbAccess.removeMedicalRecord(newRecord);
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing addEntry: " + e.getMessage());
-        }
-    }
-
-    @Test
-    public void testRemoveEntry() {
-        List<MedicalRecord> recordsBeforeRemoving = null;
-        List<MedicalRecord> recordsAfterRemoving = null;
-
-        MedicalRecord exRecord = null;
-
-        try {
-            exRecord = medicalRecordDbAccess.addMedicalRecord(2, "Test remove record");
-            recordsBeforeRemoving = medicalRecordDbAccess.getAll();
-            medicalRecordDbAccess.removeMedicalRecord(exRecord);
-            recordsAfterRemoving = medicalRecordDbAccess.getAll();
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing removeEntry: " + e.getMessage());
-        }
-
-        assertTrue("Removed MedicalRecord should no longer be in the database",
-                recordsAfterRemoving.size() < recordsBeforeRemoving.size());
-    }
 
     @Test
     public void testGetByIdNotInDb() {
@@ -175,18 +113,5 @@ public class MedicalRecordAccessTest {
                 success);
     }
 
-    @Test
-    public void testRemoveEntryNotInDb() {
-        boolean success = true;
-        MedicalRecord recordNotInDb = new MedicalRecord(-999, -1, "Test not in db");
 
-        try {
-            success = medicalRecordDbAccess.removeMedicalRecord(recordNotInDb);
-        } catch (SQLException e) {
-            fail("SQLException occurred while testing removeEntryNotInDb: " + e.getMessage());
-        }
-
-        assertFalse("removeEntry() should return false when trying to remove a MedicalRecord that isn't in the database",
-                success);
-    }
 }

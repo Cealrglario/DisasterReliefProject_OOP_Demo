@@ -62,46 +62,6 @@ public class MedicalRecordAccess<U> extends DatabaseObjectAccess<MedicalRecord, 
     }
 
 
-    public MedicalRecord addMedicalRecord(int locationId, String treatmentDetails) throws SQLException {
-        dbConnectionManager.initializeDbConnection();
-        Connection dbConnect = dbConnectionManager.getDbConnection();
-
-        PreparedStatement myStmt = dbConnect.prepareStatement(
-                "INSERT INTO MedicalRecord (location_id, treatment_details) VALUES (?, ?)",
-                Statement.RETURN_GENERATED_KEYS
-        );
-
-        myStmt.setInt(1, locationId);
-        myStmt.setString(2, treatmentDetails);
-
-        int affectedRows = myStmt.executeUpdate();
-        if (affectedRows == 0) {
-            System.out.println("Creating medical record failed, no rows affected.");
-            myStmt.close();
-            dbConnectionManager.closeDbConnection();
-            return null;
-        }
-
-        MedicalRecord newMedicalRecord = null;
-        try (ResultSet generatedKeys = myStmt.getGeneratedKeys()) {
-            if (generatedKeys.next()) {
-                int medicalRecordId = generatedKeys.getInt(1);
-                newMedicalRecord = new MedicalRecord(medicalRecordId, locationId, treatmentDetails);
-            } else {
-                System.out.println("Creating medical record failed, couldn't obtain medical record ID.");
-                myStmt.close();
-                dbConnectionManager.closeDbConnection();
-                return null;
-            }
-        }
-
-        myStmt.close();
-        dbConnectionManager.closeDbConnection();
-
-        return newMedicalRecord;
-    }
-
-
     @Override
     public boolean updateInfo(String infoToUpdate, U newInfo, int medicalRecordId) throws SQLException {
         int affectedRows;
@@ -161,22 +121,4 @@ public class MedicalRecordAccess<U> extends DatabaseObjectAccess<MedicalRecord, 
         return retrievedInfo;
     }
 
-
-    public boolean removeMedicalRecord(MedicalRecord unwantedMedicalRecord) throws SQLException {
-        int unwantedMedicalRecordId = unwantedMedicalRecord.getMedicalRecordId();
-
-        dbConnectionManager.initializeDbConnection();
-        Connection dbConnect = dbConnectionManager.getDbConnection();
-
-        PreparedStatement myStmt = dbConnect.prepareStatement("DELETE FROM MedicalRecord WHERE medical_record_id = ?");
-
-        myStmt.setInt(1, unwantedMedicalRecordId);
-
-        int rowsAffected = myStmt.executeUpdate();
-
-        myStmt.close();
-        dbConnectionManager.closeDbConnection();
-
-        return rowsAffected > 0;
-    }
 }

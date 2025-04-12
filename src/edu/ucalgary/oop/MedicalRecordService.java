@@ -16,16 +16,8 @@ public enum MedicalRecordService {
         return medicalRecordAccess.getAll();
     }
 
-    public MedicalRecord addMedicalRecord(int locationId, String treatmentDetails) throws SQLException {
-        return medicalRecordAccess.addMedicalRecord(locationId, treatmentDetails);
-    }
-
     public boolean updateTreatmentDetails(MedicalRecord medicalRecord, String newTreatmentDetails) throws SQLException {
         medicalRecord.setTreatmentDetails(newTreatmentDetails);
         return medicalRecordAccess.updateInfo("treatment_details", newTreatmentDetails, medicalRecord.getMedicalRecordId());
-    }
-
-    public boolean removeMedicalRecord(MedicalRecord medicalRecord) throws SQLException {
-        return medicalRecordAccess.removeMedicalRecord(medicalRecord);
     }
 }
