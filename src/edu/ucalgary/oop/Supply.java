@@ -1,7 +1,5 @@
 package edu.ucalgary.oop;
 
-import java.util.Stack;
-
 public abstract class Supply {
     private final int SUPPLY_ID;
     private final String TYPE;
