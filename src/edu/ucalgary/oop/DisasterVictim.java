@@ -6,7 +6,7 @@ import java.util.Stack;
 
 public class DisasterVictim extends Person {
     private List<MedicalRecord> medicalRecords;
-    private List<PersonalBelonging> personalBelongings;
+    private List<Supply> supplies;
     private final LocalDate ENTRY_DATE;
     private String comments;
 
@@ -28,12 +28,12 @@ public class DisasterVictim extends Person {
         this.medicalRecords = records;
     }
 
-    public List<PersonalBelonging> getPersonalBelongings() {
-        return this.personalBelongings;
+    public List<Supply> getSupplies() {
+        return this.supplies;
     }
 
-    public void setPersonalBelongings(List<PersonalBelonging> personalBelongings) {
-        this.personalBelongings = personalBelongings;
+    public void setSupplies(List<Supply> supplies) {
+        this.supplies = supplies;
     }
 
     public LocalDate getEntryDate() {
@@ -48,12 +48,12 @@ public class DisasterVictim extends Person {
         this.comments = comments;
     }
 
-    public void addPersonalBelonging(PersonalBelonging newBelonging) {
-        this.personalBelongings.add(newBelonging);
+    public void addSupply(Supply newSupply) {
+        this.supplies.add(newSupply);
     }
 
-    public void removePersonalBelonging(PersonalBelonging unwantedBelonging) {
-        this.personalBelongings.remove(unwantedBelonging);
+    public void removeSupply(Supply unwantedSupply) {
+        this.supplies.remove(unwantedSupply);
     }
 
     public void addMedicalRecord(MedicalRecord newRecord) {
