@@ -1,12 +1,13 @@
 package edu.ucalgary.oop;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
 public class DisasterVictim extends Person {
-    private List<MedicalRecord> medicalRecords;
-    private List<Supply> supplies;
+    private List<MedicalRecord> medicalRecords = new ArrayList<>();
+    private List<Supply> supplies = new ArrayList<>();
     private final LocalDate ENTRY_DATE;
     private String comments;
 
