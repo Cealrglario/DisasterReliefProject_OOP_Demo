@@ -8,8 +8,8 @@ import java.util.Map;
 
 public class PersonLocationAccess extends DatabaseAssociationAccess<Person, Location> {
 
-    public List<Map<Person, Location>> getAll() throws SQLException {
-        List<Map<Person, Location>> retrievedAssociations = new ArrayList<>();
+    public Map<Integer, Integer> getAll() throws SQLException {
+        Map<Integer, Integer> retrievedAssociations = new HashMap<>();
 
         dbConnectionManager.initializeDbConnection();
         Connection dbConnect = dbConnectionManager.getDbConnection();
@@ -24,12 +24,7 @@ public class PersonLocationAccess extends DatabaseAssociationAccess<Person, Loca
             int personId = queryResults.getInt("person_id");
             int locationId = queryResults.getInt("location_id");
 
-            Person person = personAccess.getById(personId);
-            Location location = locationAccess.getById(locationId);
-
-            Map<Person, Location> PersonLocationAssociation = new HashMap<>();
-            PersonLocationAssociation.put(person, location);
-            retrievedAssociations.add(PersonLocationAssociation);
+            retrievedAssociations.put(personId, locationId);
         }
 
         myStmt.close();
@@ -39,8 +34,8 @@ public class PersonLocationAccess extends DatabaseAssociationAccess<Person, Loca
     }
 
 
-    public Map<Person, Location> getById(Person person, Location location) throws SQLException {
-        Map<Person, Location> retrievedAssociation = null;
+    public Map<Integer, Integer> getById(Person person, Location location) throws SQLException {
+        Map<Integer, Integer> retrievedAssociation = null;
 
         dbConnectionManager.initializeDbConnection();
         Connection dbConnect = dbConnectionManager.getDbConnection();
@@ -56,7 +51,7 @@ public class PersonLocationAccess extends DatabaseAssociationAccess<Person, Loca
 
         if(queryResults.next()) {
             retrievedAssociation = new HashMap<>();
-            retrievedAssociation.put(person, location);
+            retrievedAssociation.put(person.getAssignedId(), location.getLocationId());
         } else {
             System.out.println("Error getting PersonLocation by IDs: Association doesn't exist.");
             myStmt.close();
