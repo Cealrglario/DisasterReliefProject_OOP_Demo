@@ -87,6 +87,12 @@ public enum LocationService {
     }
 
     public boolean removeSupplyAllocation(Location location, Supply supply, LocalDate allocationDate) throws SQLException {
-        return supplyLocationAllocationAccess.removeEntry(supply, location, allocationDate);
+        boolean success;
+        Allocation unwantedAllocation = supplyLocationAllocationAccess.getById(supply, location);
+
+        success = supplyLocationAllocationAccess.removeEntry(supply, location, allocationDate);
+        location.removeAllocation(unwantedAllocation);
+
+        return success && !location.getAllocations().contains(unwantedAllocation);
     }
 }
