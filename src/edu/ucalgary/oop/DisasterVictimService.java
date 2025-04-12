@@ -5,9 +5,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DisasterVictimService {
+public enum DisasterVictimService {
+    INSTANCE;
+
     private PersonAccess<Object> personAccess = new PersonAccess<>();
     private SupplyPersonAllocationAccess supplyPersonAllocationAccess = new SupplyPersonAllocationAccess();
+    private VictimMedicalRecordAccess<Object> victimMedicalRecordAccess = new VictimMedicalRecordAccess<>();
 
     public DisasterVictim getDisasterVictimById(int personId, LocalDate entryDate) throws SQLException {
         Person person = personAccess.getById(personId);
@@ -71,4 +74,45 @@ public class DisasterVictimService {
 
         return false;
     }
+
+    public void refreshMedicalRecords(DisasterVictim victim) throws SQLException {
+        List<MedicalRecord> medicalRecords = victimMedicalRecordAccess.getMedicalRecordsForPerson(victim.getAssignedId());
+
+        if (victim.getMedicalRecords() == null) {
+            victim.setMedicalRecords(new ArrayList<>());
+        } else {
+            victim.setMedicalRecords(medicalRecords);
+        }
+    }
+
+
+    public MedicalRecord addMedicalRecord(DisasterVictim victim, int locationId, String treatmentDetails) throws SQLException {
+        MedicalRecord newRecord = victimMedicalRecordAccess.addMedicalRecordToPerson(victim.getAssignedId(), locationId, treatmentDetails);
+
+        if (newRecord != null) {
+            victim.addMedicalRecord(newRecord);
+        }
+
+        return newRecord;
+    }
+
+
+    public boolean removeMedicalRecord(DisasterVictim victim, MedicalRecord medicalRecord) throws SQLException {
+        boolean success = victimMedicalRecordAccess.removeMedicalRecordFromPerson(
+                victim.getAssignedId(), medicalRecord.getMedicalRecordId());
+
+        if (success) {
+            victim.removeMedicalRecord(medicalRecord);
+            return true;
+        }
+
+        return false;
+    }
+
+
+    public void refreshDisasterVictim(DisasterVictim victim) throws SQLException {
+        refreshSupplies(victim);
+        refreshMedicalRecords(victim);
+    }
 }
+
