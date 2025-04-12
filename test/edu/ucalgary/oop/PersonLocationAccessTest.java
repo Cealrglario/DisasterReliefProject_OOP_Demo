@@ -57,7 +57,7 @@ public class PersonLocationAccessTest {
 
     @Test
     public void testGetAll() {
-        List<Map<Person, Location>> allRetrievedLocationOccupants  = null;
+        Map<Integer, Integer> allRetrievedLocationOccupants  = null;
 
         try {
             allRetrievedLocationOccupants = personLocationDbAccess.getAll();
@@ -70,7 +70,7 @@ public class PersonLocationAccessTest {
 
     @Test
     public void testGetById() {
-        Map<Person, Location> retrievedLocationOccupant = null;
+        Map<Integer, Integer> retrievedLocationOccupant = null;
 
         try {
             retrievedLocationOccupant = personLocationDbAccess.getById(placeholderPerson, placeholderLocation);
@@ -79,13 +79,13 @@ public class PersonLocationAccessTest {
         }
 
         assertEquals("The retrieved person's location should match the expected location when calling getById()",
-                retrievedLocationOccupant.get(placeholderPerson), placeholderLocation);
+                retrievedLocationOccupant.get(placeholderPerson.getAssignedId()).intValue(), placeholderLocation.getLocationId());
     }
 
     @Test
     public void testAddEntry() {
-        List<Map<Person, Location>> locationOccupantsBeforeAdding = null;
-        List<Map<Person, Location>> locationOccupantsAfterAdding = null;
+        Map<Integer, Integer> locationOccupantsBeforeAdding = null;
+        Map<Integer, Integer> locationOccupantsAfterAdding = null;
 
         Person newPlaceholderPerson = null;
         Location newPlaceholderLocation = null;
@@ -113,8 +113,8 @@ public class PersonLocationAccessTest {
 
     @Test
     public void testRemoveEntry() {
-        List<Map<Person, Location>> locationOccupantsBeforeRemoving = null;
-        List<Map<Person, Location>> locationOccupantsAfterRemoving = null;
+        Map<Integer, Integer> locationOccupantsBeforeRemoving = null;
+        Map<Integer, Integer> locationOccupantsAfterRemoving = null;
 
         Person exPlaceholderPerson = null;
         Location exPlaceholderLocation = null;
@@ -123,16 +123,16 @@ public class PersonLocationAccessTest {
             exPlaceholderPerson = personAccess.addPerson("Test Person 2", "Male", null, "222-2222");
             exPlaceholderLocation = locationAccess.getById(2);
 
-            locationOccupantsBeforeRemoving = personLocationDbAccess.getAll();
             personLocationDbAccess.addEntry(exPlaceholderPerson, exPlaceholderLocation);
+            locationOccupantsBeforeRemoving = personLocationDbAccess.getAll();
             personLocationDbAccess.removeEntry(exPlaceholderPerson, exPlaceholderLocation);
             locationOccupantsAfterRemoving = personLocationDbAccess.getAll();
         } catch (SQLException e) {
             fail("SQLException occurred while testing removeEntry: " + e.getMessage());
         }
 
-        assertNotEquals("Unwanted person-location entry should be no longer be in the database",
-                locationOccupantsAfterRemoving, locationOccupantsBeforeRemoving);
+        assertTrue("Unwanted person-location entry should be no longer be in the database",
+                locationOccupantsAfterRemoving.size() < locationOccupantsBeforeRemoving.size());
     }
 
     @Test
@@ -154,7 +154,7 @@ public class PersonLocationAccessTest {
 
     @Test
     public void testGetByIdNotInDb() {
-        Map<Person, Location> retrievedLocationOccupant = null;
+        Map<Integer, Integer> retrievedLocationOccupant = null;
 
         Person personNotInDb = new Person(-999, "Person not in db", "Male", "999-9999");
         Location locationNotInDb = new Location(-999, "Location not in db", "Test");
@@ -171,8 +171,8 @@ public class PersonLocationAccessTest {
 
     @Test
     public void testAddEntryThatAlreadyExists() {
-        List<Map<Person, Location>> locationOccupantsBeforeAdding = null;
-        List<Map<Person, Location>> locationOccupantsAfterAdding = null;
+        Map<Integer, Integer> locationOccupantsBeforeAdding = null;
+        Map<Integer, Integer> locationOccupantsAfterAdding = null;
 
         try {
             locationOccupantsBeforeAdding = personLocationDbAccess.getAll();
