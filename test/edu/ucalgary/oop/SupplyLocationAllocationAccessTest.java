@@ -146,7 +146,7 @@ public class SupplyLocationAllocationAccessTest {
 
     @Test
     public void testGetSuppliesAtLocation() {
-        List<Supply> testSupplies = null;
+        List<Allocation> testSupplies = null;
         Location testLocation = null;
         
         try {

@@ -140,15 +140,15 @@ public class SupplyLocationAllocationAccess extends DatabaseAssociationAccess<Su
     }
 
 
-    public List<Supply> getSuppliesAtLocation(Location location) throws SQLException {
-        List<Supply> supplies = new ArrayList<>();
+    public List<Allocation> getSuppliesAtLocation(Location location) throws SQLException {
+        List<Allocation> allocations = new ArrayList<>();
         SupplyService supplyService = SupplyService.INSTANCE;
 
         dbConnectionManager.initializeDbConnection();
         Connection dbConnect = dbConnectionManager.getDbConnection();
 
         PreparedStatement myStmt = dbConnect.prepareStatement(
-                "SELECT supply_id FROM SupplyAllocation WHERE location_id = ? AND person_id IS NULL"
+                "SELECT supply_id, allocation_date FROM SupplyAllocation WHERE location_id = ? AND person_id IS NULL"
         );
 
         myStmt.setInt(1, location.getLocationId());
@@ -157,13 +157,18 @@ public class SupplyLocationAllocationAccess extends DatabaseAssociationAccess<Su
 
         while(queryResults.next()) {
             int supplyId = queryResults.getInt("supply_id");
-            Supply supply = supplyService.getSupplyById(supplyId);
-            supplies.add(supply);
+            int locationId = location.getLocationId();
+            LocalDate dateAllocated = queryResults.getDate("allocation_date").toLocalDate();
+
+            Supply retrievedSupply = supplyService.getSupplyById(supplyId);
+
+            Allocation retrievedAllocation = new Allocation(retrievedSupply, null, locationId, dateAllocated);
+            allocations.add(retrievedAllocation);
         }
 
         myStmt.close();
         dbConnectionManager.closeDbConnection();
 
-        return supplies;
+        return allocations;
     }
 }

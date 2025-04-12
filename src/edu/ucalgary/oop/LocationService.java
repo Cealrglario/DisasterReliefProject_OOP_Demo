@@ -65,13 +65,11 @@ public enum LocationService {
     }
 
     public void refreshAllocations(Location location) throws SQLException {
-        List<Allocation> allAllocations = supplyLocationAllocationAccess.getAll();
+        List<Allocation> allAllocations = supplyLocationAllocationAccess.getSuppliesAtLocation(location);
         LinkedHashSet<Allocation> locationAllocations = new LinkedHashSet<>();
 
         for (int i = 0; i < allAllocations.size(); i++) {
-            if (allAllocations.get(i).getLocationId() == location.getLocationId()) {
-                locationAllocations.add(allAllocations.get(i));
-            }
+            locationAllocations.add(allAllocations.get(i));
         }
 
         location.setAllocations(locationAllocations);
