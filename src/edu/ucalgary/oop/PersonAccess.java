@@ -35,17 +35,19 @@ public class PersonAccess<U> extends DatabaseObjectAccess<Person, U> {
 
             boolean inFamilyGroup;
 
-            if(familyGroupId != null) {
-                inFamilyGroup = true;
-            } else {
-                inFamilyGroup = false;
-            }
-
             Person retrievedPerson;
             if(dateOfBirth != null) {
                 retrievedPerson = new Person(assignedId, firstName, gender, dateOfBirth, phoneNumber);
             } else {
                 retrievedPerson = new Person(assignedId, firstName, gender, phoneNumber);
+            }
+
+            if(familyGroupId != null) {
+                inFamilyGroup = true;
+                retrievedPerson.setFamilyGroupId(familyGroupId);
+            } else {
+                inFamilyGroup = false;
+                retrievedPerson.setFamilyGroupId(null);
             }
 
             retrievedPerson.setLastName(lastName);
@@ -85,16 +87,18 @@ public class PersonAccess<U> extends DatabaseObjectAccess<Person, U> {
 
             boolean inFamilyGroup;
 
-            if(familyGroupId != null) {
-                inFamilyGroup = true;
-            } else {
-                inFamilyGroup = false;
-            }
-
             if(dateOfBirth != null) {
                 retrievedPerson = new Person(assignedId, firstName, gender, dateOfBirth, phoneNumber);
             } else {
                 retrievedPerson = new Person(assignedId, firstName, gender, phoneNumber);
+            }
+
+            if(familyGroupId != null) {
+                inFamilyGroup = true;
+                retrievedPerson.setFamilyGroupId(familyGroupId);
+            } else {
+                inFamilyGroup = false;
+                retrievedPerson.setFamilyGroupId(null);
             }
 
             retrievedPerson.setLastName(lastName);
@@ -238,11 +242,5 @@ public class PersonAccess<U> extends DatabaseObjectAccess<Person, U> {
         dbConnectionManager.closeDbConnection();
 
         return rowsAffected > 0;
-    }
-
-
-    public List<FamilyGroup> getAllFamilyGroups() {
-        // Not done yet
-        return null;
     }
 }

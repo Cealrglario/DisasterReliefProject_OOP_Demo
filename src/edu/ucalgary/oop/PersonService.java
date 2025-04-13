@@ -2,6 +2,7 @@ package edu.ucalgary.oop;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public enum PersonService {
@@ -52,6 +53,7 @@ public enum PersonService {
 
     public boolean updateFamilyGroupStatus(Person person, boolean inFamilyGroup, Integer familyGroupId) throws SQLException {
         person.setInFamilyGroup(inFamilyGroup);
+        person.setFamilyGroupId(familyGroupId);
 
         if (inFamilyGroup) {
             return personAccess.updateInfo("family_group", familyGroupId, person.getAssignedId());
@@ -62,5 +64,23 @@ public enum PersonService {
 
     public boolean removePerson(Person person) throws SQLException {
         return personAccess.removePerson(person);
+    }
+
+    public List<Person> getPersonRelatives(Person person) {
+        try {
+            List<Person> relatives = new ArrayList<>();
+            List<Person> retrievedPersons = getAllPersons();
+
+            for (Person retrievedPerson : retrievedPersons) {
+                if (retrievedPerson.getFamilyGroupId() == person.getFamilyGroupId()) {
+                    relatives.add(retrievedPerson);
+                }
+            }
+
+            return relatives;
+        } catch (Exception e) {
+            System.out.println("Error getting person's relatives: " + e.getMessage());
+            return null;
+        }
     }
 }

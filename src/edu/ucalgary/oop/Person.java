@@ -9,6 +9,7 @@ public class Person {
     private LocalDate dateOfBirth;
     private String gender;
     private boolean inFamilyGroup;
+    private Integer familyGroupId;
     private String phoneNumber;
 
     public Person(int assignedId, String firstName, String gender, String phoneNumber) {
@@ -64,6 +65,14 @@ public class Person {
 
     public void setInFamilyGroup(boolean inFamilyGroup) {
         this.inFamilyGroup = inFamilyGroup;
+    }
+
+    public int getFamilyGroupId() {
+        return this.familyGroupId;
+    }
+
+    public void setFamilyGroupId(Integer familyGroupId) {
+        this.familyGroupId = familyGroupId;
     }
 
     public String getPhoneNumber() {
