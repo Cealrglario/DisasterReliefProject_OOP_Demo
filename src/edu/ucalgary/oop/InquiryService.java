@@ -26,6 +26,10 @@ public enum InquiryService {
         return inquiryAccess.updateInfo("comments", newInfo, inquiry.getInquiryId());
     }
 
+    public Object getInquiryInfo(String infoToGet, int inquiryId) throws SQLException {
+        return inquiryAccess.getInfo(infoToGet, inquiryId);
+    }
+
     public boolean updateLastKnownLocation(Inquiry inquiry, int locationId) throws SQLException {
         inquiry.setLastKnownLocationId(locationId);
         return inquiryAccess.updateInfo("location_id", locationId, inquiry.getInquiryId());

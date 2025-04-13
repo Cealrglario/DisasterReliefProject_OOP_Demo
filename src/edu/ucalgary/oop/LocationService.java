@@ -16,6 +16,10 @@ public enum LocationService {
         return locationAccess.getById(locationId);
     }
 
+    public List<Location> getAllLocations() throws SQLException {
+        return locationAccess.getAll();
+    }
+
     public Location getLocationWithOccupants(int locationId) throws SQLException {
         Location retrievedLocation = locationAccess.getById(locationId);
         if (retrievedLocation == null) {
@@ -37,6 +41,10 @@ public enum LocationService {
         }
 
         return retrievedLocations;
+    }
+
+    public Object getLocationInfo(String infoToGet, int locationId) throws SQLException {
+        return locationAccess.getInfo(infoToGet, locationId);
     }
 
     public boolean updateLocationName(Location location, String newName) throws SQLException {
@@ -76,7 +84,14 @@ public enum LocationService {
     }
 
     public boolean addSupplyAllocation(Location location, Supply supply, LocalDate allocationDate) throws SQLException {
-        Allocation allocation = supplyLocationAllocationAccess.addEntry(supply, location, allocationDate);
+        Allocation allocation;
+
+        if (supply.getType().toLowerCase().equals("personal belonging")) {
+            System.out.println("Cannot allocate personal belongings to locations.");
+            return false;
+        } else {
+            allocation = new Allocation(supply, null, location.getLocationId(), allocationDate);
+        }
 
         if (allocation != null) {
             location.addAllocation(allocation);
