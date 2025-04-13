@@ -1,6 +1,7 @@
 package edu.ucalgary.oop;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -264,15 +265,115 @@ public class LocationSubmenu extends Menu {
     }
 
     public void processManageOccupantsInput() {
+        PersonService personService = PersonService.INSTANCE;
+        DisasterVictimService disasterVictimService = DisasterVictimService.INSTANCE;
+
         try {
             Location retrievedLocation = locationService.getLocationWithOccupants(selectedLocationId);
 
             switch(intInput) {
                 case 1: // Add an occupant
 
+                    // Get first name
+                    System.out.println("Enter the occupant's first name: ");
+                    setRequiresIntInput(false);
+                    setStringNumbersAllowed(false);
+                    setStringEmptyAllowed(false);
+                    String firstName = handleStringInput();
+
+                    // Get gender
+                    String[] genderOptions = languageManager.getMenuTranslation("gender_options");
+                    for (String option : genderOptions) {
+                        System.out.println(option);
+                    }
+
+                    System.out.println("Enter the occupant's gender by typing in a corresponding number (for example, '1' for Male): ");
+                    setRequiresIntInput(true);
+                    setMinIntInput(1);
+                    setMaxIntInput(3);
+                    handleIntInput();
+
+                    String gender = switch (intInput) {
+                        case 1 -> "Male";
+                        case 2 -> "Female";
+                        case 3 -> "Non-binary";
+                        default -> null;
+                    };
+
+                    // Get date of birth
+                    setRequiresIntInput(false);
+                    setStringNumbersAllowed(true);
+                    setStringEmptyAllowed(false);
+
+                    System.out.println("Enter the occupant's date of birth");
+                    System.out.println("-------------------------------------------");
+
+                    System.out.println("Enter the occupant's date of birth (example: If born on December 11, type '11'): ");
+                    String dateOfBirth = handleStringInput();
+
+                    System.out.println("Enter the occupant's month of birth (example: If born on December 11, type '12'): ");
+                    String monthOfBirth = handleStringInput();
+
+                    System.out.println("Enter the occupant's year of birth (example: If born in 2000, type '2000'): ");
+                    String yearOfBirth = handleStringInput();
+
+                    String stringDateOfBirth = String.format("%s-%s-%s", yearOfBirth, monthOfBirth, dateOfBirth);
+                    LocalDate realDateOfBirth = LocalDate.parse(stringDateOfBirth);
+
+                    // Get phone number
+                    System.out.println("Enter the occupant's phone number (use format 123-456-7890)");
+                    System.out.println("If no known phone number, simply hit enter: ");
+                    setRequiresIntInput(false);
+                    setStringNumbersAllowed(true);
+                    setStringEmptyAllowed(true);
+
+                    String phoneNumber = handleStringInput();
+
+                    Person newPerson = personService.addPerson(firstName, gender, realDateOfBirth, phoneNumber);
+                    locationService.addOccupant(retrievedLocation, newPerson);
+
+                    System.out.println("Successfully added a new occupant.");
+                    break;
+
                 case 2: // Remove an occupant
+                    System.out.println("Input the ID of the occupant you'd like to remove: ");
+                    setRequiresIntInput(true);
+                    setMinIntInput(1);
+                    setMaxIntInput(Integer.MAX_VALUE);
+                    handleIntInput();
+
+                    int personToRemoveId = intInput;
+                    Person personToRemove = personService.getPersonById(personToRemoveId);
+                    Location personLocation = disasterVictimService.getPersonLocation(personToRemove);
+
+                    if (retrievedLocation.getLocationId() != personLocation.getLocationId()) {
+                        System.out.println("Cannot remove this occupant as they are not an occupant of this location.");
+                        break;
+                    } else {
+                        locationService.removeOccupant(retrievedLocation, personToRemove);
+                        System.out.println("Occupant successfully removed from this location.");
+                        break;
+                    }
 
                 case 3: // View all occupants
+                    if (!retrievedLocation.getOccupants().isEmpty()) {
+                        System.out.println("Occupants of location: ");
+                        System.out.println("---------------------------------");
+
+                        for (Person person : retrievedLocation.getOccupants()) {
+                            System.out.println("First name: " + person.getFirstName());
+                            System.out.println("Assigned ID: " + person.getAssignedId());
+                            System.out.println("Gender: " + person.getGender());
+                            System.out.println("Phone Number: " + person.getPhoneNumber());
+                            System.out.println();
+                        }
+                    } else {
+                        System.out.println("No occupants at this location.");
+                    }
+
+                case 4: // Return to main submenu
+                returnToDefaultState();
+                break;
             }
         } catch (Exception e) {
             System.out.println("Error managing occupants at a location: " + e.getMessage());
@@ -286,10 +387,15 @@ public class LocationSubmenu extends Menu {
 
             switch (intInput) {
                 case 1: // Remove a supply
+                    
 
                 case 2: // Add a supply
 
                 case 3: // Give a supply to an occupant
+
+                case 4: // Return to main submenu
+                    returnToDefaultState();
+                    break;
             }
         } catch (Exception e) {
             System.out.println("Error managing supplies at a location: " + e.getMessage());
