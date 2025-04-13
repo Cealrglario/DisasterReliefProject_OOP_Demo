@@ -8,17 +8,14 @@ import java.util.Stack;
 public class DisasterVictim extends Person {
     private List<MedicalRecord> medicalRecords = new ArrayList<>();
     private List<Supply> supplies = new ArrayList<>();
-    private final LocalDate ENTRY_DATE;
     private String comments;
 
-    public DisasterVictim(int assignedId, String firstName, String gender, LocalDate dateOfEntry, String phoneNumber) {
+    public DisasterVictim(int assignedId, String firstName, String gender, String phoneNumber) {
         super(assignedId, firstName, gender, phoneNumber);
-        this.ENTRY_DATE = dateOfEntry;
     }
 
-    public DisasterVictim(int assignedId, String firstName, String gender, LocalDate dateOfBirth, LocalDate dateOfEntry, String phoneNumber) {
+    public DisasterVictim(int assignedId, String firstName, String gender, LocalDate dateOfBirth, String phoneNumber) {
         super(assignedId, firstName, gender, dateOfBirth, phoneNumber);
-        this.ENTRY_DATE = dateOfEntry;
     }
 
     public List<MedicalRecord> getMedicalRecords() {
@@ -35,10 +32,6 @@ public class DisasterVictim extends Person {
 
     public void setSupplies(List<Supply> supplies) {
         this.supplies = supplies;
-    }
-
-    public LocalDate getEntryDate() {
-        return this.ENTRY_DATE;
     }
 
     public String getComments() {

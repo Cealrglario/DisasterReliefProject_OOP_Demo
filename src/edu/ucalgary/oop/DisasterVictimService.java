@@ -14,7 +14,7 @@ public enum DisasterVictimService {
     private final SupplyLocationAllocationAccess supplyLocationAllocationAccess = new SupplyLocationAllocationAccess();
     private final VictimMedicalRecordAccess<Object> victimMedicalRecordAccess = new VictimMedicalRecordAccess<>();
 
-    public DisasterVictim getDisasterVictimById(int personId, LocalDate entryDate) throws SQLException {
+    public DisasterVictim getDisasterVictimById(int personId) throws SQLException {
         Person person = personAccess.getById(personId);
         DisasterVictim victim = null;
 
@@ -24,11 +24,10 @@ public enum DisasterVictimService {
 
         if (person.getDateOfBirth() != null) {
             victim = new DisasterVictim(person.getAssignedId(), person.getFirstName(), person.getGender(), person.getDateOfBirth(),
-                    entryDate, person.getPhoneNumber()
+                    person.getPhoneNumber()
             );
         } else {
-            victim = new DisasterVictim(person.getAssignedId(), person.getFirstName(), person.getGender(), entryDate,
-                    person.getPhoneNumber());
+            victim = new DisasterVictim(person.getAssignedId(), person.getFirstName(), person.getGender(), person.getPhoneNumber());
         }
 
         victim.setLastName(person.getLastName());
