@@ -35,7 +35,7 @@ public enum ErrorLogger {
             printWriter.println("Stack trace: ");
             printWriter.println("---------------------------");
             e.printStackTrace(printWriter);
-            printWriter.println("");
+            printWriter.println();
 
             printWriter.close();
 
