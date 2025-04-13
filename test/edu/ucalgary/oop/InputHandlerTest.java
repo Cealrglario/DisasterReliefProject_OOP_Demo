@@ -1,22 +1,84 @@
 package edu.ucalgary.oop;
 
-import org.junit.Before;
+import org.junit.After;
 import org.junit.Test;
+import static org.junit.Assert.*;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
 public class InputHandlerTest {
-    @Before
-    public void setUp() throws Exception {
+
+    private final InputStream systemIn = System.in;
+    private InputHandler inputHandler;
+
+    @After
+    public void tearDown() {
+        System.setIn(systemIn);
     }
 
     @Test
     public void testGetIntInput() {
+        String input = "2";
+        ByteArrayInputStream testIn = new ByteArrayInputStream(input.getBytes());
+        System.setIn(testIn);
+
+        inputHandler = new InputHandler();
+
+        int result = inputHandler.getIntInput(1, 4);
+        assertEquals("getIntInput() should simply return the inputted int value if it's within range",
+                2, result);
+    }
+
+    @Test
+    public void testGetInvalidIntInput() {
+        String input = "-2\n2";
+        ByteArrayInputStream testIn = new ByteArrayInputStream(input.getBytes());
+        System.setIn(testIn);
+
+        inputHandler = new InputHandler();
+        int result = inputHandler.getIntInput(1, 4);
+
+        assertEquals("getIntInput() should request a new input if it's not within range",
+                2, result);
     }
 
     @Test
     public void testGetStringInput() {
+        String input = "Test";
+        ByteArrayInputStream testIn = new ByteArrayInputStream(input.getBytes());
+        System.setIn(testIn);
+
+        inputHandler = new InputHandler();
+
+        String result = inputHandler.getStringInput(false, false);
+        assertEquals("getStringInput() should simply return the inputted string if it adheres to requirements",
+                "Test", result);
     }
 
     @Test
-    public void testGetInputScanner() {
+    public void testGetEmptyStringInputNotAllowed() {
+        String input = "\nTest";
+        ByteArrayInputStream testIn = new ByteArrayInputStream(input.getBytes());
+        System.setIn(testIn);
+
+        inputHandler = new InputHandler();
+
+        String result = inputHandler.getStringInput(false, false);
+        assertEquals("getStringInput() should request a new input if it detects a forbidden empty input",
+                "Test", result);
+    }
+
+    @Test
+    public void testGetStringInputWithNumbersNotAllowed() {
+        String input = "Test123\nTest";
+        ByteArrayInputStream testIn = new ByteArrayInputStream(input.getBytes());
+        System.setIn(testIn);
+
+        inputHandler = new InputHandler();
+
+        String result = inputHandler.getStringInput(false, false);
+        assertEquals("getStringInput() request a new input if it detects numbers in the input when forbidden",
+                "Test", result);
     }
 }
