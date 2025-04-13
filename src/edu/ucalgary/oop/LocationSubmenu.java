@@ -1,14 +1,17 @@
 package edu.ucalgary.oop;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class LocationSubmenu extends Menu {
     private final String[] MANAGE_OCCUPANTS_OPTIONS = languageManager.getMenuTranslation("location_submenu_manage_occupants");
     private final String[] MANAGE_SUPPLIES_OPTIONS = languageManager.getMenuTranslation("location_submenu_manage_supplies");
     private final LocationService locationService = LocationService.INSTANCE;
+    private final Pattern dateFormat = Pattern.compile("^(\\d{4})-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01])$\n");
+    private final Pattern phoneNumberFormat = Pattern.compile("^(\\d{3})-(\\d{3})-(\\d{4}$)");
 
     private enum State {DEFAULT, MANAGE_OCCUPANTS, MANAGE_SUPPLIES}
     private State currentState = State.DEFAULT;
@@ -187,10 +190,6 @@ public class LocationSubmenu extends Menu {
 
                     allocation.getAllocatedSupply().displayDetails();
 
-                    if (!allocation.getAllocatedSupply().getComments().isEmpty()) {
-                        System.out.println("Comments: " + allocation.getAllocatedSupply().getComments());
-                    }
-
                     System.out.println();
                 }
             } else {
@@ -305,34 +304,41 @@ public class LocationSubmenu extends Menu {
                     setStringNumbersAllowed(true);
                     setStringEmptyAllowed(false);
 
-                    System.out.println("Enter the occupant's date of birth");
-                    System.out.println("-------------------------------------------");
+                    System.out.println("Enter the occupant's date of birth (e.g. 2000-12-31 for December 31, 2000): ");
+                    String stringDateOfBirth = handleStringInput();
+                    Matcher dateMatcher = dateFormat.matcher(stringDateOfBirth);
 
-                    System.out.println("Enter the occupant's date of birth (example: If born on December 11, type '11'): ");
-                    String dateOfBirth = handleStringInput();
+                    while(!dateMatcher.matches()) {
+                        System.out.println("Invalid date format. Enter a date in the format YYYY-MM-DD: ");
+                        stringDateOfBirth = handleStringInput();
+                    }
 
-                    System.out.println("Enter the occupant's month of birth (example: If born on December 11, type '12'): ");
-                    String monthOfBirth = handleStringInput();
-
-                    System.out.println("Enter the occupant's year of birth (example: If born in 2000, type '2000'): ");
-                    String yearOfBirth = handleStringInput();
-
-                    String stringDateOfBirth = String.format("%s-%s-%s", yearOfBirth, monthOfBirth, dateOfBirth);
                     LocalDate realDateOfBirth = LocalDate.parse(stringDateOfBirth);
 
                     // Get phone number
-                    System.out.println("Enter the occupant's phone number (use format 123-456-7890)");
+                    System.out.println("Enter the occupant's phone number (e.g. 123-456-7890)");
                     System.out.println("If no known phone number, simply hit enter: ");
                     setRequiresIntInput(false);
                     setStringNumbersAllowed(true);
                     setStringEmptyAllowed(true);
 
                     String phoneNumber = handleStringInput();
+                    Matcher phoneNumberMatcher = phoneNumberFormat.matcher(phoneNumber);
+
+                    while(!phoneNumberMatcher.matches()) {
+                        System.out.println("Invalid phone number format. Enter a phone number in the format 123-456-7890: ");
+                        phoneNumber = handleStringInput();
+                    }
 
                     Person newPerson = personService.addPerson(firstName, gender, realDateOfBirth, phoneNumber);
-                    locationService.addOccupant(retrievedLocation, newPerson);
+                    boolean success = locationService.addOccupant(retrievedLocation, newPerson);
 
-                    System.out.println("Successfully added a new occupant.");
+                    if(success) {
+                        System.out.println("Successfully added a new occupant.");
+                    } else {
+                        System.out.println("Failed to add a new occupant.");
+                    }
+
                     break;
 
                 case 2: // Remove an occupant
@@ -348,12 +354,17 @@ public class LocationSubmenu extends Menu {
 
                     if (retrievedLocation.getLocationId() != personLocation.getLocationId()) {
                         System.out.println("Cannot remove this occupant as they are not an occupant of this location.");
-                        break;
                     } else {
-                        locationService.removeOccupant(retrievedLocation, personToRemove);
-                        System.out.println("Occupant successfully removed from this location.");
-                        break;
+                        success = locationService.removeOccupant(retrievedLocation, personToRemove);
+                        if (success) {
+                            System.out.println("Occupant successfully removed from this location.");
+                        } else {
+                            System.out.println("Failed to remove occupant from this location.");
+                        }
+
                     }
+
+                    break;
 
                 case 3: // View all occupants
                     if (!retrievedLocation.getOccupants().isEmpty()) {
@@ -382,16 +393,181 @@ public class LocationSubmenu extends Menu {
 
     public void processManageSuppliesInput() {
         try {
-            Location retrievedLocation = locationService.getLocationWithOccupants(selectedLocationId);
+            SupplyService supplyService = SupplyService.INSTANCE;
+            Location retrievedLocation = locationService.getLocation(selectedLocationId);
             locationService.refreshAllocations(retrievedLocation);
+
 
             switch (intInput) {
                 case 1: // Remove a supply
-                    
+                    System.out.println("Input the ID of the supply you'd like to remove: ");
+                    setRequiresIntInput(true);
+                    setMinIntInput(1);
+                    setMaxIntInput(Integer.MAX_VALUE);
+                    handleIntInput();
+                    int supplyToRemoveId = intInput;
+
+                    Supply supplyToRemove = supplyService.getSupplyById(supplyToRemoveId);
+
+                    if (supplyToRemove == null) {
+                        System.out.println("Supply not found.");
+                        break;
+                    }
+
+                    System.out.println("Enter the supply's allocation date (e.g. 2000-12-31 for December 31, 2000): ");
+                    setRequiresIntInput(false);
+                    setStringNumbersAllowed(true);
+                    setStringEmptyAllowed(false);
+
+                    String stringAllocationDate = handleStringInput();
+                    Matcher dateMatcher = dateFormat.matcher(stringAllocationDate);
+
+                    while(!dateMatcher.matches()) {
+                        System.out.println("Invalid date format. Enter a date in the format YYYY-MM-DD: ");
+                        stringAllocationDate = handleStringInput();
+                    }
+
+                    LocalDate allocationDate = LocalDate.parse(stringAllocationDate);
+
+                    boolean success = locationService.removeSupplyAllocation(retrievedLocation, supplyToRemove, allocationDate);
+
+                    if (success) {
+                        System.out.println("Supply successfully removed from this location.");
+                    } else {
+                        System.out.println("Failed to remove supply from this location.");
+                    }
+
+                    break;
 
                 case 2: // Add a supply
+                    String[] addSupplyOptions = languageManager.getMenuTranslation("add_supply_options");
+
+                    for (String option : addSupplyOptions) {
+                        System.out.println(option);
+                    }
+
+                    System.out.println("Choose the type of supply (e.g. '1' for Blanket): ");
+                    setRequiresIntInput(true);
+                    setMinIntInput(1);
+                    setMaxIntInput(addSupplyOptions.length - 1);
+                    handleIntInput();
+
+                    String supplyType = switch (intInput) {
+                        case 1 -> "Blanket";
+                        case 2 -> "Cot";
+                        case 3 -> "Personal belonging";
+                        case 4 -> "Water";
+                        default -> null;
+                    };
+
+                    System.out.println("Enter any comments for this supply (like a description, cot location like 12 A14, or leave empty): ");
+                    setRequiresIntInput(false);
+                    setStringNumbersAllowed(true);
+                    setStringEmptyAllowed(true);
+                    String supplyComments = handleStringInput();
+
+                    if (supplyType.equalsIgnoreCase("Cot") ) {
+                        Pattern cotLocationFormat = Pattern.compile("^(\\d{1,3}) (\\s{1}\\d{1,2})$");
+                        Matcher cotLocationMatcher = cotLocationFormat.matcher(supplyComments);
+
+                        while (!cotLocationMatcher.matches()) {
+                            System.out.println("Cot location format is invalid. Format should be 123 A23 for room number and grid location: ");
+                            supplyComments = handleStringInput();
+                        }
+                    }
+
+                    Supply newSupply = supplyService.addSupply(supplyType, supplyComments);
+
+                    if (newSupply == null) {
+                        System.out.println("Failed to create new supply.");
+                        break;
+                    }
+
+                    success = locationService.addSupplyAllocation(retrievedLocation, newSupply, LocalDate.now());
+
+                    if (success) {
+                        System.out.println("Supply successfully added to this location.");
+                    } else {
+                        System.out.println("Failed to add supply to this location.");
+                    }
+
+                    break;
 
                 case 3: // Give a supply to an occupant
+                    System.out.println("Input the ID of the supply you'd like to give: ");
+                    setRequiresIntInput(true);
+                    setMinIntInput(1);
+                    setMaxIntInput(Integer.MAX_VALUE);
+                    handleIntInput();
+                    int supplyToGiveId = intInput;
+
+                    Supply supplyToGive = supplyService.getSupplyById(supplyToGiveId);
+
+                    if (supplyToGive == null) {
+                        System.out.println("Supply not found.");
+                        break;
+                    }
+
+                    System.out.println("Input the ID of the occupant to give the supply to: ");
+                    setRequiresIntInput(true);
+                    setMinIntInput(1);
+                    setMaxIntInput(Integer.MAX_VALUE);
+                    handleIntInput();
+                    int occupantId = intInput;
+
+                    PersonService personService = PersonService.INSTANCE;
+                    Person occupant = personService.getPersonById(occupantId);
+
+                    if (occupant == null) {
+                        System.out.println("Occupant not found.");
+                        break;
+                    }
+
+                    DisasterVictimService disasterVictimService = DisasterVictimService.INSTANCE;
+                    Location occupantLocation = disasterVictimService.getPersonLocation(occupant);
+
+                    if (occupantLocation == null || occupantLocation.getLocationId() != retrievedLocation.getLocationId()) {
+                        System.out.println("The specified person is not an occupant of this location.");
+                        break;
+                    }
+
+                    System.out.println("Enter the supply's allocation date (e.g. 2000-12-31 for December 31, 2000): ");
+                    setRequiresIntInput(false);
+                    setStringNumbersAllowed(true);
+                    setStringEmptyAllowed(false);
+
+                    stringAllocationDate = handleStringInput();
+                    dateMatcher = dateFormat.matcher(stringAllocationDate);
+
+                    while(!dateMatcher.matches()) {
+                        System.out.println("Invalid date format. Enter a date in the format YYYY-MM-DD: ");
+                        stringAllocationDate = handleStringInput();
+                    }
+
+                    allocationDate = LocalDate.parse(stringAllocationDate);
+
+                    boolean removedFromLocation = locationService.removeSupplyAllocation(retrievedLocation, supplyToGive, allocationDate);
+
+                    if (!removedFromLocation) {
+                        System.out.println("Failed to remove supply from location.");
+                        break;
+                    }
+
+                    DisasterVictim victim = disasterVictimService.getDisasterVictimById(occupantId);
+
+                    if (victim == null) {
+                        System.out.println("Failed to retrieve disaster victim.");
+                        break;
+                    }
+
+                    boolean addedToOccupant = disasterVictimService.addSupplyAllocation(victim, supplyToGive, allocationDate);
+
+                    if (addedToOccupant) {
+                        System.out.println("Supply successfully given to occupant.");
+                    } else {
+                        System.out.println("Failed to give supply to occupant.");
+                    }
+                    break;
 
                 case 4: // Return to main submenu
                     returnToDefaultState();
@@ -401,4 +577,5 @@ public class LocationSubmenu extends Menu {
             System.out.println("Error managing supplies at a location: " + e.getMessage());
         }
     }
+
 }
