@@ -6,7 +6,7 @@ public class InputHandler {
     private final Scanner INPUT_SCANNER = new Scanner(System.in);
 
     public int getIntInput(int min, int max) {
-        Integer userInput = null;
+        Integer userInput = INPUT_SCANNER.nextInt();
         boolean intInput = false;
 
         while(!intInput) {
