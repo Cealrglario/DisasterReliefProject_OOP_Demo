@@ -1,8 +1,8 @@
 package edu.ucalgary.oop;
 
 public class PersonSubmenu extends Menu {
-    private String[] PERSON_OPTIONS;
-    private String[] MANAGE_PERSON_OPTIONS;
+    private final String[] PERSON_OPTIONS = languageManager.getMenuTranslation("person_default_options");
+    private final String[] MANAGE_PERSON_OPTIONS = languageManager.getMenuTranslation("person_manage_options");
 
     public PersonSubmenu(String[] defaultOptions) {
         super(defaultOptions);
@@ -16,15 +16,13 @@ public class PersonSubmenu extends Menu {
         return this.MANAGE_PERSON_OPTIONS;
     }
 
-    public void listAllPersons() {}
-
-    public void addNewPerson() {}
-
     public void viewPersonInfo() {}
 
     public void managePersonInfo() {}
 
     public void getPersonRelatives() {}
+
+    public void managePersonMedicalRecords() {}
 
     @Override
     public void processInput() {}
