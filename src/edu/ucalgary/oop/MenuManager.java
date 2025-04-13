@@ -7,8 +7,8 @@ public enum MenuManager {
 
     private boolean isRunning = false;
     private Menu currentMenu;
-    private Stack<Menu> menuHistory;
-    private LanguageManager languageManager = LanguageManager.INSTANCE;
+    private final Stack<Menu> menuHistory = new Stack<>();
+    private final LanguageManager languageManager = LanguageManager.INSTANCE;
 
     public Menu getCurrentMenu() {
         return this.currentMenu;
@@ -31,6 +31,7 @@ public enum MenuManager {
 
     public void startRunning() {
         isRunning = true;
+        navigateToMenu(new MainMenu(languageManager.getMenuTranslation("main_menu_defaults")));
     }
 
     public boolean getIsRunning() {
@@ -52,7 +53,6 @@ public enum MenuManager {
 
         currentMenu.processInput();
     }
-
 
 }
 

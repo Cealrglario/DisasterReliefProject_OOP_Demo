@@ -40,7 +40,7 @@ public abstract class Menu {
     }
 
     public void handleIntInput() {
-        int intInput = inputHandler.getIntInput(minIntInput, maxIntInput);
+        intInput = inputHandler.getIntInput(minIntInput, maxIntInput);
     }
 
     public String handleStringInput() {
