@@ -8,6 +8,7 @@ import java.util.List;
 public class InquirySubmenu extends Menu {
     private final String[] LOG_INQUIRY_OPTIONS = languageManager.getMenuTranslation("inquiry_submenu_log_inquiry");
     private final String[] MANAGE_INQUIRY_OPTIONS = languageManager.getMenuTranslation("inquiry_submenu_manage_inquiry");
+    private final InquiryService inquiryService = InquiryService.INSTANCE;
 
     private enum State {DEFAULT, LOG_INQUIRY, MANAGE_INQUIRY}
     private State currentState = State.DEFAULT;
@@ -55,7 +56,6 @@ public class InquirySubmenu extends Menu {
 
         try {
             LocalDate currentDate = LocalDate.now();
-            InquiryService inquiryService = InquiryService.INSTANCE;
             Inquiry newInquiry = inquiryService.addInquiry(inquirerId, seekingId, currentDate, comments);
 
             if (newInquiry != null) {
@@ -79,7 +79,6 @@ public class InquirySubmenu extends Menu {
         selectedInquiryId = intInput;
 
         try {
-            InquiryService inquiryService = InquiryService.INSTANCE;
             Inquiry inquiry = inquiryService.getInquiryById(selectedInquiryId);
 
             if (inquiry != null) {
@@ -103,7 +102,6 @@ public class InquirySubmenu extends Menu {
 
     public void listAllInquiries() {
         try {
-            InquiryService inquiryService = InquiryService.INSTANCE;
             List<Inquiry> inquiries = inquiryService.getAllInquiries();
 
             if (inquiries != null && !inquiries.isEmpty()) {
@@ -168,21 +166,26 @@ public class InquirySubmenu extends Menu {
 
     private void processDefaultInput() {
         switch (intInput) {
-            case 1:
+            case 1: // Log a new inquiry
                 logNewInquiry();
                 break;
-            case 2:
+
+            case 2: // View the details of a specific inquiry
                 viewInquiryDetails();
                 break;
-            case 3:
+
+            case 3: // View all inquiries
                 listAllInquiries();
                 break;
-            case 4:
+
+            case 4: // Manage the information of a specific inquiry
                 manageInquiryInformation();
                 break;
-            case 5:
+
+            case 5: // Return to main menu
                 menuManager.returnToMainMenu();
                 break;
+
             default:
                 System.out.println(languageManager.getTranslation("error_invalid_option"));
                 break;
@@ -191,7 +194,6 @@ public class InquirySubmenu extends Menu {
 
     private void processManageInquiryInput() {
         try {
-            InquiryService inquiryService = InquiryService.INSTANCE;
             Inquiry inquiry = inquiryService.getInquiryById(selectedInquiryId);
 
             if (inquiry == null) {
