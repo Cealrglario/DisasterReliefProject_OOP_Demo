@@ -41,12 +41,7 @@ public enum DisasterVictimService {
 
     public void refreshSupplies(DisasterVictim victim) throws SQLException {
         List<Supply> supplies = supplyPersonAllocationAccess.getPersonSupplies(victim);
-
-        if (victim.getSupplies() == null) {
-            victim.setSupplies(new ArrayList<>());
-        } else {
-            victim.setSupplies(supplies);
-        }
+        victim.setSupplies(supplies);
     }
 
 
@@ -54,9 +49,6 @@ public enum DisasterVictimService {
         Allocation allocation = supplyPersonAllocationAccess.addEntry(supply, victim, allocationDate);
 
         if (allocation != null) {
-            if (victim.getSupplies() == null) {
-                victim.setSupplies(new ArrayList<>());
-            }
             victim.addSupply(supply);
             return true;
         }
@@ -78,12 +70,7 @@ public enum DisasterVictimService {
 
     public void refreshMedicalRecords(DisasterVictim victim) throws SQLException {
         List<MedicalRecord> medicalRecords = victimMedicalRecordAccess.getMedicalRecordsForPerson(victim.getAssignedId());
-
-        if (victim.getMedicalRecords() == null) {
-            victim.setMedicalRecords(new ArrayList<>());
-        } else {
-            victim.setMedicalRecords(medicalRecords);
-        }
+        victim.setMedicalRecords(medicalRecords);
     }
 
 
