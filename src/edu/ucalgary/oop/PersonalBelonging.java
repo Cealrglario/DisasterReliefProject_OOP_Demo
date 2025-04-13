@@ -17,4 +17,9 @@ public class PersonalBelonging extends Supply {
 
         return true;
     }
+
+    @Override
+    public void displayDetails() {
+        System.out.println("Description: " + description);
+    }
 }

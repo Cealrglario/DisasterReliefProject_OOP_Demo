@@ -17,4 +17,9 @@ public class Cot extends Supply {
 
         return true;
     }
+
+    @Override
+    public void displayDetails() {
+        System.out.println("Cot location: " + cotLocation);
+    }
 }

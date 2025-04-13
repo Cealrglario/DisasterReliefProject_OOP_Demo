@@ -24,5 +24,14 @@ public class Water extends Supply {
     public void setIsExpired(boolean isExpired) {}
 
     public void checkExpiration(LocalDateTime timeAllocated) {}
+
+    @Override
+    public void displayDetails() {
+        if (!isExpired) {
+            System.out.println("Good for drinking, not yet expired.");
+        } else {
+            System.out.println("Expired.");
+        }
+    }
 }
 

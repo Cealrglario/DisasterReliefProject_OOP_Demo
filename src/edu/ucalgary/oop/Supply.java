@@ -25,4 +25,6 @@ public abstract class Supply {
     public String getType() {
         return TYPE;
     }
+
+    public abstract void displayDetails();
 }
