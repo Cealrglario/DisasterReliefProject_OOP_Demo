@@ -1,5 +1,6 @@
 package edu.ucalgary.oop;
 
+import javax.swing.text.DateFormatter;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
@@ -8,7 +9,7 @@ public class InquirySubmenu extends Menu {
     private final String[] LOG_INQUIRY_OPTIONS = languageManager.getMenuTranslation("inquiry_submenu_log_inquiry");
     private final String[] MANAGE_INQUIRY_OPTIONS = languageManager.getMenuTranslation("inquiry_submenu_manage_inquiry");
 
-    private enum State { DEFAULT, LOG_INQUIRY, MANAGE_INQUIRY }
+    private enum State {DEFAULT, LOG_INQUIRY, MANAGE_INQUIRY}
     private State currentState = State.DEFAULT;
 
     private int inquirerId;
@@ -106,17 +107,20 @@ public class InquirySubmenu extends Menu {
             List<Inquiry> inquiries = inquiryService.getAllInquiries();
 
             if (inquiries != null && !inquiries.isEmpty()) {
-                System.out.println(languageManager.getTranslation("inquiry_list_header"));
-
+                int counter = 0;
                 for (Inquiry inquiry : inquiries) {
-                    String formattedEntry = String.format(
-                            languageManager.getTranslation("inquiry_list_format"),
-                            inquiry.getInquiryId(),
-                            inquiry.getDateOfInquiry(),
-                            inquiry.getInquirerid(),
-                            inquiry.getMissingPersonId()
-                    );
-                    System.out.println(formattedEntry);
+                    counter++;
+                    String formattedString = String.format("Inquiry #%d: ", counter);
+                    System.out.println(formattedString);
+                    System.out.println("--------------------------------");
+                    System.out.println("Inquiry ID: " + inquiryService.getInquiryInfo("inquiry_id", inquiry.getInquiryId()));
+                    System.out.println("Inquirer ID: " + inquiryService.getInquiryInfo("inquirer_id", inquiry.getInquiryId()));
+                    System.out.println("Missing Person ID: " + inquiryService.getInquiryInfo("seeking_id", inquiry.getInquiryId()));
+                    System.out.println("Last known location ID: " + inquiryService.getInquiryInfo("location_id",
+                            inquiry.getInquiryId()));
+                    System.out.println("Date of inquiry: " + inquiryService.getInquiryInfo("inquiry_id", inquiry.getInquiryId()));
+                    System.out.println("Comments: " + inquiryService.getInquiryInfo("comments", inquiry.getInquiryId()));
+                    System.out.println();
                 }
             } else {
                 System.out.println(languageManager.getTranslation("no_inquiries_found"));
