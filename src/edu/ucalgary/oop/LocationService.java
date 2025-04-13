@@ -22,6 +22,7 @@ public enum LocationService {
 
     public Location getLocationWithOccupants(int locationId) throws SQLException {
         Location retrievedLocation = locationAccess.getById(locationId);
+
         if (retrievedLocation == null) {
             return null;
         }
@@ -90,7 +91,7 @@ public enum LocationService {
             System.out.println("Cannot allocate personal belongings to locations.");
             return false;
         } else {
-            allocation = new Allocation(supply, null, location.getLocationId(), allocationDate);
+            allocation = supplyLocationAllocationAccess.addEntry(supply, location, allocationDate);
         }
 
         if (allocation != null) {
