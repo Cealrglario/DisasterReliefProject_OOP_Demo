@@ -9,7 +9,6 @@ public class Location {
     private String name;
     private String address;
     private List<Person> occupants;
-    private List<Supply> inventory;
     private LinkedHashSet<Allocation> supplyAllocations;
 
     public Location(int locationId, String name, String address) {
@@ -17,7 +16,6 @@ public class Location {
         this.name = name;
         this.address = address;
         this.occupants = new ArrayList<>();
-        this.inventory = new ArrayList<>();
         this.supplyAllocations = new LinkedHashSet<>();
     }
 
@@ -49,14 +47,6 @@ public class Location {
         this.occupants = occupants;
     }
 
-    public List<Supply> getInventory() {
-        return this.inventory;
-    }
-
-    public void setInventory(List<Supply> inventory) {
-        this.inventory = inventory;
-    }
-
     public LinkedHashSet<Allocation> getAllocations() {
         return this.supplyAllocations;
     }
@@ -71,14 +61,6 @@ public class Location {
 
     public void removeOccupant(Person exOccupant) {
         this.occupants.remove(exOccupant);
-    }
-
-    public void addInventory(Supply newInventory) {
-        this.inventory.add(newInventory);
-    }
-
-    public void removeInventory(Supply expiredInventory) {
-        this.inventory.remove(expiredInventory);
     }
 
     public void addAllocation(Allocation allocation) {
