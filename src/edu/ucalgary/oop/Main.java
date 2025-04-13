@@ -8,20 +8,29 @@ public class Main {
         String selectedLanguage;
         LanguageManager languageManager = LanguageManager.INSTANCE;
         MenuManager menuManager = MenuManager.INSTANCE;
+        ErrorLogger errorLogger = ErrorLogger.INSTANCE;
 
-        System.out.println("Please select a language (for example, type en-CA for Canadian English): ");
-        selectedLanguage = userInput.nextLine();
+        try {
+            System.out.println("Please select a language (for example, type en-CA for Canadian English): ");
+            selectedLanguage = userInput.nextLine();
 
-        if(!languageManager.configureLanguage(selectedLanguage)) {
+            if(!languageManager.configureLanguage(selectedLanguage)) {
+                System.exit(1);
+            }
+
+            userInput.close();
+
+            menuManager.startRunning();
+
+            while(menuManager.getIsRunning()) {
+                menuManager.run();
+            }
+        } catch (Exception e) {
+            errorLogger.logError(e);
+
+            System.out.println("Fatal exception caught - logging error and exiting program...");
+            System.out.println("---------------------------------------------------------------------");
             System.exit(1);
-        }
-
-        userInput.close();
-
-        menuManager.startRunning();
-
-        while(menuManager.getIsRunning()) {
-            menuManager.run();
         }
     }
 }
