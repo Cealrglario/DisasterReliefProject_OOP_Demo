@@ -9,9 +9,10 @@ import java.util.Map;
 public enum DisasterVictimService {
     INSTANCE;
 
-    private PersonAccess<Object> personAccess = new PersonAccess<>();
-    private SupplyPersonAllocationAccess supplyPersonAllocationAccess = new SupplyPersonAllocationAccess();
-    private VictimMedicalRecordAccess<Object> victimMedicalRecordAccess = new VictimMedicalRecordAccess<>();
+    private final PersonAccess<Object> personAccess = new PersonAccess<>();
+    private final SupplyPersonAllocationAccess supplyPersonAllocationAccess = new SupplyPersonAllocationAccess();
+    private final SupplyLocationAllocationAccess supplyLocationAllocationAccess = new SupplyLocationAllocationAccess();
+    private final VictimMedicalRecordAccess<Object> victimMedicalRecordAccess = new VictimMedicalRecordAccess<>();
 
     public DisasterVictim getDisasterVictimById(int personId, LocalDate entryDate) throws SQLException {
         Person person = personAccess.getById(personId);
@@ -47,6 +48,11 @@ public enum DisasterVictimService {
 
     public boolean addSupplyAllocation(DisasterVictim victim, Supply supply, LocalDate allocationDate) throws SQLException {
         Allocation allocation = supplyPersonAllocationAccess.addEntry(supply, victim, allocationDate);
+        Allocation allocationToRemove = supplyLocationAllocationAccess.getById(supply, getPersonLocation(victim));
+
+        if (allocationToRemove != null) {
+            supplyLocationAllocationAccess.removeEntry(allocationToRemove);
+        }
 
         if (allocation != null) {
             victim.addSupply(supply);
