@@ -38,7 +38,7 @@ public class SupplyLocationAllocationAccessTest {
     @After
     public void tearDown() throws Exception {
         try {
-            supplyLocationDbAccess.removeEntry(placeholderSupply, placeholderLocation, testAllocationDate);
+            supplyLocationDbAccess.removeEntry(testAllocation);
         } catch (SQLException e) {
             throw new SQLException(e.getMessage());
         }
@@ -114,7 +114,7 @@ public class SupplyLocationAllocationAccessTest {
                 allocationsAfterAdding.size() > allocationsBeforeAdding.size());
 
         try {
-            supplyLocationDbAccess.removeEntry(newSupply, newLocation, newDate);
+            supplyLocationDbAccess.removeEntry(newAllocation);
         } catch (SQLException e) {
             fail("Error occurred during cleanup: " + e.getMessage());
         }
@@ -132,9 +132,9 @@ public class SupplyLocationAllocationAccessTest {
             extraSupply = supplyService.getSupplyById(7);
             extraLocation = locationService.getLocation(2);
 
-            supplyLocationDbAccess.addEntry(extraSupply, extraLocation, extraDate);
+            Allocation newAllocation = supplyLocationDbAccess.addEntry(extraSupply, extraLocation, extraDate);
             allocationsBeforeRemoving = supplyLocationDbAccess.getAll();
-            supplyLocationDbAccess.removeEntry(extraSupply, extraLocation, extraDate);
+            supplyLocationDbAccess.removeEntry(newAllocation);
             allocationsAfterRemoving = supplyLocationDbAccess.getAll();
         } catch (SQLException e) {
             fail("Error occurred while testing removeEntry: " + e.getMessage());

@@ -119,7 +119,11 @@ public class SupplyLocationAllocationAccess extends DatabaseAssociationAccess<Su
     }
 
 
-    public boolean removeEntry(Supply supply, Location location, LocalDate allocationDate) throws SQLException {
+    public boolean removeEntry(Allocation allocationToRemove) throws SQLException {
+        Supply supply = allocationToRemove.getAllocatedSupply();
+        int locationId = allocationToRemove.getLocationId();
+        LocalDate allocationDate = allocationToRemove.getTimeAllocated();
+
         dbConnectionManager.initializeDbConnection();
         Connection dbConnect = dbConnectionManager.getDbConnection();
 
@@ -128,7 +132,7 @@ public class SupplyLocationAllocationAccess extends DatabaseAssociationAccess<Su
         );
 
         myStmt.setInt(1, supply.getSupplyId());
-        myStmt.setInt(2, location.getLocationId());
+        myStmt.setInt(2, locationId);
         myStmt.setDate(3, Date.valueOf(allocationDate));
 
         int rowsAffected = myStmt.executeUpdate();

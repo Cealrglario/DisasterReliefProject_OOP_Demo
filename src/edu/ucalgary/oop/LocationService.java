@@ -106,7 +106,7 @@ public enum LocationService {
         boolean success;
         Allocation unwantedAllocation = supplyLocationAllocationAccess.getById(supply, location);
 
-        success = supplyLocationAllocationAccess.removeEntry(supply, location, allocationDate);
+        success = supplyLocationAllocationAccess.removeEntry(unwantedAllocation);
         location.removeAllocation(unwantedAllocation);
 
         return success && !location.getAllocations().contains(unwantedAllocation);
