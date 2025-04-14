@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PersonLocationAccess extends DatabaseAssociationAccess<Person, Location> {
+public class PersonLocationAccess extends DatabaseAssociationAccess {
 
     public Map<Integer, Integer> getAll() throws SQLException {
         Map<Integer, Integer> retrievedAssociations = new HashMap<>();

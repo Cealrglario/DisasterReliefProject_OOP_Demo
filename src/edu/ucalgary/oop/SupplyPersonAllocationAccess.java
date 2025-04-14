@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SupplyPersonAllocationAccess extends DatabaseAssociationAccess<Supply, Person> {
+public class SupplyPersonAllocationAccess extends DatabaseAssociationAccess {
 
     public List<Allocation> getAll() throws SQLException {
         List<Allocation> retrievedAllocations = new ArrayList<>();
