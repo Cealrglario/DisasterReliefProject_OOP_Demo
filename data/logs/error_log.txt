@@ -1,0 +1,23 @@
+Exception caught: Cannot read the array length because the return value of "edu.ucalgary.oop.MainMenu.getDefaultOptions()" is null
+Timestamp of exception: 2025-04-13 19:54:25
+Stack trace: 
+---------------------------
+java.lang.NullPointerException: Cannot read the array length because the return value of "edu.ucalgary.oop.MainMenu.getDefaultOptions()" is null
+	at edu.ucalgary.oop.MainMenu.<init>(MainMenu.java:10)
+	at edu.ucalgary.oop.MenuManager.startRunning(MenuManager.java:34)
+	at edu.ucalgary.oop.Main.main(Main.java:23)
+
+Exception caught: null
+Timestamp of exception: 2025-04-13 19:57:12
+Stack trace: 
+---------------------------
+java.util.NoSuchElementException
+	at java.base/java.util.Scanner.throwFor(Scanner.java:945)
+	at java.base/java.util.Scanner.next(Scanner.java:1602)
+	at java.base/java.util.Scanner.nextInt(Scanner.java:2267)
+	at java.base/java.util.Scanner.nextInt(Scanner.java:2221)
+	at edu.ucalgary.oop.InputHandler.getIntInput(InputHandler.java:9)
+	at edu.ucalgary.oop.Menu.handleIntInput(Menu.java:43)
+	at edu.ucalgary.oop.MenuManager.run(MenuManager.java:49)
+	at edu.ucalgary.oop.Main.main(Main.java:26)
+
