@@ -56,12 +56,14 @@ public class LocationSubmenu extends Menu {
     }
 
     public void updateLocationName() {
+        System.out.println(languageManager.getTranslation("input_location_id"));
         setRequiresIntInput(true);
         setMinIntInput(1);
         setMaxIntInput(Integer.MAX_VALUE);
         handleIntInput();
         int locationId = intInput;
 
+        System.out.println(languageManager.getTranslation("input_location_updated_name"));
         setRequiresIntInput(false);
         setStringEmptyAllowed(false);
         setStringNumbersAllowed(true);
@@ -81,12 +83,14 @@ public class LocationSubmenu extends Menu {
     }
 
     public void updateLocationAddress() {
+        System.out.println(languageManager.getTranslation("input_location_id"));
         setRequiresIntInput(true);
         setMinIntInput(1);
         setMaxIntInput(Integer.MAX_VALUE);
         handleIntInput();
         int locationId = intInput;
 
+        System.out.println(languageManager.getTranslation("input_location_updated_address"));
         setRequiresIntInput(false);
         setStringEmptyAllowed(false);
         setStringNumbersAllowed(true);
@@ -106,6 +110,7 @@ public class LocationSubmenu extends Menu {
     }
 
     public void viewLocationDetails() {
+        System.out.println(languageManager.getTranslation("input_location_id"));
         setRequiresIntInput(true);
         setMinIntInput(1);
         setMaxIntInput(Integer.MAX_VALUE);
@@ -280,6 +285,10 @@ public class LocationSubmenu extends Menu {
                             default -> null;
                         };
 
+                        // Reset the min/max int input range to match menu options
+                        setMinIntInput(1);
+                        setMaxIntInput(MANAGE_OCCUPANTS_OPTIONS.length - 1);
+
                         // Get date of birth
                         setRequiresIntInput(false);
                         setStringNumbersAllowed(true);
@@ -288,6 +297,7 @@ public class LocationSubmenu extends Menu {
                         System.out.println(languageManager.getTranslation("enter_no_date_of_birth"));
                         String stringDateOfBirth = handleStringInput();
                         LocalDate realDateOfBirth = null;
+
                         if (!stringDateOfBirth.isEmpty()) {
                             Matcher dateMatcher = dateFormat.matcher(stringDateOfBirth);
                             while(!dateMatcher.matches()) {
@@ -334,6 +344,7 @@ public class LocationSubmenu extends Menu {
                     } catch (Exception e) {
                         System.out.println(languageManager.getTranslation("add_person_error") + e.getMessage());
                     }
+
                     break;
 
                 case 2: // Remove an occupant
@@ -357,6 +368,7 @@ public class LocationSubmenu extends Menu {
                             System.out.println(languageManager.getTranslation("occupant_removed_failure"));
                         }
                     }
+
                     break;
 
                 case 3: // View all occupants
@@ -364,15 +376,17 @@ public class LocationSubmenu extends Menu {
                         System.out.println(languageManager.getTranslation("occupants_of_location"));
                         System.out.println(languageManager.getTranslation("divider_long"));
                         for (Person person : retrievedLocation.getOccupants()) {
-                            System.out.println(languageManager.getTranslation("first_name") + person.getFirstName());
-                            System.out.println(languageManager.getTranslation("assigned_id") + person.getAssignedId());
-                            System.out.println(languageManager.getTranslation("gender") + person.getGender());
-                            System.out.println(languageManager.getTranslation("phone_number") + person.getPhoneNumber());
+                            System.out.println(languageManager.getTranslation("first_name") + ": " + person.getFirstName());
+                            System.out.println(languageManager.getTranslation("assigned_id") + ": " + person.getAssignedId());
+                            System.out.println(languageManager.getTranslation("gender") + ": " + person.getGender());
+                            System.out.println(languageManager.getTranslation("phone_number") + ": " + person.getPhoneNumber());
                             System.out.println();
                         }
                     } else {
                         System.out.println(languageManager.getTranslation("no_occupants"));
                     }
+
+                    break;
 
                 case 4: // Return to main submenu
                     returnToDefaultState();

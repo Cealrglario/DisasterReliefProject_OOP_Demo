@@ -30,3 +30,14 @@ java.lang.NullPointerException: Cannot read the array length because "this.curre
 	at edu.ucalgary.oop.MenuManager.run(MenuManager.java:46)
 	at edu.ucalgary.oop.Main.main(Main.java:24)
 
+Exception caught: Cannot read the array length because "this.MANAGE_OCCUPANTS_OPTIONS" is null
+Timestamp of exception: 2025-04-13 21:12:35
+Stack trace: 
+---------------------------
+java.lang.NullPointerException: Cannot read the array length because "this.MANAGE_OCCUPANTS_OPTIONS" is null
+	at edu.ucalgary.oop.LocationSubmenu.manageOccupants(LocationSubmenu.java:151)
+	at edu.ucalgary.oop.LocationSubmenu.processDefaultInput(LocationSubmenu.java:239)
+	at edu.ucalgary.oop.LocationSubmenu.processInput(LocationSubmenu.java:210)
+	at edu.ucalgary.oop.MenuManager.run(MenuManager.java:54)
+	at edu.ucalgary.oop.Main.main(Main.java:24)
+
