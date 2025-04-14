@@ -457,10 +457,18 @@ public class LocationSubmenu extends Menu {
                     String supplyComments = handleStringInput();
 
                     if (supplyType.equalsIgnoreCase("Cot") ) {
-                        Pattern cotLocationFormat = Pattern.compile("^(\\d{1,3}) (\\s{1}\\d{1,2})$");
+                        Pattern cotLocationFormat = Pattern.compile("^(\\d{1,3}) ([A-Za-z]\\d{1,2})$");
                         Matcher cotLocationMatcher = cotLocationFormat.matcher(supplyComments);
                         while (!cotLocationMatcher.matches()) {
                             System.out.println(languageManager.getTranslation("invalid_cot_location"));
+                            supplyComments = handleStringInput();
+                            cotLocationMatcher = cotLocationFormat.matcher(supplyComments);
+                        }
+                    }
+
+                    if (supplyType.equalsIgnoreCase("Personal belonging")) {
+                        while (supplyComments.isEmpty()) {
+                            System.out.println(languageManager.getTranslation("belonging_needs_description"));
                             supplyComments = handleStringInput();
                         }
                     }

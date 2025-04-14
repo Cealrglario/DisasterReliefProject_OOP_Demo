@@ -548,6 +548,11 @@
   </translation>
 
   <translation>
+    <key>type_neg1_to_go_back</key>
+    <value><![CDATA[Type in '-1' to go back to the main submenu: ]]></value>
+  </translation>
+
+  <translation>
     <key>last_known_location</key>
     <value><![CDATA[Last Known Location]]></value>
   </translation>
@@ -858,6 +863,11 @@
   </translation>
 
   <translation>
+    <key>belonging_needs_description</key>
+    <value><![CDATA[A personal belonging must have a description. Please input a description: ]]></value>
+  </translation>
+
+  <translation>
     <key>input_supply_id_to_remove</key>
     <value><![CDATA[Input the ID of the supply you'd like to remove: ]]></value>
   </translation>
@@ -914,7 +924,7 @@
 
   <translation>
     <key>input_supply_id_to_give</key>
-    <value><![CDATA[Input the ID of the supply you'd like to give: ]]></value>
+    <value><![CDATA[Input the ID of the supply you'd like to give]]></value>
   </translation>
 
   <translation>

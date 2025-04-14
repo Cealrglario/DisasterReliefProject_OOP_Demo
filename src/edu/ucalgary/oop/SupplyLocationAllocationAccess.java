@@ -122,18 +122,16 @@ public class SupplyLocationAllocationAccess extends DatabaseAssociationAccess<Su
     public boolean removeEntry(Allocation allocationToRemove) throws SQLException {
         Supply supply = allocationToRemove.getAllocatedSupply();
         int locationId = allocationToRemove.getLocationId();
-        LocalDate allocationDate = allocationToRemove.getTimeAllocated();
 
         dbConnectionManager.initializeDbConnection();
         Connection dbConnect = dbConnectionManager.getDbConnection();
 
         PreparedStatement myStmt = dbConnect.prepareStatement(
-                "DELETE FROM SupplyAllocation WHERE supply_id = ? AND location_id = ? AND allocation_date = ? AND person_id IS NULL"
+                "DELETE FROM SupplyAllocation WHERE supply_id = ? AND location_id = ? AND person_id IS NULL"
         );
 
         myStmt.setInt(1, supply.getSupplyId());
         myStmt.setInt(2, locationId);
-        myStmt.setDate(3, Date.valueOf(allocationDate));
 
         int rowsAffected = myStmt.executeUpdate();
 

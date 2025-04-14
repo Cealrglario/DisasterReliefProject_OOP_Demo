@@ -75,11 +75,7 @@ public enum LocationService {
 
     public void refreshAllocations(Location location) throws SQLException {
         List<Allocation> allAllocations = supplyLocationAllocationAccess.getSuppliesAtLocation(location);
-        LinkedHashSet<Allocation> locationAllocations = new LinkedHashSet<>();
-
-        for (int i = 0; i < allAllocations.size(); i++) {
-            locationAllocations.add(allAllocations.get(i));
-        }
+        LinkedHashSet<Allocation> locationAllocations = new LinkedHashSet<>(allAllocations);
 
         location.setAllocations(locationAllocations);
     }
@@ -87,7 +83,7 @@ public enum LocationService {
     public boolean addSupplyAllocation(Location location, Supply supply, LocalDate allocationDate) throws SQLException {
         Allocation allocation;
 
-        if (supply.getType().toLowerCase().equals("personal belonging")) {
+        if (supply.getType().equalsIgnoreCase("personal belonging")) {
             System.out.println("Cannot allocate personal belongings to locations.");
             return false;
         } else {
@@ -104,7 +100,19 @@ public enum LocationService {
 
     public boolean removeSupplyAllocation(Location location, Supply supply) throws SQLException {
         boolean success;
-        Allocation unwantedAllocation = supplyLocationAllocationAccess.getById(supply, location);
+        LinkedHashSet<Allocation> retrievedAllocations = location.getAllocations();
+        Allocation unwantedAllocation = null;
+
+        for (Allocation allocation : retrievedAllocations) {
+            if (allocation.getAllocatedSupply().getSupplyId() == supply.getSupplyId()) {
+                unwantedAllocation = allocation;
+            }
+        }
+
+        if (unwantedAllocation == null) {
+            System.out.println("The location doesn't have the specified supply.");
+            return false;
+        }
 
         success = supplyLocationAllocationAccess.removeEntry(unwantedAllocation);
         location.removeAllocation(unwantedAllocation);

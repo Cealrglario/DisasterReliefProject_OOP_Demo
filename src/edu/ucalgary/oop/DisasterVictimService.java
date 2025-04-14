@@ -47,15 +47,23 @@ public enum DisasterVictimService {
     public boolean addSupplyAllocation(DisasterVictim victim, Supply supply, LocalDate allocationDate) throws SQLException {
         Allocation allocation = supplyPersonAllocationAccess.addEntry(supply, victim, allocationDate);
         Location personLocation = getPersonLocation(victim);
+        locationService.refreshAllocations(personLocation);
 
         boolean success = locationService.removeSupplyAllocation(personLocation, supply);
 
         if (allocation != null && success) {
             victim.addSupply(supply);
             return true;
+        } else if (allocation == null) {
+            System.out.println("Supply allocation to person failed. Allocation returned to addSupplyAllocation is null.");
+            return false;
+        } else if (!success) {
+            System.out.println("Supply allocation to person failed. Failed to remove supply from location.");
+            return false;
+        } else {
+            System.out.println("Unknown error occurred while allocating a supply to a person.");
+            return false;
         }
-
-        return false;
     }
 
 

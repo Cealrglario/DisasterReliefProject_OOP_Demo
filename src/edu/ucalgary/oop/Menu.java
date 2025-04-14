@@ -34,6 +34,7 @@ public abstract class Menu {
     }
 
     public void handleDisplay() {
+        System.out.println();
         for (int i = 0; i < currentDisplay.length; i++) {
             System.out.println(currentDisplay[i]);
         }
