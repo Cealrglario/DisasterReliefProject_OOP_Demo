@@ -25,6 +25,7 @@ public class Main {
             }
 
             userInput.close();
+            System.exit(1);
         } catch (Exception e) {
             errorLogger.logError(e);
 
