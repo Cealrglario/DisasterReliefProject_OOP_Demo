@@ -41,3 +41,13 @@ java.lang.NullPointerException: Cannot read the array length because "this.MANAG
 	at edu.ucalgary.oop.MenuManager.run(MenuManager.java:54)
 	at edu.ucalgary.oop.Main.main(Main.java:24)
 
+Exception caught: Cannot read the array length because the return value of "edu.ucalgary.oop.Menu.getDefaultOptions()" is null
+Timestamp of exception: 2025-04-14 10:48:47
+Stack trace: 
+---------------------------
+java.lang.NullPointerException: Cannot read the array length because the return value of "edu.ucalgary.oop.Menu.getDefaultOptions()" is null
+	at edu.ucalgary.oop.Menu.<init>(Menu.java:21)
+	at edu.ucalgary.oop.MainMenu.<init>(MainMenu.java:6)
+	at edu.ucalgary.oop.MenuManager.startRunning(MenuManager.java:34)
+	at edu.ucalgary.oop.Main.main(Main.java:21)
+

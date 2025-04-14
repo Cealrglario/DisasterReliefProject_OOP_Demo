@@ -336,6 +336,7 @@ public class PersonSubmenu extends Menu {
                     setStringEmptyAllowed(true);
                     String stringDateOfBirth = handleStringInput();
                     LocalDate newDateOfBirth = null;
+
                     if (!stringDateOfBirth.isEmpty()) {
                         Matcher dateMatcher = dateFormat.matcher(stringDateOfBirth);
                         while(!dateMatcher.matches()) {
