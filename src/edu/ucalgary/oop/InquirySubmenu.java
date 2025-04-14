@@ -108,16 +108,20 @@ public class InquirySubmenu extends Menu {
                 int counter = 0;
                 for (Inquiry inquiry : inquiries) {
                     counter++;
-                    String formattedString = String.format("Inquiry #%d: ", counter);
-                    System.out.println(formattedString);
-                    System.out.println("--------------------------------");
-                    System.out.println("Inquiry ID: " + inquiryService.getInquiryInfo("inquiry_id", inquiry.getInquiryId()));
-                    System.out.println("Inquirer ID: " + inquiryService.getInquiryInfo("inquirer_id", inquiry.getInquiryId()));
-                    System.out.println("Missing Person ID: " + inquiryService.getInquiryInfo("seeking_id", inquiry.getInquiryId()));
-                    System.out.println("Last known location ID: " + inquiryService.getInquiryInfo("location_id",
-                            inquiry.getInquiryId()));
-                    System.out.println("Date of inquiry: " + inquiryService.getInquiryInfo("inquiry_id", inquiry.getInquiryId()));
-                    System.out.println("Comments: " + inquiryService.getInquiryInfo("comments", inquiry.getInquiryId()));
+                    System.out.println(String.format(languageManager.getTranslation("inquiry_number"), counter));
+                    System.out.println(languageManager.getTranslation("separator"));
+                    System.out.println(languageManager.getTranslation("inquiry_id") + ": " +
+                            inquiryService.getInquiryInfo("inquiry_id", inquiry.getInquiryId()));
+                    System.out.println(languageManager.getTranslation("inquirer_id") + ": " +
+                            inquiryService.getInquiryInfo("inquirer_id", inquiry.getInquiryId()));
+                    System.out.println(languageManager.getTranslation("missing_person_id") + ": " +
+                            inquiryService.getInquiryInfo("seeking_id", inquiry.getInquiryId()));
+                    System.out.println(languageManager.getTranslation("last_known_location_id") + ": " +
+                            inquiryService.getInquiryInfo("location_id", inquiry.getInquiryId()));
+                    System.out.println(languageManager.getTranslation("date_of_inquiry") + ": " +
+                            inquiryService.getInquiryInfo("date_of_inquiry", inquiry.getInquiryId()));
+                    System.out.println(languageManager.getTranslation("comments") + ": " +
+                            inquiryService.getInquiryInfo("comments", inquiry.getInquiryId()));
                     System.out.println();
                 }
             } else {
