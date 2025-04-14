@@ -203,7 +203,7 @@ public class InquirySubmenu extends Menu {
             }
 
             switch (intInput) {
-                case 1:
+                case 1: // Update comments
                     System.out.println(languageManager.getTranslation("input_new_comments"));
                     setRequiresIntInput(false);
                     setStringEmptyAllowed(false);
@@ -218,7 +218,7 @@ public class InquirySubmenu extends Menu {
                     }
                     break;
 
-                case 2:
+                case 2: // Update last known location
                     System.out.println(languageManager.getTranslation("input_new_location_id"));
                     setRequiresIntInput(true);
                     setMinIntInput(1);
@@ -234,7 +234,7 @@ public class InquirySubmenu extends Menu {
                     }
                     break;
 
-                case 3:
+                case 3: // Return to main submenu
                     returnToDefaultState();
                     return;
             }

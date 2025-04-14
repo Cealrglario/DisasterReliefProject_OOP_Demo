@@ -583,7 +583,7 @@ public class PersonSubmenu extends Menu {
                     } else {
                         System.out.println("Failed to remove medical record.");
                     }
-                    
+
                     break;
 
                 case 5: // Return to main submenu
