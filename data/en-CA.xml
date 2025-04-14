@@ -32,6 +32,16 @@
 
   <!-- Menu Translations -->
   <menuTranslation>
+    <key>location_submenu_manage_occupants</key>
+    <value><![CDATA["Which action would you like to perform?", "1. Add an occupant to this location", "2. Remove an occupant from this location", "3. View all occupants at this location", "4. Return to main submenu"]]></value>
+  </menuTranslation>
+
+  <menuTranslation>
+    <key>location_submenu_manage_supplies</key>
+    <value><![CDATA["Which action would you like to perform?", "1. Remove a supply from this location", "2. Add a supply to this location", "3. Give a supply to an occupant of this location", "4. Return to main submenu"]]></value>
+  </menuTranslation>
+
+  <menuTranslation>
     <key>person_submenu_manage_info</key>
     <value><![CDATA["Which action would you like to perform?", "1. Update first name", "2. Update last name", "3. Update gender", "4. Update date of birth", "5. Update phone number", "6. Update family group status", "7. Return to main submenu"]]></value>
   </menuTranslation>
@@ -620,6 +630,16 @@
   <translation>
     <key>try_again_later</key>
     <value><![CDATA[Try again later.]]></value>
+  </translation>
+
+  <translation>
+    <key>input_location_updated_name</key>
+    <value><![CDATA[Enter the location's new name: ]]></value>
+  </translation>
+
+  <translation>
+    <key>input_location_updated_address</key>
+    <value><![CDATA[Enter the location's new address: ]]></value>
   </translation>
 
   <translation>
