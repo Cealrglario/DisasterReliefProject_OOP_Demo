@@ -3,7 +3,7 @@
   <!-- Main Menu Default Options -->
   <menuTranslation>
     <key>main_menu_defaults</key>
-    <value><![CDATA["Which action would you like to perform?", "1. Manage Persons", "2. Manage Locations", "3. Manage Inquiries"]]></value>
+    <value><![CDATA["Which action would you like to perform?", "1. Manage Persons", "2. Manage Locations", "3. Manage Inquiries", "4. Exit Program"]]></value>
   </menuTranslation>
 
   <!-- Person Submenu Default Options -->
@@ -554,7 +554,7 @@
 
   <translation>
     <key>last_known_location</key>
-    <value><![CDATA[Last Known Location]]></value>
+    <value><![CDATA[Last Known Location ID: ]]></value>
   </translation>
 
   <translation>
