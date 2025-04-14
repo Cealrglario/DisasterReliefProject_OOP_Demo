@@ -6,6 +6,7 @@ public class FamilyGroup {
     private final int GROUP_ID;
     private String commonFamilyName;
     private HashSet<Person> members;
+    private PersonService personService = PersonService.INSTANCE;
 
     public FamilyGroup(int groupId) {
         this.GROUP_ID = groupId;
@@ -43,13 +44,24 @@ public class FamilyGroup {
     }
 
     public void addMember(Person member) {
-        this.members.add(member);
+        try {
+            this.members.add(member);
+            personService.updateFamilyGroupStatus(member, true, GROUP_ID);
+        } catch (Exception e) {
+            System.out.println("Failed to add member to family group: " + e.getMessage());
+        }
     }
 
     public boolean removeMember(Person exMember) {
         if (members.contains(exMember)) {
-            members.remove(exMember);
-            return true;
+            try {
+                this.members.remove(exMember);
+                personService.updateFamilyGroupStatus(exMember, false, null);
+                return true;
+            } catch (Exception e) {
+                System.out.println("Failed to remove member from family group: " + e.getMessage());
+                return false;
+            }
         } else {
             return false;
         }

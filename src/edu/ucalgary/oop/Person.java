@@ -67,7 +67,7 @@ public class Person {
         this.inFamilyGroup = inFamilyGroup;
     }
 
-    public int getFamilyGroupId() {
+    public Integer getFamilyGroupId() {
         return this.familyGroupId;
     }
 
