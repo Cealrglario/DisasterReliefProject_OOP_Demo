@@ -102,7 +102,7 @@ public enum LanguageManager {
                     String[] translation = rawTranslation.split(",");
 
                     for (int j = 0; j < translation.length; j++) {
-                        translation[i] = translation[i].trim().replace("\"", "");
+                        translation[j] = translation[j].trim().replace("\"", "");
                     }
 
                     menuTranslationData.put(key, translation);
