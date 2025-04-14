@@ -11,7 +11,7 @@ public class SupplyFactory {
             supply = new Cot(supplyId, comments);
         } else if (type.equalsIgnoreCase("water")) {
             supply = new Water(supplyId, false);
-        } else if (type.equalsIgnoreCase("personal item")) {
+        } else if (type.equalsIgnoreCase("personal belonging")) {
             supply = new PersonalBelonging(supplyId, comments);
         }
 
