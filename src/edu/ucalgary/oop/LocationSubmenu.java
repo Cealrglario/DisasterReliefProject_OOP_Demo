@@ -10,7 +10,7 @@ public class LocationSubmenu extends Menu {
     private final String[] MANAGE_OCCUPANTS_OPTIONS = languageManager.getMenuTranslation("location_submenu_manage_occupants");
     private final String[] MANAGE_SUPPLIES_OPTIONS = languageManager.getMenuTranslation("location_submenu_manage_supplies");
     private final LocationService locationService = LocationService.INSTANCE;
-    private final Pattern dateFormat = Pattern.compile("^(\\d{4})-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01])$\n");
+    private final Pattern dateFormat = Pattern.compile("^(\\d{4})-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01])$");
     private final Pattern phoneNumberFormat = Pattern.compile("^(\\d{3})-(\\d{3})-(\\d{4}$)");
 
     private enum State {DEFAULT, MANAGE_OCCUPANTS, MANAGE_SUPPLIES}
@@ -56,7 +56,7 @@ public class LocationSubmenu extends Menu {
     }
 
     public void updateLocationName() {
-        System.out.println(languageManager.getTranslation("input_location_id"));
+        System.out.println(languageManager.getTranslation("input_location_id_to_update"));
         setRequiresIntInput(true);
         setMinIntInput(1);
         setMaxIntInput(Integer.MAX_VALUE);
@@ -83,7 +83,7 @@ public class LocationSubmenu extends Menu {
     }
 
     public void updateLocationAddress() {
-        System.out.println(languageManager.getTranslation("input_location_id"));
+        System.out.println(languageManager.getTranslation("input_location_id_to_update"));
         setRequiresIntInput(true);
         setMinIntInput(1);
         setMaxIntInput(Integer.MAX_VALUE);
@@ -110,7 +110,7 @@ public class LocationSubmenu extends Menu {
     }
 
     public void viewLocationDetails() {
-        System.out.println(languageManager.getTranslation("input_location_id"));
+        System.out.println(languageManager.getTranslation("input_location_id_to_view"));
         setRequiresIntInput(true);
         setMinIntInput(1);
         setMaxIntInput(Integer.MAX_VALUE);
@@ -139,7 +139,7 @@ public class LocationSubmenu extends Menu {
     }
 
     public void manageOccupants() {
-        System.out.println(languageManager.getTranslation("input_location_id"));
+        System.out.println(languageManager.getTranslation("input_location_id_to_manage"));
         setRequiresIntInput(true);
         setMinIntInput(1);
         setMaxIntInput(Integer.MAX_VALUE);
@@ -152,7 +152,7 @@ public class LocationSubmenu extends Menu {
     }
 
     public void manageSupplies() {
-        System.out.println(languageManager.getTranslation("input_location_id"));
+        System.out.println(languageManager.getTranslation("input_location_id_to_manage"));
         setRequiresIntInput(true);
         setMinIntInput(1);
         setMaxIntInput(Integer.MAX_VALUE);
@@ -165,7 +165,7 @@ public class LocationSubmenu extends Menu {
     }
 
     public void viewLocationSupplies() {
-        System.out.println(languageManager.getTranslation("input_location_id_to_view"));
+        System.out.println(languageManager.getTranslation("input_location_id_to_view_supplies"));
         setRequiresIntInput(true);
         setMinIntInput(1);
         setMaxIntInput(Integer.MAX_VALUE);
@@ -336,6 +336,8 @@ public class LocationSubmenu extends Menu {
 
                         // Create new person
                         Person newPerson = personService.addPerson(firstName, gender, realDateOfBirth, phoneNumber);
+                        locationService.addOccupant(retrievedLocation, newPerson);
+
                         if (newPerson != null) {
                             System.out.println(String.format(languageManager.getTranslation("person_added_success"), newPerson.getAssignedId()));
                         } else {
@@ -363,6 +365,7 @@ public class LocationSubmenu extends Menu {
                     } else {
                         boolean success = locationService.removeOccupant(retrievedLocation, personToRemove);
                         if (success) {
+                            personService.removePerson(personToRemove);
                             System.out.println(languageManager.getTranslation("occupant_removed_success"));
                         } else {
                             System.out.println(languageManager.getTranslation("occupant_removed_failure"));
@@ -413,25 +416,16 @@ public class LocationSubmenu extends Menu {
                     int supplyToRemoveId = intInput;
 
                     Supply supplyToRemove = supplyService.getSupplyById(supplyToRemoveId);
+
                     if (supplyToRemove == null) {
                         System.out.println(languageManager.getTranslation("supply_not_found"));
                         break;
                     }
 
-                    System.out.println(languageManager.getTranslation("enter_supply_allocation_date"));
-                    setRequiresIntInput(false);
-                    setStringNumbersAllowed(true);
-                    setStringEmptyAllowed(false);
-                    String stringAllocationDate = handleStringInput();
-                    Matcher dateMatcher = dateFormat.matcher(stringAllocationDate);
-                    while(!dateMatcher.matches()) {
-                        System.out.println(languageManager.getTranslation("invalid_date_format"));
-                        stringAllocationDate = handleStringInput();
-                    }
+                    boolean success = locationService.removeSupplyAllocation(retrievedLocation, supplyToRemove);
 
-                    LocalDate allocationDate = LocalDate.parse(stringAllocationDate);
-                    boolean success = locationService.removeSupplyAllocation(retrievedLocation, supplyToRemove, allocationDate);
                     if (success) {
+                        supplyService.removeSupply(supplyToRemove);
                         System.out.println(languageManager.getTranslation("supply_removed_success"));
                     } else {
                         System.out.println(languageManager.getTranslation("supply_removed_failure"));
@@ -473,12 +467,14 @@ public class LocationSubmenu extends Menu {
                     }
 
                     Supply newSupply = supplyService.addSupply(supplyType, supplyComments);
+
                     if (newSupply == null) {
                         System.out.println(languageManager.getTranslation("create_supply_failure"));
                         break;
                     }
 
                     success = locationService.addSupplyAllocation(retrievedLocation, newSupply, LocalDate.now());
+
                     if (success) {
                         System.out.println(languageManager.getTranslation("supply_added_success"));
                     } else {
@@ -495,6 +491,7 @@ public class LocationSubmenu extends Menu {
                     int supplyToGiveId = intInput;
 
                     Supply supplyToGive = supplyService.getSupplyById(supplyToGiveId);
+
                     if (supplyToGive == null) {
                         System.out.println(languageManager.getTranslation("supply_not_found"));
                         break;
@@ -509,6 +506,7 @@ public class LocationSubmenu extends Menu {
 
                     PersonService personService = PersonService.INSTANCE;
                     Person occupant = personService.getPersonById(occupantId);
+
                     if (occupant == null) {
                         System.out.println(languageManager.getTranslation("occupant_not_found"));
                         break;
@@ -516,6 +514,7 @@ public class LocationSubmenu extends Menu {
 
                     DisasterVictimService disasterVictimService = DisasterVictimService.INSTANCE;
                     Location occupantLocation = disasterVictimService.getPersonLocation(occupant);
+
                     if (occupantLocation == null || occupantLocation.getLocationId() != retrievedLocation.getLocationId()) {
                         System.out.println(languageManager.getTranslation("person_not_occupant"));
                         break;
@@ -525,32 +524,40 @@ public class LocationSubmenu extends Menu {
                     setRequiresIntInput(false);
                     setStringNumbersAllowed(true);
                     setStringEmptyAllowed(false);
-                    stringAllocationDate = handleStringInput();
-                    dateMatcher = dateFormat.matcher(stringAllocationDate);
-                    while(!dateMatcher.matches()) {
-                        System.out.println(languageManager.getTranslation("invalid_date_format"));
-                        stringAllocationDate = handleStringInput();
-                    }
 
-                    allocationDate = LocalDate.parse(stringAllocationDate);
-                    boolean removedFromLocation = locationService.removeSupplyAllocation(retrievedLocation, supplyToGive, allocationDate);
-                    if (!removedFromLocation) {
-                        System.out.println(languageManager.getTranslation("remove_supply_from_location_failure"));
-                        break;
+                    String stringAllocationDate = handleStringInput();
+                    LocalDate allocationDate = null;
+
+                    if (!stringAllocationDate.isEmpty()) {
+                        Matcher dateMatcher = dateFormat.matcher(stringAllocationDate);
+                        while(!dateMatcher.matches()) {
+                            System.out.println(languageManager.getTranslation("invalid_date_format"));
+                            stringAllocationDate = handleStringInput();
+                            if (stringAllocationDate.isEmpty()) {
+                                break;
+                            }
+                            dateMatcher = dateFormat.matcher(stringAllocationDate);
+                        }
+                        if (!stringAllocationDate.isEmpty()) {
+                            allocationDate = LocalDate.parse(stringAllocationDate);
+                        }
                     }
 
                     DisasterVictim victim = disasterVictimService.getDisasterVictimById(occupantId);
+
                     if (victim == null) {
                         System.out.println(languageManager.getTranslation("retrieve_victim_failure"));
                         break;
                     }
 
                     boolean addedToOccupant = disasterVictimService.addSupplyAllocation(victim, supplyToGive, allocationDate);
+
                     if (addedToOccupant) {
                         System.out.println(languageManager.getTranslation("supply_given_to_occupant_success"));
                     } else {
                         System.out.println(languageManager.getTranslation("supply_given_to_occupant_failure"));
                     }
+
                     break;
 
                 case 4: // Return to main submenu
