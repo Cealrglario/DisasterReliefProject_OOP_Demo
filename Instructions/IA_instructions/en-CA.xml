@@ -1,40 +1,551 @@
-<translation>
-  <key>test</key>
-  <value>test</value>
-</translation>
-
-<translation>
-  <key>gender_man</key>
-  <value>Man</value>
-</translation>
-
-<translation>
-  <key>gender_woman</key>
-  <value>Woman</value>
-</translation>
-
-<translation>
-  <key>gender_nb</key>
-  <value>Non-binary person</value>
-</translation>
-
-<translation>
-  <key>input_firstname</key>
-  <value>Enter the person's first name:</value>
-</translation>
-
-<translation>
-  <key>report_person</key>
-  <value>%s entered the %s facility on %s.</value>
-</translation>
-
+<!-- Menu Translations -->
 <menuTranslation>
-  <key>main_menu_defaults</key>
-  <value>"Which menu would you like to navigate to? (Type in '1' for 'Manage Persons', for example)", "1. Manage Persons", "2. Manage Locations", "3. Manage Inquiries",
-        "4. Manage Family Groups", "5. Manage Supplies"</value>
+  <key>person_submenu_manage_info</key>
+  <value>"Which action would you like to perform?", "1. Update first name", "2. Update last name", "3. Update gender", "4. Update date of birth", "5. Update phone number", "6. Update family group status", "7. Return to main submenu"</value>
 </menuTranslation>
 
 <menuTranslation>
-  <key>test</key>
-  <value>"1. Test Option 1", "2. Test Option 2"</value>
+  <key>person_submenu_manage_medical_records</key>
+  <value>"Which action would you like to perform?", "1. View all medical records", "2. Add a medical record", "3. Update a medical record", "4. Remove a medical record", "5. Return to main submenu"</value>
 </menuTranslation>
+
+<menuTranslation>
+  <key>gender_options</key>
+  <value>"Select gender:", "1. Male", "2. Female", "3. Non-binary"</value>
+</menuTranslation>
+
+<menuTranslation>
+  <key>inquiry_submenu_log_inquiry</key>
+  <value>"Please provide the following information:"</value>
+</menuTranslation>
+
+<menuTranslation>
+  <key>inquiry_submenu_manage_inquiry</key>
+  <value>"Which action would you like to perform?", "1. Update comments", "2. Update last known location", "3. Return to main submenu"</value>
+</menuTranslation>
+
+<!-- Regular Translations -->
+<translation>
+  <key>persons_and_details</key>
+  <value>Persons and their details:</value>
+</translation>
+
+<translation>
+  <key>separator</key>
+  <value>--------------------------------------------</value>
+</translation>
+
+<translation>
+  <key>separator_short</key>
+  <value>--------------------------------</value>
+</translation>
+
+<translation>
+  <key>person_number</key>
+  <value>Person #%d: </value>
+</translation>
+
+<translation>
+  <key>person_id</key>
+  <value>Person ID</value>
+</translation>
+
+<translation>
+  <key>first_name</key>
+  <value>First Name</value>
+</translation>
+
+<translation>
+  <key>last_name</key>
+  <value>Last Name</value>
+</translation>
+
+<translation>
+  <key>gender</key>
+  <value>Gender</value>
+</translation>
+
+<translation>
+  <key>date_of_birth</key>
+  <value>Date of Birth</value>
+</translation>
+
+<translation>
+  <key>phone_number</key>
+  <value>Phone Number</value>
+</translation>
+
+<translation>
+  <key>no_persons_found</key>
+  <value>No persons found.</value>
+</translation>
+
+<translation>
+  <key>list_persons_error</key>
+  <value>Error occurred while trying to list all persons</value>
+</translation>
+
+<translation>
+  <key>try_again_later</key>
+  <value>Try again later.</value>
+</translation>
+
+<translation>
+  <key>person_details</key>
+  <value>Person details:</value>
+</translation>
+
+<translation>
+  <key>location</key>
+  <value>Location</value>
+</translation>
+
+<translation>
+  <key>supplies</key>
+  <value>Supplies</value>
+</translation>
+
+<translation>
+  <key>medical_records</key>
+  <value>Medical Records</value>
+</translation>
+
+<translation>
+  <key>record_id</key>
+  <value>Record ID</value>
+</translation>
+
+<translation>
+  <key>treatment</key>
+  <value>Treatment</value>
+</translation>
+
+<translation>
+  <key>date</key>
+  <value>Date</value>
+</translation>
+
+<translation>
+  <key>family_group_id</key>
+  <value>Family Group ID</value>
+</translation>
+
+<translation>
+  <key>person_not_found</key>
+  <value>Person couldn't be found.</value>
+</translation>
+
+<translation>
+  <key>view_person_error</key>
+  <value>Error occurred while trying to view person details</value>
+</translation>
+
+<translation>
+  <key>input_person_id</key>
+  <value>Enter the person's ID: </value>
+</translation>
+
+<translation>
+  <key>relatives_of</key>
+  <value>Relatives of %s:</value>
+</translation>
+
+<translation>
+  <key>id</key>
+  <value>ID</value>
+</translation>
+
+<translation>
+  <key>name</key>
+  <value>Name</value>
+</translation>
+
+<translation>
+  <key>no_relatives_found</key>
+  <value>No relatives found for this person.</value>
+</translation>
+
+<translation>
+  <key>get_relatives_error</key>
+  <value>Error occurred while trying to get person's relatives</value>
+</translation>
+
+<translation>
+  <key>error_invalid_option</key>
+  <value>Invalid option. Please try again.</value>
+</translation>
+
+<translation>
+  <key>person_not_found_returning</key>
+  <value>Person not found. Returning to main submenu.</value>
+</translation>
+
+<translation>
+  <key>enter_new_first_name</key>
+  <value>Enter the new first name: </value>
+</translation>
+
+<translation>
+  <key>first_name_updated_success</key>
+  <value>Successfully updated first name to %s.</value>
+</translation>
+
+<translation>
+  <key>first_name_update_failed</key>
+  <value>Failed to update first name.</value>
+</translation>
+
+<translation>
+  <key>enter_new_last_name</key>
+  <value>Enter the new last name (or press Enter to remove): </value>
+</translation>
+
+<translation>
+  <key>last_name_updated_success</key>
+  <value>Successfully updated last name to %s.</value>
+</translation>
+
+<translation>
+  <key>last_name_removed_success</key>
+  <value>Successfully removed last name.</value>
+</translation>
+
+<translation>
+  <key>last_name_update_failed</key>
+  <value>Failed to update last name.</value>
+</translation>
+
+<translation>
+  <key>enter_new_gender</key>
+  <value>Enter the new gender by typing in a corresponding number: </value>
+</translation>
+
+<translation>
+  <key>gender_updated_success</key>
+  <value>Successfully updated gender to %s.</value>
+</translation>
+
+<translation>
+  <key>gender_update_failed</key>
+  <value>Failed to update gender.</value>
+</translation>
+
+<translation>
+  <key>enter_new_dob</key>
+  <value>Enter the new date of birth (e.g. 2000-12-31), or press Enter to remove: </value>
+</translation>
+
+<translation>
+  <key>invalid_date_format</key>
+  <value>Invalid date format. Enter a date in the format YYYY-MM-DD: </value>
+</translation>
+
+<translation>
+  <key>dob_updated_success</key>
+  <value>Successfully updated date of birth to %s.</value>
+</translation>
+
+<translation>
+  <key>dob_removed_success</key>
+  <value>Successfully removed date of birth.</value>
+</translation>
+
+<translation>
+  <key>dob_update_failed</key>
+  <value>Failed to update date of birth.</value>
+</translation>
+
+<translation>
+  <key>enter_new_phone</key>
+  <value>Enter the new phone number (e.g. 123-456-7890), or press Enter to remove: </value>
+</translation>
+
+<translation>
+  <key>invalid_phone_format</key>
+  <value>Invalid phone number format. Enter a phone number in the format 123-456-7890: </value>
+</translation>
+
+<translation>
+  <key>phone_updated_success</key>
+  <value>Successfully updated phone number to %s.</value>
+</translation>
+
+<translation>
+  <key>phone_removed_success</key>
+  <value>Successfully removed phone number.</value>
+</translation>
+
+<translation>
+  <key>phone_update_failed</key>
+  <value>Failed to update phone number.</value>
+</translation>
+
+<translation>
+  <key>in_family_group</key>
+  <value>Person is currently in family group with ID: %d</value>
+</translation>
+
+<translation>
+  <key>remove_from_family_group</key>
+  <value>Do you want to remove them from this family group? (1 for Yes, 2 for No): </value>
+</translation>
+
+<translation>
+  <key>removed_from_family_group_success</key>
+  <value>Successfully removed person from family group.</value>
+</translation>
+
+<translation>
+  <key>removed_from_family_group_failed</key>
+  <value>Failed to remove person from family group.</value>
+</translation>
+
+<translation>
+  <key>not_in_family_group</key>
+  <value>Person is not currently in a family group.</value>
+</translation>
+
+<translation>
+  <key>add_to_family_group</key>
+  <value>Do you want to add them to a family group? (1 for Yes, 2 for No): </value>
+</translation>
+
+<translation>
+  <key>enter_family_group_id</key>
+  <value>Enter the family group ID: </value>
+</translation>
+
+<translation>
+  <key>added_to_family_group_success</key>
+  <value>Successfully added person to family group with ID: %d</value>
+</translation>
+
+<translation>
+  <key>added_to_family_group_failed</key>
+  <value>Failed to add person to family group.</value>
+</translation>
+
+<translation>
+  <key>manage_person_error</key>
+  <value>Error managing person information</value>
+</translation>
+
+<translation>
+  <key>not_disaster_victim_returning</key>
+  <value>Person not found or is not a disaster victim. Returning to main submenu.</value>
+</translation>
+
+<translation>
+  <key>medical_records_for</key>
+  <value>Medical records for %s:</value>
+</translation>
+
+<translation>
+  <key>location_id</key>
+  <value>Location ID</value>
+</translation>
+
+<translation>
+  <key>treatment_details</key>
+  <value>Treatment Details</value>
+</translation>
+
+<translation>
+  <key>treatment_date</key>
+  <value>Treatment Date</value>
+</translation>
+
+<translation>
+  <key>no_medical_records</key>
+  <value>No medical records found for this person.</value>
+</translation>
+
+<translation>
+  <key>enter_location_id</key>
+  <value>Enter the location ID for the treatment: </value>
+</translation>
+
+<translation>
+  <key>enter_treatment_details</key>
+  <value>Enter the treatment details: </value>
+</translation>
+
+<translation>
+  <key>medical_record_added_success</key>
+  <value>Successfully added a new medical record with ID: %d</value>
+</translation>
+
+<translation>
+  <key>medical_record_added_failed</key>
+  <value>Failed to add a new medical record.</value>
+</translation>
+
+<translation>
+  <key>enter_record_id_to_update</key>
+  <value>Enter the ID of the medical record to update: </value>
+</translation>
+
+<translation>
+  <key>medical_record_not_found</key>
+  <value>Medical record not found for this person.</value>
+</translation>
+
+<translation>
+  <key>enter_new_treatment_details</key>
+  <value>Enter the new treatment details: </value>
+</translation>
+
+<translation>
+  <key>treatment_details_updated_success</key>
+  <value>Successfully updated treatment details.</value>
+</translation>
+
+<translation>
+  <key>treatment_details_updated_failed</key>
+  <value>Failed to update treatment details.</value>
+</translation>
+
+<translation>
+  <key>enter_record_id_to_remove</key>
+  <value>Enter the ID of the medical record to remove: </value>
+</translation>
+
+<translation>
+  <key>medical_record_removed_success</key>
+  <value>Successfully removed medical record.</value>
+</translation>
+
+<translation>
+  <key>medical_record_removed_failed</key>
+  <value>Failed to remove medical record.</value>
+</translation>
+
+<translation>
+  <key>manage_medical_records_error</key>
+  <value>Error managing person's medical records</value>
+</translation>
+
+<translation>
+  <key>input_inquirer_id</key>
+  <value>Enter the inquirer's ID: </value>
+</translation>
+
+<translation>
+  <key>input_seeking_id</key>
+  <value>Enter the ID of the person being sought: </value>
+</translation>
+
+<translation>
+  <key>input_comments</key>
+  <value>Enter any additional comments or information: </value>
+</translation>
+
+<translation>
+  <key>inquiry_added_success</key>
+  <value>Inquiry has been successfully logged.</value>
+</translation>
+
+<translation>
+  <key>inquiry_added_failure</key>
+  <value>Failed to log the inquiry.</value>
+</translation>
+
+<translation>
+  <key>database_error</key>
+  <value>Database error occurred</value>
+</translation>
+
+<translation>
+  <key>input_inquiry_id</key>
+  <value>Enter the inquiry ID: </value>
+</translation>
+
+<translation>
+  <key>inquiry_id</key>
+  <value>Inquiry ID</value>
+</translation>
+
+<translation>
+  <key>inquirer_id</key>
+  <value>Inquirer ID</value>
+</translation>
+
+<translation>
+  <key>seeking_id</key>
+  <value>Seeking ID</value>
+</translation>
+
+<translation>
+  <key>date_of_inquiry</key>
+  <value>Date of Inquiry</value>
+</translation>
+
+<translation>
+  <key>comments</key>
+  <value>Comments</value>
+</translation>
+
+<translation>
+  <key>last_known_location</key>
+  <value>Last Known Location</value>
+</translation>
+
+<translation>
+  <key>inquiry_not_found</key>
+  <value>Inquiry couldn't be found.</value>
+</translation>
+
+<translation>
+  <key>inquiry_number</key>
+  <value>Inquiry #%d: </value>
+</translation>
+
+<translation>
+  <key>missing_person_id</key>
+  <value>Missing Person ID</value>
+</translation>
+
+<translation>
+  <key>last_known_location_id</key>
+  <value>Last Known Location ID</value>
+</translation>
+
+<translation>
+  <key>no_inquiries_found</key>
+  <value>No inquiries found.</value>
+</translation>
+
+<translation>
+  <key>input_inquiry_id_to_manage</key>
+  <value>Enter the ID of the inquiry you want to manage: </value>
+</translation>
+
+<translation>
+  <key>input_new_comments</key>
+  <value>Enter the new comments: </value>
+</translation>
+
+<translation>
+  <key>inquiry_updated_success</key>
+  <value>Inquiry has been successfully updated.</value>
+</translation>
+
+<translation>
+  <key>inquiry_updated_failure</key>
+  <value>Failed to update the inquiry.</value>
+</translation>
+
+<translation>
+  <key>input_new_location_id</key>
+  <value>Enter the new location ID: </value>
+</translation>
+
+<translation>
+  <key>location_updated_success</key>
+  <value>Location has been successfully updated.</value>
+</translation>
+
+<translation>
+  <key>location_updated_failure</key>
+  <value>Failed to update the location.</value>
+</translation>
