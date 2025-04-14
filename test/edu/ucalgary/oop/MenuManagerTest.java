@@ -9,14 +9,14 @@ public class MenuManagerTest {
     private MenuManager menuManager;
     private LanguageManager languageManager;
     private MainMenu testMainMenu;
-    private FamilyGroupSubmenu testFamilyGroupSubmenu;
+    private InquirySubmenu testInquirySubmenu;
 
     @Before
     public void setUp() {
         menuManager = MenuManager.INSTANCE;
         languageManager = LanguageManager.INSTANCE;
         testMainMenu = new MainMenu(languageManager.getMenuTranslation("main_menu_defaults"));
-        testFamilyGroupSubmenu = new FamilyGroupSubmenu(languageManager.getMenuTranslation("family_group_submenu_defaults"));
+        testInquirySubmenu = new InquirySubmenu(languageManager.getMenuTranslation("inquiry_submenu_defaults"));
 
         menuManager.navigateToMenu(testMainMenu);
     }
@@ -34,15 +34,15 @@ public class MenuManagerTest {
 
     @Test
     public void testNavigateToMenu() {
-        menuManager.navigateToMenu(testFamilyGroupSubmenu);
+        menuManager.navigateToMenu(testInquirySubmenu);
 
         assertEquals("MenuManager should be navigated to the submenu for Family Group management",
-                testFamilyGroupSubmenu, menuManager.getCurrentMenu());
+                testInquirySubmenu, menuManager.getCurrentMenu());
     }
 
     @Test
     public void testBacktrackMenus() {
-        menuManager.navigateToMenu(testFamilyGroupSubmenu);
+        menuManager.navigateToMenu(testInquirySubmenu);
         menuManager.backtrackMenus();
 
         assertEquals("backtrackMenus() should return to the previously displayed menu", testMainMenu,
