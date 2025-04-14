@@ -309,8 +309,8 @@ public class PersonSubmenu extends Menu {
                     setMaxIntInput(3);
                     handleIntInput();
                     String newGender = switch (intInput) {
-                        case 1 -> "Man";
-                        case 2 -> "Woman";
+                        case 1 -> "Male";
+                        case 2 -> "Female";
                         case 3 -> "Non-binary";
                         default -> null;
                     };
