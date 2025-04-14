@@ -24,6 +24,11 @@
   <value>"Which action would you like to perform?", "1. Update comments", "2. Update last known location", "3. Return to main submenu"</value>
 </menuTranslation>
 
+<menuTranslation>
+  <key>add_supply_options</key>
+  <value>"Select supply type:", "1. Blanket", "2. Cot", "3. Personal belonging", "4. Water"</value>
+</menuTranslation>
+
 <!-- Regular Translations -->
 <translation>
   <key>persons_and_details</key>
@@ -549,3 +554,349 @@
   <key>location_updated_failure</key>
   <value>Failed to update the location.</value>
 </translation>
+
+<translation>
+  <key>locations_and_details</key>
+  <value>Locations and their details:</value>
+</translation>
+
+<translation>
+  <key>separator</key>
+  <value>--------------------------------------------</value>
+</translation>
+
+<translation>
+  <key>location_number</key>
+  <value>Location #%d: </value>
+</translation>
+
+<translation>
+  <key>separator_short</key>
+  <value>--------------------------------</value>
+</translation>
+
+<translation>
+  <key>location_id</key>
+  <value>Location ID: </value>
+</translation>
+
+<translation>
+  <key>name</key>
+  <value>Name: </value>
+</translation>
+
+<translation>
+  <key>address</key>
+  <value>Address: </value>
+</translation>
+
+<translation>
+  <key>no_locations_found</key>
+  <value>No locations found.</value>
+</translation>
+
+<translation>
+  <key>list_locations_error</key>
+  <value>Error occurred while trying to list all locations: </value>
+</translation>
+
+<translation>
+  <key>try_again_later</key>
+  <value>Try again later.</value>
+</translation>
+
+<translation>
+  <key>location_name_updated_success</key>
+  <value>Successfully updated the location name to %s.</value>
+</translation>
+
+<translation>
+  <key>location_name_updated_failure</key>
+  <value>Couldn't update the location name. Try again later.</value>
+</translation>
+
+<translation>
+  <key>update_location_name_error</key>
+  <value>Error occurred while trying to update location name: </value>
+</translation>
+
+<translation>
+  <key>location_address_updated_success</key>
+  <value>Successfully updated the location address to %s.</value>
+</translation>
+
+<translation>
+  <key>location_address_updated_failure</key>
+  <value>Couldn't update the location address. Try again later.</value>
+</translation>
+
+<translation>
+  <key>update_location_address_error</key>
+  <value>Error occurred while trying to update location address: </value>
+</translation>
+
+<translation>
+  <key>location_details</key>
+  <value>Location details:</value>
+</translation>
+
+<translation>
+  <key>number_of_occupants</key>
+  <value>Number of occupants: </value>
+</translation>
+
+<translation>
+  <key>number_of_supplies</key>
+  <value>Number of supplies: </value>
+</translation>
+
+<translation>
+  <key>location_not_found</key>
+  <value>Location couldn't be found.</value>
+</translation>
+
+<translation>
+  <key>view_location_details_error</key>
+  <value>Error occurred while trying to view location details: </value>
+</translation>
+
+<translation>
+  <key>input_location_id</key>
+  <value>Enter the location ID: </value>
+</translation>
+
+<translation>
+  <key>input_location_id_to_view</key>
+  <value>Enter the ID of the location you want to view supplies for: </value>
+</translation>
+
+<translation>
+  <key>supply_details</key>
+  <value>Supply details:</value>
+</translation>
+
+<translation>
+  <key>supply_id</key>
+  <value>Supply ID: </value>
+</translation>
+
+<translation>
+  <key>supply_type</key>
+  <value>Supply type: </value>
+</translation>
+
+<translation>
+  <key>time_allocated</key>
+  <value>Time allocated: </value>
+</translation>
+
+<translation>
+  <key>location_no_supplies</key>
+  <value>Location has no supplies.</value>
+</translation>
+
+<translation>
+  <key>view_location_supplies_error</key>
+  <value>Error occurred when trying to view location supplies: </value>
+</translation>
+
+<translation>
+  <key>enter_first_name</key>
+  <value>Enter the person's first name: </value>
+</translation>
+
+<translation>
+  <key>enter_gender_number</key>
+  <value>Enter the person's gender by typing in a corresponding number (for example, '1' for Man): </value>
+</translation>
+
+<translation>
+  <key>enter_date_of_birth</key>
+  <value>Enter the person's date of birth (e.g. 2000-12-31 for December 31, 2000): </value>
+</translation>
+
+<translation>
+  <key>enter_no_date_of_birth</key>
+  <value>If no known date of birth, simply hit enter: </value>
+</translation>
+
+<translation>
+  <key>invalid_date_format</key>
+  <value>Invalid date format. Enter a date in the format YYYY-MM-DD: </value>
+</translation>
+
+<translation>
+  <key>enter_phone_number</key>
+  <value>Enter the person's phone number (e.g. 123-456-7890)</value>
+</translation>
+
+<translation>
+  <key>enter_no_phone_number</key>
+  <value>If no known phone number, simply hit enter: </value>
+</translation>
+
+<translation>
+  <key>invalid_phone_format</key>
+  <value>Invalid phone number format. Enter a phone number in the format 123-456-7890: </value>
+</translation>
+
+<translation>
+  <key>person_added_success</key>
+  <value>Successfully added a new person with ID: %d</value>
+</translation>
+
+<translation>
+  <key>person_added_failure</key>
+  <value>Failed to add a new person.</value>
+</translation>
+
+<translation>
+  <key>add_person_error</key>
+  <value>Error occurred while trying to add a person: </value>
+</translation>
+
+<translation>
+  <key>input_occupant_id_to_remove</key>
+  <value>Input the ID of the occupant you'd like to remove: </value>
+</translation>
+
+<translation>
+  <key>cannot_remove_occupant</key>
+  <value>Cannot remove this occupant as they are not an occupant of this location.</value>
+</translation>
+
+<translation>
+  <key>occupant_removed_success</key>
+  <value>Occupant successfully removed from this location.</value>
+</translation>
+
+<translation>
+  <key>occupant_removed_failure</key>
+  <value>Failed to remove occupant from this location.</value>
+</translation>
+
+<translation>
+  <key>occupants_of_location</key>
+  <value>Occupants of location: </value>
+</translation>
+
+<translation>
+  <key>divider_long</key>
+  <value>---------------------------------</value>
+</translation>
+
+<translation>
+  <key>assigned_id</key>
+  <value>Assigned ID: </value>
+</translation>
+
+<translation>
+  <key>no_occupants</key>
+  <value>No occupants at this location.</value>
+</translation>
+
+<translation>
+  <key>manage_occupants_error</key>
+  <value>Error managing occupants at a location: </value>
+</translation>
+
+<translation>
+  <key>input_supply_id_to_remove</key>
+  <value>Input the ID of the supply you'd like to remove: </value>
+</translation>
+
+<translation>
+  <key>supply_not_found</key>
+  <value>Supply not found.</value>
+</translation>
+
+<translation>
+  <key>enter_supply_allocation_date</key>
+  <value>Enter the supply's allocation date (e.g. 2000-12-31 for December 31, 2000): </value>
+</translation>
+
+<translation>
+  <key>supply_removed_success</key>
+  <value>Supply successfully removed from this location.</value>
+</translation>
+
+<translation>
+  <key>supply_removed_failure</key>
+  <value>Failed to remove supply from this location.</value>
+</translation>
+
+<translation>
+  <key>choose_supply_type</key>
+  <value>Choose the type of supply (e.g. '1' for Blanket): </value>
+</translation>
+
+<translation>
+  <key>enter_supply_comments</key>
+  <value>Enter any comments for this supply (like a description, cot location like 12 A14, or leave empty): </value>
+</translation>
+
+<translation>
+  <key>invalid_cot_location</key>
+  <value>Cot location format is invalid. Format should be 123 A23 for room number and grid location: </value>
+</translation>
+
+<translation>
+  <key>create_supply_failure</key>
+  <value>Failed to create new supply.</value>
+</translation>
+
+<translation>
+  <key>supply_added_success</key>
+  <value>Supply successfully added to this location.</value>
+</translation>
+
+<translation>
+  <key>supply_added_failure</key>
+  <value>Failed to add supply to this location.</value>
+</translation>
+
+<translation>
+  <key>input_supply_id_to_give</key>
+  <value>Input the ID of the supply you'd like to give: </value>
+</translation>
+
+<translation>
+  <key>input_occupant_id</key>
+  <value>Input the ID of the occupant to give the supply to: </value>
+</translation>
+
+<translation>
+  <key>occupant_not_found</key>
+  <value>Occupant not found.</value>
+</translation>
+
+<translation>
+  <key>person_not_occupant</key>
+  <value>The specified person is not an occupant of this location.</value>
+</translation>
+
+<translation>
+  <key>remove_supply_from_location_failure</key>
+  <value>Failed to remove supply from location.</value>
+</translation>
+
+<translation>
+  <key>retrieve_victim_failure</key>
+  <value>Failed to retrieve disaster victim.</value>
+</translation>
+
+<translation>
+  <key>supply_given_to_occupant_success</key>
+  <value>Supply successfully given to occupant.</value>
+</translation>
+
+<translation>
+  <key>supply_given_to_occupant_failure</key>
+  <value>Failed to give supply to occupant.</value>
+</translation>
+
+<translation>
+  <key>manage_supplies_error</key>
+  <value>Error managing supplies at a location: </value>
+</translation>
+
