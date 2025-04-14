@@ -10,12 +10,10 @@ import java.util.List;
 
 public class InquiryServiceTest {
     private InquiryService inquiryService;
-    private InquiryAccess<Object> inquiryAccess;
 
     @Before
     public void setUp() {
         inquiryService = InquiryService.INSTANCE;
-        inquiryAccess = new InquiryAccess<>();
     }
 
     @Test
@@ -28,6 +26,7 @@ public class InquiryServiceTest {
             fail("Error testing getInquiryById: " + e.getMessage());
         }
 
+        assertNotNull("getInquiryById() should return a non-null Inquiry object", testInquiry);
         assertEquals("getInquiryById() should retrieve the correct Inquiry", 1, testInquiry.getInquiryId());
     }
 
@@ -41,7 +40,7 @@ public class InquiryServiceTest {
             fail("Error testing getAllInquiries: " + e.getMessage());
         }
 
-        assertNotNull("getAllInquiries() should retrieve a valid list of Inquiries", retrievedInquiries);
+        assertNotNull("getAllInquiries() should retrieve a non-null list of Inquiries", retrievedInquiries);
     }
 
     @Test
@@ -66,7 +65,7 @@ public class InquiryServiceTest {
         try {
             inquiryService.removeInquiry(testInquiry);
         } catch (SQLException e) {
-            fail("Error testing addInquiry: " + e.getMessage());
+            fail("Error cleaning up after test: " + e.getMessage());
         }
     }
 
@@ -74,24 +73,56 @@ public class InquiryServiceTest {
     public void testUpdateInquiryInfo() {
         Inquiry testInquiry = null;
         String newInfo = "Updated inquiry information";
-        String retrievedInfo = null;
 
         try {
             testInquiry = inquiryService.addInquiry(1, 2, LocalDate.now(), "Test inquiry");
-            inquiryService.updateInquiryInfo(testInquiry, newInfo);
+            boolean updateResult = inquiryService.updateInquiryInfo(testInquiry, newInfo);
 
-            retrievedInfo = (String) inquiryAccess.getInfo("comments", testInquiry.getInquiryId());
+            assertTrue("updateInquiryInfo() should return true for successful update", updateResult);
+            assertEquals("updateInquiryInfo() should update the info in the Inquiry object",
+                    newInfo, testInquiry.getInfoProvided());
+
+            String retrievedInfo = (String) inquiryService.getInquiryInfo("comments", testInquiry.getInquiryId());
+            assertEquals("updateInquiryInfo() should update the info in the database",
+                    newInfo, retrievedInfo);
         } catch (SQLException e) {
             fail("Error testing updateInquiryInfo: " + e.getMessage());
+        } finally {
+            try {
+                if (testInquiry != null) {
+                    inquiryService.removeInquiry(testInquiry);
+                }
+            } catch (SQLException e) {
+                fail("Error cleaning up after test: " + e.getMessage());
+            }
         }
+    }
 
-        assertEquals("updateInquiryInfo() should update the info in-memory and in database",
-                testInquiry.getInfoProvided(), retrievedInfo);
+    @Test
+    public void testGetInquiryInfo() {
+        Inquiry testInquiry = null;
+        String testInfo = "Test inquiry for info retrieval";
 
         try {
-            inquiryService.removeInquiry(testInquiry);
+            testInquiry = inquiryService.addInquiry(1, 2, LocalDate.now(), testInfo);
+
+            String retrievedInfo = (String) inquiryService.getInquiryInfo("comments", testInquiry.getInquiryId());
+            assertEquals("getInquiryInfo() should retrieve the correct information",
+                    testInfo, retrievedInfo);
+
+            Integer retrievedInquirerId = (Integer) inquiryService.getInquiryInfo("inquirer_id", testInquiry.getInquiryId());
+            assertEquals("getInquiryInfo() should retrieve the correct inquirer_id",
+                    1, retrievedInquirerId.intValue());
         } catch (SQLException e) {
-            fail("Error testing updateInquiryInfo: " + e.getMessage());
+            fail("Error testing getInquiryInfo: " + e.getMessage());
+        } finally {
+            try {
+                if (testInquiry != null) {
+                    inquiryService.removeInquiry(testInquiry);
+                }
+            } catch (SQLException e) {
+                fail("Error cleaning up after test: " + e.getMessage());
+            }
         }
     }
 
@@ -99,24 +130,28 @@ public class InquiryServiceTest {
     public void testUpdateLastKnownLocation() {
         Inquiry testInquiry = null;
         int newLocationId = 2;
-        Integer retrievedLocationId = null;
 
         try {
             testInquiry = inquiryService.addInquiry(1, 2, LocalDate.now(), "Test inquiry");
-            inquiryService.updateLastKnownLocation(testInquiry, newLocationId);
+            boolean updateResult = inquiryService.updateLastKnownLocation(testInquiry, newLocationId);
 
-            retrievedLocationId = (Integer) inquiryAccess.getInfo("location_id", testInquiry.getInquiryId());
+            assertTrue("updateLastKnownLocation() should return true for successful update", updateResult);
+            assertEquals("updateLastKnownLocation() should update the location ID in the Inquiry object",
+                    newLocationId, testInquiry.getLastKnownLocationId());
+
+            Integer retrievedLocationId = (Integer) inquiryService.getInquiryInfo("location_id", testInquiry.getInquiryId());
+            assertEquals("updateLastKnownLocation() should update the location ID in the database",
+                    newLocationId, retrievedLocationId.intValue());
         } catch (SQLException e) {
             fail("Error testing updateLastKnownLocation: " + e.getMessage());
-        }
-
-        assertEquals("updateLastKnownLocation() should update the location ID in-memory and in database",
-                testInquiry.getLastKnownLocationId(), retrievedLocationId.intValue());
-
-        try {
-            inquiryService.removeInquiry(testInquiry);
-        } catch (SQLException e) {
-            fail("Error testing updateLastKnownLocation: " + e.getMessage());
+        } finally {
+            try {
+                if (testInquiry != null) {
+                    inquiryService.removeInquiry(testInquiry);
+                }
+            } catch (SQLException e) {
+                fail("Error cleaning up after test: " + e.getMessage());
+            }
         }
     }
 
@@ -127,11 +162,37 @@ public class InquiryServiceTest {
 
         try {
             testInquiry = inquiryService.addInquiry(1, 2, LocalDate.now(), "Test remove");
+            int inquiryId = testInquiry.getInquiryId();
             removalResult = inquiryService.removeInquiry(testInquiry);
+
+            assertTrue("removeInquiry() should return true when successful", removalResult);
+
+            Inquiry retrievedInquiry = inquiryService.getInquiryById(inquiryId);
+            assertNull("removeInquiry() should remove the inquiry from the database", retrievedInquiry);
         } catch (SQLException e) {
             fail("Error testing removeInquiry: " + e.getMessage());
         }
+    }
 
-        assertTrue("removeInquiry() should return true when successful", removalResult);
+    @Test
+    public void testInquiryNullInfoProvided() {
+        Inquiry testInquiry = null;
+        String testInfo = null;
+
+        try {
+            testInquiry = inquiryService.addInquiry(1, 2, LocalDate.now(), testInfo);
+            assertNotNull("addInquiry() should handle null info", testInquiry);
+            assertNull("Inquiry should have null infoProvided", testInquiry.getInfoProvided());
+        } catch (SQLException e) {
+            fail("Error testing inquiry with null info: " + e.getMessage());
+        } finally {
+            try {
+                if (testInquiry != null) {
+                    inquiryService.removeInquiry(testInquiry);
+                }
+            } catch (SQLException e) {
+                fail("Error cleaning up after test: " + e.getMessage());
+            }
+        }
     }
 }
