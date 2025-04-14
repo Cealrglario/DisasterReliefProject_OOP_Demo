@@ -1,6 +1,6 @@
 package edu.ucalgary.oop;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class Water extends Supply {
     private boolean allocatedToVictim;
@@ -15,15 +15,22 @@ public class Water extends Supply {
         return this.allocatedToVictim;
     }
 
-    public void setAllocatedToVictim(boolean toVictim) {}
+    public void setAllocatedToVictim(boolean toVictim) {
+        this.allocatedToVictim = toVictim;
+    }
 
     public boolean getIsExpired() {
         return this.isExpired;
     }
 
-    public void setIsExpired(boolean isExpired) {}
+    public void setIsExpired(boolean isExpired) {
+        this.isExpired = isExpired;
+    }
 
-    public void checkExpiration(LocalDateTime timeAllocated) {}
+    public void checkExpiration(LocalDate dateAllocated) {
+        LocalDate now = LocalDate.now();
+        this.isExpired = !now.isBefore(dateAllocated.plusDays(1));
+    }
 
     @Override
     public void displayDetails() {

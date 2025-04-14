@@ -236,4 +236,35 @@ public class PersonServiceTest {
 
         assertTrue("removePerson() should return true when successful", removalResult);
     }
+
+    @Test
+    public void testGetPersonRelatives() {
+        Person testPerson1 = null;
+        Person testPerson2 = null;
+        List<Person> relatives = null;
+
+        try {
+            testPerson1 = personService.addPerson("Test Person 1", "Male", null, "111-1111");
+            testPerson2 = personService.addPerson("Test Person 2", "Female", null, "222-2222");
+
+            personService.updateFamilyGroupStatus(testPerson1, true, 999);
+            personService.updateFamilyGroupStatus(testPerson2, true, 999);
+
+            relatives = personService.getPersonRelatives(testPerson1);
+        } catch (SQLException e) {
+            fail("Error testing getPersonRelatives: " + e.getMessage());
+        }
+
+        for (Person relative : relatives) {
+            assertEquals("Family group ID of relative should match person's family group ID",
+                    relative.getFamilyGroupId(), testPerson1.getFamilyGroupId());
+        }
+
+        try {
+            personService.removePerson(testPerson1);
+            personService.removePerson(testPerson2);
+        } catch (SQLException e) {
+            fail("Error cleaning up after test: " + e.getMessage());
+        }
+    }
 }

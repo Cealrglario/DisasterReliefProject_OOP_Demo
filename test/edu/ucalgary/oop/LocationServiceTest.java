@@ -191,7 +191,7 @@ public class LocationServiceTest {
                 initialAllocationCount < updatedAllocationCount);
 
         try {
-            locationService.removeSupplyAllocation(testLocation, testSupply, testDate);
+            locationService.removeSupplyAllocation(testLocation, testSupply);
         } catch (SQLException e) {
             fail("Error testing refreshAllocations: " + e.getMessage());
         }
@@ -224,7 +224,7 @@ public class LocationServiceTest {
                 memoryAllocationCount, dbAllocationCount);
 
         try {
-            locationService.removeSupplyAllocation(testLocation, testSupply, testDate);
+            locationService.removeSupplyAllocation(testLocation, testSupply);
         } catch (SQLException e) {
             fail("Error occurred while testing addAllocation: " + e.getMessage());
         }
@@ -243,7 +243,7 @@ public class LocationServiceTest {
             testSupply = supplyService.getSupplyById(3);
 
             locationService.addSupplyAllocation(testLocation, testSupply, testDate);
-            removeResult = locationService.removeSupplyAllocation(testLocation, testSupply, testDate);
+            removeResult = locationService.removeSupplyAllocation(testLocation, testSupply);
         } catch (SQLException e) {
             fail("Error testing removeSupplyAllocation: " + e.getMessage());
         }

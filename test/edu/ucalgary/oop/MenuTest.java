@@ -11,8 +11,12 @@ public class MenuTest {
     @Before
     public void setUp() {
         languageManager = LanguageManager.INSTANCE;
-        testMainMenu = new MainMenu(languageManager.getMenuTranslation("main_menu_defaults"));
 
+        // Initialize language manager with a valid language
+        // This ensures translations are available
+        languageManager.configureLanguage("en-CA");
+
+        testMainMenu = new MainMenu(languageManager.getMenuTranslation("main_menu_defaults"));
         testMainMenu.setCurrentDisplay(testMainMenu.getDefaultOptions());
     }
 

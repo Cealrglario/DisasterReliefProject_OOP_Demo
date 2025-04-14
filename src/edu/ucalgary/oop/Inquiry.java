@@ -13,7 +13,7 @@ public class Inquiry {
     private String infoProvided;
     private int lastKnownLocationId;
 
-    public Inquiry(int inquiryId, int inquirerId, int missingPersonId, LocalDate dateOfInquiry, String infoProvided) {
+    public Inquiry(int inquiryId, int inquirerId, int missingPersonId, String infoProvided) {
         this.INQUIRY_ID = inquiryId;
         this.INQUIRER_ID = inquirerId;
         this.MISSING_PERSON_ID = missingPersonId;

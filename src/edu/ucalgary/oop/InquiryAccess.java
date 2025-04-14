@@ -25,7 +25,7 @@ public class InquiryAccess<U> extends DatabaseObjectAccess<Inquiry, U> {
             LocalDate dateOfInquiry = queryResults.getDate("date_of_inquiry").toLocalDate();
             String comments = queryResults.getString("comments");
 
-            Inquiry retrievedInquiry = new Inquiry(inquiryId, inquirerId, seekingId, dateOfInquiry, comments);
+            Inquiry retrievedInquiry = new Inquiry(inquiryId, inquirerId, seekingId, comments);
             retrievedInquiry.setLastKnownLocationId(locationId);
 
             retrievedInquiries.add(retrievedInquiry);
@@ -55,7 +55,7 @@ public class InquiryAccess<U> extends DatabaseObjectAccess<Inquiry, U> {
             LocalDate dateOfInquiry = queryResults.getDate("date_of_inquiry").toLocalDate();
             String comments = queryResults.getString("comments");
 
-            retrievedInquiry = new Inquiry(inquiryId, inquirerId, seekingId, dateOfInquiry, comments);
+            retrievedInquiry = new Inquiry(inquiryId, inquirerId, seekingId, comments);
             retrievedInquiry.setLastKnownLocationId(locationId);
         } else {
             System.out.println("Error getting Inquiry by ID: Inquiry doesn't exist.");
@@ -98,7 +98,7 @@ public class InquiryAccess<U> extends DatabaseObjectAccess<Inquiry, U> {
             if (generatedKeys.next()) {
                 int inquiryId = generatedKeys.getInt(1);
 
-                newInquiry = new Inquiry(inquiryId, inquirerId, missingPersonId, dateOfInquiry, infoProvided);
+                newInquiry = new Inquiry(inquiryId, inquirerId, missingPersonId, infoProvided);
             } else {
                 System.out.println("Creating inquiry failed, couldn't obtain inquiry ID.");
                 myStmt.close();

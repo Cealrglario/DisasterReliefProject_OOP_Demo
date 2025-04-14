@@ -19,11 +19,17 @@ public class InputHandler {
                 }
             } catch (Exception e) {
                 System.out.println("Invalid input. Please select an option by typing in its corresponding number: ");
-                INPUT_SCANNER.nextLine();
+                // Clear the scanner's buffer, but only if there's still a line to read
+                if (INPUT_SCANNER.hasNextLine()) {
+                    INPUT_SCANNER.nextLine();
+                }
             }
         }
 
-        INPUT_SCANNER.nextLine();
+        // Clear the scanner's buffer, but only if there's still a line to read
+        if (INPUT_SCANNER.hasNextLine()) {
+            INPUT_SCANNER.nextLine();
+        }
         return userInput;
     }
 

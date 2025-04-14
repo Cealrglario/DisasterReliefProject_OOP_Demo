@@ -211,7 +211,7 @@ public class InquiryAccessTest {
 
     @Test
     public void testRemoveInquiryNotInDb() {
-        Inquiry inquiryNotInDb = new Inquiry(-9999, 2, 2, LocalDate.now(), "non-existent inquiry");
+        Inquiry inquiryNotInDb = new Inquiry(-9999, 2, 2, "non-existent inquiry");
         boolean success = false;
         try {
             success = inquiryDbAccess.removeInquiry(inquiryNotInDb);

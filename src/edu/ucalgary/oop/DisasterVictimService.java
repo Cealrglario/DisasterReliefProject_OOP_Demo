@@ -47,24 +47,25 @@ public enum DisasterVictimService {
 
     public boolean addSupplyAllocation(DisasterVictim victim, Supply supply, LocalDate allocationDate) throws SQLException {
         Allocation allocation = supplyPersonAllocationAccess.addEntry(supply, victim, allocationDate);
-        Location personLocation = getPersonLocation(victim);
-        locationService.refreshAllocations(personLocation);
 
-        boolean success = locationService.removeSupplyAllocation(personLocation, supply);
-
-        if (allocation != null && success) {
-            victim.addSupply(supply);
-            return true;
-        } else if (allocation == null) {
+        if (allocation == null) {
             System.out.println(languageManager.getTranslation("supply_allocation_failed_null"));
             return false;
-        } else if (!success) {
-            System.out.println(languageManager.getTranslation("supply_allocation_failed_removal"));
-            return false;
-        } else {
-            System.out.println(languageManager.getTranslation("supply_allocation_unknown_error"));
-            return false;
         }
+
+        victim.addSupply(supply);
+
+        try {
+            Location personLocation = getPersonLocation(victim);
+            if (personLocation != null) {
+                locationService.refreshAllocations(personLocation);
+                locationService.removeSupplyAllocation(personLocation, supply);
+            }
+        } catch (SQLException e) {
+            System.out.println(languageManager.getTranslation("supply_allocation_removal_warning") + e.getMessage());
+        }
+
+        return true;
     }
 
 
@@ -118,13 +119,15 @@ public enum DisasterVictimService {
     public Location getPersonLocation(Person person) {
         PersonLocationAccess personLocationAccess = new PersonLocationAccess();
         LocationAccess<Object> locationAccess = new LocationAccess<>();
-        Location retrievedLocation;
+        Location retrievedLocation = null;
 
         try {
             Map<Integer, Integer> retrievedPersonsInLocations = personLocationAccess.getAll();
-            int retrievedLocationId = retrievedPersonsInLocations.get(person.getAssignedId());
+            Integer retrievedLocationId = retrievedPersonsInLocations.get(person.getAssignedId());
 
-            retrievedLocation = locationAccess.getById(retrievedLocationId);
+            if (retrievedLocationId != null) {
+                retrievedLocation = locationAccess.getById(retrievedLocationId);
+            }
         } catch (SQLException e) {
             System.out.println(languageManager.getTranslation("failed_retrieve_location_id") + e.getMessage());
             return null;

@@ -1,10 +1,9 @@
 package edu.ucalgary.oop;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import static org.junit.Assert.*;
 
@@ -47,22 +46,29 @@ public class WaterTest {
     }
 
     @Test
-    public void testCheckExpirationBeforeThreshold() {
-        // Assuming checkExpiration sets water as expired if currentTime is EXACTLY on or after January 1, 2025
-        LocalDateTime beforeThreshold = LocalDateTime.of(2024, 12, 31, 23, 59);
+    public void testCheckExpirationSameDay() {
+        LocalDate today = LocalDate.now();
 
-        testWater.checkExpiration(beforeThreshold);
+        testWater.checkExpiration(today);
 
-        assertFalse("Water should not be expired before threshold", testWater.getIsExpired());
+        assertFalse("Water should not be expired on the same day it was allocated", testWater.getIsExpired());
     }
 
     @Test
-    public void testCheckExpirationAtOrAfterThreshold() {
-        LocalDateTime atThreshold = LocalDateTime.of(2025, 1, 1, 0, 0);
+    public void testCheckExpirationOneDayAfter() {
+        LocalDate yesterday = LocalDate.now().minusDays(1);
 
-        testWater.checkExpiration(atThreshold);
+        testWater.checkExpiration(yesterday);
 
-        assertTrue("Water should be expired at or after threshold", testWater.getIsExpired());
+        assertTrue("Water should be expired one day after it was allocated", testWater.getIsExpired());
     }
 
+    @Test
+    public void testCheckExpirationTwoDaysAfter() {
+        LocalDate twoDaysAgo = LocalDate.now().minusDays(2);
+
+        testWater.checkExpiration(twoDaysAgo);
+
+        assertTrue("Water should be expired two days after it was allocated", testWater.getIsExpired());
+    }
 }

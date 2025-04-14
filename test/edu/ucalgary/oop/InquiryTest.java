@@ -10,7 +10,7 @@ public class InquiryTest {
 
     @Before
     public void setUp() {
-        testInquiry = new Inquiry(1, 1, 1, LocalDate.of(2025, 1, 1),
+        testInquiry = new Inquiry(1, 1, 1,
                 "Info test");
         testInquiry.setLastKnownLocationId(1);
     }
@@ -20,7 +20,6 @@ public class InquiryTest {
         assertEquals("INQUIRY_ID should be set as expected", 1, testInquiry.getInquiryId());
         assertEquals("INQUIRER_ID should be set as expected", 1, testInquiry.getInquirerid());
         assertEquals("MISSING_PERSON_ID should be set as expected", 1, testInquiry.getMissingPersonId());
-        assertEquals("INQUIRY_DATE be set as expected", LocalDate.of(2025, 1, 1), testInquiry.getDateOfInquiry());
         assertEquals("infoProvided should be set as expected", "Info test", testInquiry.getInfoProvided());
     }
 
@@ -41,7 +40,7 @@ public class InquiryTest {
 
     @Test
     public void testGetDateOfInquiry() {
-        assertEquals("INQUIRY_DATE should be retrieved as expected", LocalDate.of(2025,1, 1), testInquiry.getDateOfInquiry());
+        assertEquals("INQUIRY_DATE should be retrieved as expected", LocalDate.now(), testInquiry.getDateOfInquiry());
     }
 
     @Test

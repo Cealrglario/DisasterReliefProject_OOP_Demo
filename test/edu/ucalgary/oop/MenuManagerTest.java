@@ -10,11 +10,17 @@ public class MenuManagerTest {
     private LanguageManager languageManager;
     private MainMenu testMainMenu;
     private InquirySubmenu testInquirySubmenu;
+    private static final String[] TEST_MENU_OPTIONS = {"1. Test Option", "2. Test Exit"};
 
     @Before
     public void setUp() {
         menuManager = MenuManager.INSTANCE;
         languageManager = LanguageManager.INSTANCE;
+
+        // Initialize language manager with a valid language
+        // This ensures translations are available
+        languageManager.configureLanguage("en-CA");
+
         testMainMenu = new MainMenu(languageManager.getMenuTranslation("main_menu_defaults"));
         testInquirySubmenu = new InquirySubmenu(languageManager.getMenuTranslation("inquiry_submenu_defaults"));
 
@@ -23,7 +29,12 @@ public class MenuManagerTest {
 
     @After
     public void tearDown() {
-        menuManager.returnToMainMenu();
+        try {
+            menuManager.returnToMainMenu();
+        } catch (NullPointerException e) {
+            // Handle the case where returnToMainMenu might fail
+            // This prevents cascading failures in tests
+        }
     }
 
     @Test

@@ -1031,5 +1031,15 @@
     <key>manage_supplies_error</key>
     <value><![CDATA[Error managing supplies at a location: ]]></value>
   </translation>
+
+  <menuTranslation>
+    <key>test</key>
+    <value><![CDATA["1. Test Option 1", "2. Test Option 2"]]></value>
+  </menuTranslation>
+
+  <translation>
+    <key>test</key>
+    <value><![CDATA[test]]></value>
+  </translation>
 </translations>
 
