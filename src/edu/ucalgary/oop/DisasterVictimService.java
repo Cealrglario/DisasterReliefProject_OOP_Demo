@@ -2,7 +2,6 @@ package edu.ucalgary.oop;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -11,7 +10,7 @@ public enum DisasterVictimService {
 
     private final PersonAccess<Object> personAccess = new PersonAccess<>();
     private final SupplyPersonAllocationAccess supplyPersonAllocationAccess = new SupplyPersonAllocationAccess();
-    private final SupplyLocationAllocationAccess supplyLocationAllocationAccess = new SupplyLocationAllocationAccess();
+    private final LocationService locationService = LocationService.INSTANCE;
     private final VictimMedicalRecordAccess<Object> victimMedicalRecordAccess = new VictimMedicalRecordAccess<>();
 
     public DisasterVictim getDisasterVictimById(int personId) throws SQLException {
@@ -47,13 +46,11 @@ public enum DisasterVictimService {
 
     public boolean addSupplyAllocation(DisasterVictim victim, Supply supply, LocalDate allocationDate) throws SQLException {
         Allocation allocation = supplyPersonAllocationAccess.addEntry(supply, victim, allocationDate);
-        Allocation allocationToRemove = supplyLocationAllocationAccess.getById(supply, getPersonLocation(victim));
+        Location personLocation = getPersonLocation(victim);
 
-        if (allocationToRemove != null) {
-            supplyLocationAllocationAccess.removeEntry(allocationToRemove);
-        }
+        boolean success = locationService.removeSupplyAllocation(personLocation, supply);
 
-        if (allocation != null) {
+        if (allocation != null && success) {
             victim.addSupply(supply);
             return true;
         }
