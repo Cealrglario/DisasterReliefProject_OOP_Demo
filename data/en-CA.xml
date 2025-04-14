@@ -178,6 +178,11 @@
   </translation>
 
   <translation>
+    <key>goodbye_message</key>
+    <value><![CDATA[Now exiting the program. Goodbye!]]></value>
+  </translation>
+
+  <translation>
     <key>person_not_found</key>
     <value><![CDATA[Person couldn't be found.]]></value>
   </translation>

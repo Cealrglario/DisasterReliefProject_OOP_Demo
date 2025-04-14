@@ -28,7 +28,9 @@ public class MainMenu extends Menu {
                 break;
 
             case 4: // Exit Program
+                System.out.println(languageManager.getTranslation("goodbye_message"));
                 menuManager.stopRunning();
+                break;
 
             default:
                 System.out.println(languageManager.getTranslation("error_invalid_option"));

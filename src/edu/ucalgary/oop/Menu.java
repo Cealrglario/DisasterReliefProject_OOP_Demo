@@ -18,7 +18,7 @@ public abstract class Menu {
         setCurrentDisplay(getDefaultOptions());
         setRequiresIntInput(true);
         setMinIntInput(1);
-        setMaxIntInput(getDefaultOptions().length - 1);
+        setMaxIntInput(getDefaultOptions().length);
     }
 
     public String[] getCurrentDisplay() {
