@@ -1,3 +1,27 @@
+<!-- Person Submenu Default Options -->
+<menuTranslation>
+  <key>person_submenu_defaults</key>
+  <value>"Which action would you like to perform?", "1. View all persons", "2. View details of a specific person", "3. Manage a person's information", "4. Get a person's relatives", "5. Manage a person's medical records", "6. Return to main menu"</value>
+</menuTranslation>
+
+<!-- Location Submenu Default Options -->
+<menuTranslation>
+  <key>location_submenu_defaults</key>
+  <value>"Which action would you like to perform?", "1. View all locations", "2. View details of a specific location", "3. Update the name of a location", "4. Update the address of a location", "5. View the supplies at a location", "6. Manage location occupants", "7. Manage supplies at a location", "8. Return to main menu"</value>
+</menuTranslation>
+
+<!-- Inquiry Submenu Default Options -->
+<menuTranslation>
+  <key>inquiry_submenu_defaults</key>
+  <value>"Which action would you like to perform?", "1. Log a new inquiry", "2. View the details of a specific inquiry", "3. View all inquiries", "4. Manage the information of a specific inquiry", "5. Return to main menu"</value>
+</menuTranslation>
+
+<!-- Generic Messages -->
+<translation>
+  <key>feature_not_implemented</key>
+  <value>This feature is not implemented yet.</value>
+</translation>
+
 <!-- Menu Translations -->
 <menuTranslation>
   <key>person_submenu_manage_info</key>
