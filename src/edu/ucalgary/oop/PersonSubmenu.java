@@ -68,6 +68,7 @@ public class PersonSubmenu extends Menu {
     }
 
     public void viewPersonDetails() {
+        System.out.println(languageManager.getTranslation("input_person_id"));
         setRequiresIntInput(true);
         setMinIntInput(1);
         setMaxIntInput(Integer.MAX_VALUE);
@@ -98,6 +99,11 @@ public class PersonSubmenu extends Menu {
                     System.out.println(languageManager.getTranslation("location") + ": " + personLocation.getName() + " (" + personLocation.getAddress() + ")");
                 }
 
+                // Display family group info
+                if (retrievedPerson.getInFamilyGroup()) {
+                    System.out.println(languageManager.getTranslation("family_group_id") + ": " + retrievedPerson.getFamilyGroupId());
+                }
+
                 // If person is a disaster victim, display more information
                 DisasterVictim victim = disasterVictimService.getDisasterVictimById(personId);
                 if (victim != null) {
@@ -126,10 +132,6 @@ public class PersonSubmenu extends Menu {
                     }
                 }
 
-                // Display family group info
-                if (retrievedPerson.getInFamilyGroup()) {
-                    System.out.println("\n" + languageManager.getTranslation("family_group_id") + ": " + retrievedPerson.getFamilyGroupId());
-                }
                 System.out.println();
             } else {
                 System.out.println(languageManager.getTranslation("person_not_found"));
@@ -314,6 +316,11 @@ public class PersonSubmenu extends Menu {
                         case 3 -> "Non-binary";
                         default -> null;
                     };
+
+                    // Reset the min/max int input range to match menu options
+                    setMinIntInput(1);
+                    setMaxIntInput(MANAGE_INFO_OPTIONS.length - 1);
+
                     success = personService.updatePersonGender(retrievedPerson, newGender);
                     if (success) {
                         System.out.println(String.format(languageManager.getTranslation("gender_updated_success"), newGender));
