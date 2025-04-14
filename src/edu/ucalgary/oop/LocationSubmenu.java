@@ -272,71 +272,90 @@ public class LocationSubmenu extends Menu {
 
             switch(intInput) {
                 case 1: // Add an occupant
+                    try {
+                        // Get first name
+                        System.out.println("Enter the person's first name: ");
+                        setRequiresIntInput(false);
+                        setStringNumbersAllowed(false);
+                        setStringEmptyAllowed(false);
+                        String firstName = handleStringInput();
 
-                    // Get first name
-                    System.out.println("Enter the occupant's first name: ");
-                    setRequiresIntInput(false);
-                    setStringNumbersAllowed(false);
-                    setStringEmptyAllowed(false);
-                    String firstName = handleStringInput();
+                        // Get gender
+                        String[] genderOptions = languageManager.getMenuTranslation("gender_options");
+                        for (String option : genderOptions) {
+                            System.out.println(option);
+                        }
 
-                    // Get gender
-                    String[] genderOptions = languageManager.getMenuTranslation("gender_options");
-                    for (String option : genderOptions) {
-                        System.out.println(option);
-                    }
+                        System.out.println("Enter the person's gender by typing in a corresponding number (for example, '1' for Male): ");
+                        setRequiresIntInput(true);
+                        setMinIntInput(1);
+                        setMaxIntInput(3);
+                        handleIntInput();
 
-                    System.out.println("Enter the occupant's gender by typing in a corresponding number (for example, '1' for Male): ");
-                    setRequiresIntInput(true);
-                    setMinIntInput(1);
-                    setMaxIntInput(3);
-                    handleIntInput();
+                        String gender = switch (intInput) {
+                            case 1 -> "Male";
+                            case 2 -> "Female";
+                            case 3 -> "Non-binary";
+                            default -> null;
+                        };
 
-                    String gender = switch (intInput) {
-                        case 1 -> "Male";
-                        case 2 -> "Female";
-                        case 3 -> "Non-binary";
-                        default -> null;
-                    };
+                        // Get date of birth
+                        setRequiresIntInput(false);
+                        setStringNumbersAllowed(true);
+                        setStringEmptyAllowed(true);
+                        System.out.println("Enter the person's date of birth (e.g. 2000-12-31 for December 31, 2000): ");
+                        System.out.println("If no known date of birth, simply hit enter: ");
+                        String stringDateOfBirth = handleStringInput();
+                        LocalDate realDateOfBirth = null;
 
-                    // Get date of birth
-                    setRequiresIntInput(false);
-                    setStringNumbersAllowed(true);
-                    setStringEmptyAllowed(false);
+                        if (!stringDateOfBirth.isEmpty()) {
+                            Matcher dateMatcher = dateFormat.matcher(stringDateOfBirth);
+                            while(!dateMatcher.matches()) {
+                                System.out.println("Invalid date format. Enter a date in the format YYYY-MM-DD: ");
+                                stringDateOfBirth = handleStringInput();
+                                if (stringDateOfBirth.isEmpty()) {
+                                    break;
+                                }
+                                dateMatcher = dateFormat.matcher(stringDateOfBirth);
+                            }
+                            if (!stringDateOfBirth.isEmpty()) {
+                                realDateOfBirth = LocalDate.parse(stringDateOfBirth);
+                            }
+                        }
 
-                    System.out.println("Enter the occupant's date of birth (e.g. 2000-12-31 for December 31, 2000): ");
-                    String stringDateOfBirth = handleStringInput();
-                    Matcher dateMatcher = dateFormat.matcher(stringDateOfBirth);
+                        // Get phone number
+                        System.out.println("Enter the person's phone number (e.g. 123-456-7890)");
+                        System.out.println("If no known phone number, simply hit enter: ");
+                        setStringNumbersAllowed(true);
+                        setStringEmptyAllowed(true);
+                        String phoneNumber = handleStringInput();
 
-                    while(!dateMatcher.matches()) {
-                        System.out.println("Invalid date format. Enter a date in the format YYYY-MM-DD: ");
-                        stringDateOfBirth = handleStringInput();
-                    }
+                        if (!phoneNumber.isEmpty()) {
+                            Matcher phoneNumberMatcher = phoneNumberFormat.matcher(phoneNumber);
+                            while(!phoneNumberMatcher.matches()) {
+                                System.out.println("Invalid phone number format. Enter a phone number in the format 123-456-7890: ");
+                                phoneNumber = handleStringInput();
+                                if (phoneNumber.isEmpty()) {
+                                    break;
+                                }
+                                phoneNumberMatcher = phoneNumberFormat.matcher(phoneNumber);
+                            }
+                        }
 
-                    LocalDate realDateOfBirth = LocalDate.parse(stringDateOfBirth);
+                        if (phoneNumber.isEmpty()) {
+                            phoneNumber = null;
+                        }
 
-                    // Get phone number
-                    System.out.println("Enter the occupant's phone number (e.g. 123-456-7890)");
-                    System.out.println("If no known phone number, simply hit enter: ");
-                    setRequiresIntInput(false);
-                    setStringNumbersAllowed(true);
-                    setStringEmptyAllowed(true);
+                        // Create new person
+                        Person newPerson = personService.addPerson(firstName, gender, realDateOfBirth, phoneNumber);
 
-                    String phoneNumber = handleStringInput();
-                    Matcher phoneNumberMatcher = phoneNumberFormat.matcher(phoneNumber);
-
-                    while(!phoneNumberMatcher.matches()) {
-                        System.out.println("Invalid phone number format. Enter a phone number in the format 123-456-7890: ");
-                        phoneNumber = handleStringInput();
-                    }
-
-                    Person newPerson = personService.addPerson(firstName, gender, realDateOfBirth, phoneNumber);
-                    boolean success = locationService.addOccupant(retrievedLocation, newPerson);
-
-                    if(success) {
-                        System.out.println("Successfully added a new occupant.");
-                    } else {
-                        System.out.println("Failed to add a new occupant.");
+                        if (newPerson != null) {
+                            System.out.println("Successfully added a new person with ID: " + newPerson.getAssignedId());
+                        } else {
+                            System.out.println("Failed to add a new person.");
+                        }
+                    } catch (Exception e) {
+                        System.out.println("Error occurred while trying to add a person: " + e.getMessage());
                     }
 
                     break;
@@ -355,7 +374,7 @@ public class LocationSubmenu extends Menu {
                     if (retrievedLocation.getLocationId() != personLocation.getLocationId()) {
                         System.out.println("Cannot remove this occupant as they are not an occupant of this location.");
                     } else {
-                        success = locationService.removeOccupant(retrievedLocation, personToRemove);
+                        boolean success = locationService.removeOccupant(retrievedLocation, personToRemove);
                         if (success) {
                             System.out.println("Occupant successfully removed from this location.");
                         } else {
