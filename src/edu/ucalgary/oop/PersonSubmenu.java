@@ -34,35 +34,36 @@ public class PersonSubmenu extends Menu {
 
     public void listAllPersons() {
         try {
-            List<Person> retrievedPersons = personService.getAllPersons();
-
+            List<Person> retrievedPersons = null;
+            retrievedPersons = personService.getAllPersons();
+            System.out.println(languageManager.getTranslation("persons_and_details"));
+            System.out.println(languageManager.getTranslation("separator"));
             if (retrievedPersons != null) {
                 int counter = 0;
                 for (Person person : retrievedPersons) {
                     counter++;
-                    String formattedString = String.format("Person #%d: ", counter);
-                    System.out.println(formattedString);
-                    System.out.println("--------------------------------");
-                    System.out.println("Person ID: " + person.getAssignedId());
-                    System.out.println("First Name: " + person.getFirstName());
+                    System.out.println(String.format(languageManager.getTranslation("person_number"), counter));
+                    System.out.println(languageManager.getTranslation("separator_short"));
+                    System.out.println(languageManager.getTranslation("person_id") + ": " + person.getAssignedId());
+                    System.out.println(languageManager.getTranslation("first_name") + ": " + person.getFirstName());
                     if (person.getLastName() != null) {
-                        System.out.println("Last Name: " + person.getLastName());
+                        System.out.println(languageManager.getTranslation("last_name") + ": " + person.getLastName());
                     }
-                    System.out.println("Gender: " + person.getGender());
+                    System.out.println(languageManager.getTranslation("gender") + ": " + person.getGender());
                     if (person.getDateOfBirth() != null) {
-                        System.out.println("Date of Birth: " + person.getDateOfBirth());
+                        System.out.println(languageManager.getTranslation("date_of_birth") + ": " + person.getDateOfBirth());
                     }
                     if (person.getPhoneNumber() != null) {
-                        System.out.println("Phone Number: " + person.getPhoneNumber());
+                        System.out.println(languageManager.getTranslation("phone_number") + ": " + person.getPhoneNumber());
                     }
                     System.out.println();
                 }
             } else {
-                System.out.println("No persons found.");
+                System.out.println(languageManager.getTranslation("no_persons_found"));
             }
         } catch (Exception e) {
-            System.out.println("Error occurred while trying to list all persons: " + e.getMessage());
-            System.out.println("Try again later.");
+            System.out.println(languageManager.getTranslation("list_persons_error") + ": " + e.getMessage());
+            System.out.println(languageManager.getTranslation("try_again_later"));
         }
     }
 
@@ -75,71 +76,68 @@ public class PersonSubmenu extends Menu {
 
         try {
             Person retrievedPerson = personService.getPersonById(personId);
-
             if (retrievedPerson != null) {
-                System.out.println("Person details:");
-                System.out.println("--------------------------------");
-                System.out.println("Person ID: " + retrievedPerson.getAssignedId());
-                System.out.println("First Name: " + retrievedPerson.getFirstName());
+                System.out.println(languageManager.getTranslation("person_details"));
+                System.out.println(languageManager.getTranslation("separator_short"));
+                System.out.println(languageManager.getTranslation("person_id") + ": " + retrievedPerson.getAssignedId());
+                System.out.println(languageManager.getTranslation("first_name") + ": " + retrievedPerson.getFirstName());
                 if (retrievedPerson.getLastName() != null) {
-                    System.out.println("Last Name: " + retrievedPerson.getLastName());
+                    System.out.println(languageManager.getTranslation("last_name") + ": " + retrievedPerson.getLastName());
                 }
-                System.out.println("Gender: " + retrievedPerson.getGender());
+                System.out.println(languageManager.getTranslation("gender") + ": " + retrievedPerson.getGender());
                 if (retrievedPerson.getDateOfBirth() != null) {
-                    System.out.println("Date of Birth: " + retrievedPerson.getDateOfBirth());
+                    System.out.println(languageManager.getTranslation("date_of_birth") + ": " + retrievedPerson.getDateOfBirth());
                 }
                 if (retrievedPerson.getPhoneNumber() != null) {
-                    System.out.println("Phone Number: " + retrievedPerson.getPhoneNumber());
+                    System.out.println(languageManager.getTranslation("phone_number") + ": " + retrievedPerson.getPhoneNumber());
                 }
 
+                // Get and display location
                 Location personLocation = disasterVictimService.getPersonLocation(retrievedPerson);
-
                 if (personLocation != null) {
-                    System.out.println("Location: " + personLocation.getName() + " (" + personLocation.getAddress() + ")");
+                    System.out.println(languageManager.getTranslation("location") + ": " + personLocation.getName() + " (" + personLocation.getAddress() + ")");
                 }
 
+                // If person is a disaster victim, display more information
                 DisasterVictim victim = disasterVictimService.getDisasterVictimById(personId);
-
                 if (victim != null) {
                     disasterVictimService.refreshSupplies(victim);
                     disasterVictimService.refreshMedicalRecords(victim);
 
+                    // Display supplies
                     List<Supply> supplies = victim.getSupplies();
-
                     if (supplies != null && !supplies.isEmpty()) {
-                        System.out.println("\nSupplies:");
+                        System.out.println("\n" + languageManager.getTranslation("supplies") + ":");
                         for (Supply supply : supplies) {
                             System.out.println("- " + supply.getType() +
                                     (supply.getComments() != null ? " (" + supply.getComments() + ")" : ""));
                         }
                     }
 
+                    // Display medical records
                     List<MedicalRecord> medicalRecords = victim.getMedicalRecords();
-
                     if (medicalRecords != null && !medicalRecords.isEmpty()) {
-                        System.out.println("\nMedical Records:");
+                        System.out.println("\n" + languageManager.getTranslation("medical_records") + ":");
                         for (MedicalRecord record : medicalRecords) {
-                            System.out.println("- Record ID: " + record.getMedicalRecordId());
-                            System.out.println("  Treatment: " + record.getTreatmentDetails());
-                            System.out.println("  Date: " + record.getTreatmentDate());
+                            System.out.println("- " + languageManager.getTranslation("record_id") + ": " + record.getMedicalRecordId());
+                            System.out.println("  " + languageManager.getTranslation("treatment") + ": " + record.getTreatmentDetails());
+                            System.out.println("  " + languageManager.getTranslation("date") + ": " + record.getTreatmentDate());
                         }
                     }
                 }
 
+                // Display family group info
                 if (retrievedPerson.getInFamilyGroup()) {
-                    System.out.println("\nFamily Group ID: " + retrievedPerson.getFamilyGroupId());
+                    System.out.println("\n" + languageManager.getTranslation("family_group_id") + ": " + retrievedPerson.getFamilyGroupId());
                 }
-
                 System.out.println();
-
             } else {
-                System.out.println("Person couldn't be found.");
+                System.out.println(languageManager.getTranslation("person_not_found"));
             }
         } catch (Exception e) {
-            System.out.println("Error occurred while trying to view person details: " + e.getMessage());
+            System.out.println(languageManager.getTranslation("view_person_error") + ": " + e.getMessage());
         }
     }
-
 
     public void managePersonInfo() {
         System.out.println(languageManager.getTranslation("input_person_id"));
@@ -148,7 +146,6 @@ public class PersonSubmenu extends Menu {
         setMaxIntInput(Integer.MAX_VALUE);
         handleIntInput();
         selectedPersonId = intInput;
-
         currentState = State.MANAGE_INFO;
         setCurrentDisplay(MANAGE_INFO_OPTIONS);
         setMinIntInput(1);
@@ -162,7 +159,6 @@ public class PersonSubmenu extends Menu {
         setMaxIntInput(Integer.MAX_VALUE);
         handleIntInput();
         selectedPersonId = intInput;
-
         currentState = State.MANAGE_MEDICAL_RECORDS;
         setCurrentDisplay(MANAGE_MEDICAL_RECORDS_OPTIONS);
         setMinIntInput(1);
@@ -179,34 +175,31 @@ public class PersonSubmenu extends Menu {
 
         try {
             Person retrievedPerson = personService.getPersonById(personId);
-
             if (retrievedPerson != null) {
                 List<Person> relatives = personService.getPersonRelatives(retrievedPerson);
-
                 if (relatives != null && !relatives.isEmpty()) {
-                    System.out.println("Relatives of " + retrievedPerson.getFirstName() + ":");
-                    System.out.println("----------------------------------");
-
+                    System.out.println(String.format(languageManager.getTranslation("relatives_of"), retrievedPerson.getFirstName()));
+                    System.out.println(languageManager.getTranslation("separator_short"));
                     for (Person relative : relatives) {
                         if (relative.getAssignedId() != retrievedPerson.getAssignedId()) {
-                            System.out.println("ID: " + relative.getAssignedId());
-                            System.out.println("Name: " + relative.getFirstName() + " " +
+                            System.out.println(languageManager.getTranslation("id") + ": " + relative.getAssignedId());
+                            System.out.println(languageManager.getTranslation("name") + ": " + relative.getFirstName() + " " +
                                     (relative.getLastName() != null ? relative.getLastName() : ""));
-                            System.out.println("Gender: " + relative.getGender());
+                            System.out.println(languageManager.getTranslation("gender") + ": " + relative.getGender());
                             if (relative.getDateOfBirth() != null) {
-                                System.out.println("Date of Birth: " + relative.getDateOfBirth());
+                                System.out.println(languageManager.getTranslation("date_of_birth") + ": " + relative.getDateOfBirth());
                             }
                             System.out.println();
                         }
                     }
                 } else {
-                    System.out.println("No relatives found for this person.");
+                    System.out.println(languageManager.getTranslation("no_relatives_found"));
                 }
             } else {
-                System.out.println("Person couldn't be found.");
+                System.out.println(languageManager.getTranslation("person_not_found"));
             }
         } catch (Exception e) {
-            System.out.println("Error occurred while trying to get person's relatives: " + e.getMessage());
+            System.out.println(languageManager.getTranslation("get_relatives_error") + ": " + e.getMessage());
         }
     }
 
@@ -238,27 +231,21 @@ public class PersonSubmenu extends Menu {
             case 1: // View all persons
                 listAllPersons();
                 break;
-
-            case 2: // View specific details of a specific person
+            case 2: // View details of a specific person
                 viewPersonDetails();
                 break;
-
             case 3: // Manage a person's information
                 managePersonInfo();
                 break;
-
             case 4: // Get a person's relatives
                 getPersonRelatives();
                 break;
-
             case 5: // Manage a person's medical records
                 managePersonMedicalRecords();
                 break;
-
             case 6: // Return to main menu
                 menuManager.returnToMainMenu();
                 break;
-
             default:
                 System.out.println(languageManager.getTranslation("error_invalid_option"));
                 break;
@@ -269,28 +256,28 @@ public class PersonSubmenu extends Menu {
         try {
             Person retrievedPerson = personService.getPersonById(selectedPersonId);
             if (retrievedPerson == null) {
-                System.out.println("Person not found. Returning to main submenu.");
+                System.out.println(languageManager.getTranslation("person_not_found_returning"));
                 returnToDefaultState();
                 return;
             }
 
             switch(intInput) {
                 case 1: // Update first name
-                    System.out.println("Enter the new first name: ");
+                    System.out.println(languageManager.getTranslation("enter_new_first_name"));
                     setRequiresIntInput(false);
                     setStringNumbersAllowed(false);
                     setStringEmptyAllowed(false);
                     String newFirstName = handleStringInput();
                     boolean success = personService.updatePersonFirstName(retrievedPerson, newFirstName);
                     if (success) {
-                        System.out.println("Successfully updated first name to " + newFirstName + ".");
+                        System.out.println(String.format(languageManager.getTranslation("first_name_updated_success"), newFirstName));
                     } else {
-                        System.out.println("Failed to update first name.");
+                        System.out.println(languageManager.getTranslation("first_name_update_failed"));
                     }
                     break;
 
                 case 2: // Update last name
-                    System.out.println("Enter the new last name (or press Enter to remove): ");
+                    System.out.println(languageManager.getTranslation("enter_new_last_name"));
                     setRequiresIntInput(false);
                     setStringNumbersAllowed(false);
                     setStringEmptyAllowed(true);
@@ -300,9 +287,13 @@ public class PersonSubmenu extends Menu {
                     }
                     success = personService.updatePersonLastName(retrievedPerson, newLastName);
                     if (success) {
-                        System.out.println("Successfully updated last name" + (newLastName != null ? " to " + newLastName : "") + ".");
+                        if (newLastName != null) {
+                            System.out.println(String.format(languageManager.getTranslation("last_name_updated_success"), newLastName));
+                        } else {
+                            System.out.println(languageManager.getTranslation("last_name_removed_success"));
+                        }
                     } else {
-                        System.out.println("Failed to update last name.");
+                        System.out.println(languageManager.getTranslation("last_name_update_failed"));
                     }
                     break;
 
@@ -312,40 +303,36 @@ public class PersonSubmenu extends Menu {
                         System.out.println(option);
                     }
 
-                    System.out.println("Enter the new gender by typing in a corresponding number (e.g. '1' for Male): ");
+                    System.out.println(languageManager.getTranslation("enter_new_gender"));
                     setRequiresIntInput(true);
                     setMinIntInput(1);
                     setMaxIntInput(3);
                     handleIntInput();
-
                     String newGender = switch (intInput) {
-                        case 1 -> "Male";
-                        case 2 -> "Female";
+                        case 1 -> "Man";
+                        case 2 -> "Woman";
                         case 3 -> "Non-binary";
                         default -> null;
                     };
-
                     success = personService.updatePersonGender(retrievedPerson, newGender);
-
                     if (success) {
-                        System.out.println("Successfully updated gender to " + newGender + ".");
+                        System.out.println(String.format(languageManager.getTranslation("gender_updated_success"), newGender));
                     } else {
-                        System.out.println("Failed to update gender.");
+                        System.out.println(languageManager.getTranslation("gender_update_failed"));
                     }
                     break;
 
                 case 4: // Update date of birth
-                    System.out.println("Enter the new date of birth (e.g. 2000-12-31 for December 31, 2000), or press Enter to set to empty: ");
+                    System.out.println(languageManager.getTranslation("enter_new_dob"));
                     setRequiresIntInput(false);
                     setStringNumbersAllowed(true);
                     setStringEmptyAllowed(true);
                     String stringDateOfBirth = handleStringInput();
                     LocalDate newDateOfBirth = null;
-
                     if (!stringDateOfBirth.isEmpty()) {
                         Matcher dateMatcher = dateFormat.matcher(stringDateOfBirth);
                         while(!dateMatcher.matches()) {
-                            System.out.println("Invalid date format. Enter a date in the format YYYY-MM-DD: ");
+                            System.out.println(languageManager.getTranslation("invalid_date_format"));
                             stringDateOfBirth = handleStringInput();
                             if (stringDateOfBirth.isEmpty()) {
                                 break;
@@ -356,27 +343,28 @@ public class PersonSubmenu extends Menu {
                             newDateOfBirth = LocalDate.parse(stringDateOfBirth);
                         }
                     }
-
                     success = personService.updatePersonDateOfBirth(retrievedPerson, newDateOfBirth);
-
                     if (success) {
-                        System.out.println("Successfully updated date of birth" + (newDateOfBirth != null ? " to " + newDateOfBirth : "") + ".");
+                        if (newDateOfBirth != null) {
+                            System.out.println(String.format(languageManager.getTranslation("dob_updated_success"), newDateOfBirth));
+                        } else {
+                            System.out.println(languageManager.getTranslation("dob_removed_success"));
+                        }
                     } else {
-                        System.out.println("Failed to update date of birth.");
+                        System.out.println(languageManager.getTranslation("dob_update_failed"));
                     }
                     break;
 
                 case 5: // Update phone number
-                    System.out.println("Enter the new phone number (e.g. 123-456-7890), or press Enter to set to empty: ");
+                    System.out.println(languageManager.getTranslation("enter_new_phone"));
                     setRequiresIntInput(false);
                     setStringNumbersAllowed(true);
                     setStringEmptyAllowed(true);
                     String newPhoneNumber = handleStringInput();
-
                     if (!newPhoneNumber.isEmpty()) {
                         Matcher phoneNumberMatcher = phoneNumberFormat.matcher(newPhoneNumber);
                         while(!phoneNumberMatcher.matches()) {
-                            System.out.println("Invalid phone number format. Enter a phone number in the format 123-456-7890: ");
+                            System.out.println(languageManager.getTranslation("invalid_phone_format"));
                             newPhoneNumber = handleStringInput();
                             if (newPhoneNumber.isEmpty()) {
                                 break;
@@ -384,66 +372,59 @@ public class PersonSubmenu extends Menu {
                             phoneNumberMatcher = phoneNumberFormat.matcher(newPhoneNumber);
                         }
                     }
-
                     if (newPhoneNumber.isEmpty()) {
                         newPhoneNumber = null;
                     }
-
                     success = personService.updatePersonPhoneNumber(retrievedPerson, newPhoneNumber);
-
                     if (success) {
-                        System.out.println("Successfully updated phone number" + (newPhoneNumber != null ? " to " + newPhoneNumber : "") + ".");
+                        if (newPhoneNumber != null) {
+                            System.out.println(String.format(languageManager.getTranslation("phone_updated_success"), newPhoneNumber));
+                        } else {
+                            System.out.println(languageManager.getTranslation("phone_removed_success"));
+                        }
                     } else {
-                        System.out.println("Failed to update phone number.");
+                        System.out.println(languageManager.getTranslation("phone_update_failed"));
                     }
                     break;
 
                 case 6: // Update family group status
                     boolean currentStatus = retrievedPerson.getInFamilyGroup();
-
                     if (currentStatus) {
-                        System.out.println("Person is currently in family group with ID: " + retrievedPerson.getFamilyGroupId());
-                        System.out.println("Do you want to remove them from this family group? (1 for Yes, 2 for No): ");
+                        System.out.println(String.format(languageManager.getTranslation("in_family_group"), retrievedPerson.getFamilyGroupId()));
+                        System.out.println(languageManager.getTranslation("remove_from_family_group"));
                         setRequiresIntInput(true);
                         setMinIntInput(1);
                         setMaxIntInput(2);
                         handleIntInput();
-
                         if (intInput == 1) {
                             success = personService.updateFamilyGroupStatus(retrievedPerson, false, null);
-
                             if (success) {
-                                System.out.println("Successfully removed person from family group.");
+                                System.out.println(languageManager.getTranslation("removed_from_family_group_success"));
                             } else {
-                                System.out.println("Failed to remove person from family group.");
+                                System.out.println(languageManager.getTranslation("removed_from_family_group_failed"));
                             }
                         }
-
                     } else {
-                        System.out.println("Person is not currently in a family group.");
-                        System.out.println("Do you want to add them to a family group? (1 for Yes, 2 for No): ");
+                        System.out.println(languageManager.getTranslation("not_in_family_group"));
+                        System.out.println(languageManager.getTranslation("add_to_family_group"));
                         setRequiresIntInput(true);
                         setMinIntInput(1);
                         setMaxIntInput(2);
                         handleIntInput();
-
                         if (intInput == 1) {
-                            System.out.println("Enter the family group ID: ");
+                            System.out.println(languageManager.getTranslation("enter_family_group_id"));
                             setMinIntInput(1);
                             setMaxIntInput(Integer.MAX_VALUE);
                             handleIntInput();
                             int familyGroupId = intInput;
-
                             success = personService.updateFamilyGroupStatus(retrievedPerson, true, familyGroupId);
-
                             if (success) {
-                                System.out.println("Successfully added person to family group with ID: " + familyGroupId);
+                                System.out.println(String.format(languageManager.getTranslation("added_to_family_group_success"), familyGroupId));
                             } else {
-                                System.out.println("Failed to add person to family group.");
+                                System.out.println(languageManager.getTranslation("added_to_family_group_failed"));
                             }
                         }
                     }
-
                     break;
 
                 case 7: // Return to main submenu
@@ -455,16 +436,15 @@ public class PersonSubmenu extends Menu {
                     break;
             }
         } catch (Exception e) {
-            System.out.println("Error managing person information: " + e.getMessage());
+            System.out.println(languageManager.getTranslation("manage_person_error") + ": " + e.getMessage());
         }
     }
 
     public void processManageMedicalRecordsInput() {
         try {
             DisasterVictim victim = disasterVictimService.getDisasterVictimById(selectedPersonId);
-
             if (victim == null) {
-                System.out.println("Person not found or is not a disaster victim. Returning to main submenu.");
+                System.out.println(languageManager.getTranslation("not_disaster_victim_returning"));
                 returnToDefaultState();
                 return;
             }
@@ -474,50 +454,45 @@ public class PersonSubmenu extends Menu {
             switch(intInput) {
                 case 1: // View all medical records
                     List<MedicalRecord> medicalRecords = victim.getMedicalRecords();
-
                     if (medicalRecords != null && !medicalRecords.isEmpty()) {
-                        System.out.println("Medical records for " + victim.getFirstName() + ":");
-                        System.out.println("------------------------------------");
-
+                        System.out.println(String.format(languageManager.getTranslation("medical_records_for"), victim.getFirstName()));
+                        System.out.println(languageManager.getTranslation("separator_short"));
                         for (MedicalRecord record : medicalRecords) {
-                            System.out.println("Record ID: " + record.getMedicalRecordId());
-                            System.out.println("Location ID: " + record.getLocationId());
-                            System.out.println("Treatment Details: " + record.getTreatmentDetails());
-                            System.out.println("Treatment Date: " + record.getTreatmentDate());
+                            System.out.println(languageManager.getTranslation("record_id") + ": " + record.getMedicalRecordId());
+                            System.out.println(languageManager.getTranslation("location_id") + ": " + record.getLocationId());
+                            System.out.println(languageManager.getTranslation("treatment_details") + ": " + record.getTreatmentDetails());
+                            System.out.println(languageManager.getTranslation("treatment_date") + ": " + record.getTreatmentDate());
                             System.out.println();
                         }
                     } else {
-                        System.out.println("No medical records found for this person.");
+                        System.out.println(languageManager.getTranslation("no_medical_records"));
                     }
-
                     break;
 
                 case 2: // Add a medical record
-                    System.out.println("Enter the location ID for the treatment: ");
+                    System.out.println(languageManager.getTranslation("enter_location_id"));
                     setRequiresIntInput(true);
                     setMinIntInput(1);
                     setMaxIntInput(Integer.MAX_VALUE);
                     handleIntInput();
                     int locationId = intInput;
 
-                    System.out.println("Enter the treatment details: ");
+                    System.out.println(languageManager.getTranslation("enter_treatment_details"));
                     setRequiresIntInput(false);
                     setStringNumbersAllowed(true);
                     setStringEmptyAllowed(false);
                     String treatmentDetails = handleStringInput();
 
                     MedicalRecord newRecord = disasterVictimService.addMedicalRecord(victim, locationId, treatmentDetails);
-
                     if (newRecord != null) {
-                        System.out.println("Successfully added a new medical record with ID: " + newRecord.getMedicalRecordId());
+                        System.out.println(String.format(languageManager.getTranslation("medical_record_added_success"), newRecord.getMedicalRecordId()));
                     } else {
-                        System.out.println("Failed to add a new medical record.");
+                        System.out.println(languageManager.getTranslation("medical_record_added_failed"));
                     }
-
                     break;
 
                 case 3: // Update a medical record
-                    System.out.println("Enter the ID of the medical record to update: ");
+                    System.out.println(languageManager.getTranslation("enter_record_id_to_update"));
                     setRequiresIntInput(true);
                     setMinIntInput(1);
                     setMaxIntInput(Integer.MAX_VALUE);
@@ -534,28 +509,26 @@ public class PersonSubmenu extends Menu {
                     }
 
                     if (recordToUpdate == null) {
-                        System.out.println("Medical record not found for this person.");
+                        System.out.println(languageManager.getTranslation("medical_record_not_found"));
                         break;
                     }
 
-                    System.out.println("Enter the new treatment details: ");
+                    System.out.println(languageManager.getTranslation("enter_new_treatment_details"));
                     setRequiresIntInput(false);
                     setStringNumbersAllowed(true);
                     setStringEmptyAllowed(false);
                     String newTreatmentDetails = handleStringInput();
 
                     boolean success = medicalRecordService.updateTreatmentDetails(recordToUpdate, newTreatmentDetails);
-
                     if (success) {
-                        System.out.println("Successfully updated treatment details.");
+                        System.out.println(languageManager.getTranslation("treatment_details_updated_success"));
                     } else {
-                        System.out.println("Failed to update treatment details.");
+                        System.out.println(languageManager.getTranslation("treatment_details_updated_failed"));
                     }
-
                     break;
 
                 case 4: // Remove a medical record
-                    System.out.println("Enter the ID of the medical record to remove: ");
+                    System.out.println(languageManager.getTranslation("enter_record_id_to_remove"));
                     setRequiresIntInput(true);
                     setMinIntInput(1);
                     setMaxIntInput(Integer.MAX_VALUE);
@@ -572,18 +545,16 @@ public class PersonSubmenu extends Menu {
                     }
 
                     if (recordToRemove == null) {
-                        System.out.println("Medical record not found for this person.");
+                        System.out.println(languageManager.getTranslation("medical_record_not_found"));
                         break;
                     }
 
                     success = disasterVictimService.removeMedicalRecord(victim, recordToRemove);
-
                     if (success) {
-                        System.out.println("Successfully removed medical record.");
+                        System.out.println(languageManager.getTranslation("medical_record_removed_success"));
                     } else {
-                        System.out.println("Failed to remove medical record.");
+                        System.out.println(languageManager.getTranslation("medical_record_removed_failed"));
                     }
-
                     break;
 
                 case 5: // Return to main submenu
@@ -595,7 +566,7 @@ public class PersonSubmenu extends Menu {
                     break;
             }
         } catch (Exception e) {
-            System.out.println("Error managing person's medical records: " + e.getMessage());
+            System.out.println(languageManager.getTranslation("manage_medical_records_error") + ": " + e.getMessage());
         }
     }
 }
