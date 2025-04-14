@@ -52,10 +52,6 @@ public abstract class Menu {
         return inputHandler.getStringInput(stringEmptyAllowed, stringNumbersAllowed);
     }
 
-    public void returnToMainMenu() {
-        menuManager.returnToMainMenu();
-    }
-
     public boolean getRequiresIntInput() {
         return requiresIntInput;
     }

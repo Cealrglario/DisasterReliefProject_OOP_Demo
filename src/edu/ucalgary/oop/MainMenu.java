@@ -27,6 +27,9 @@ public class MainMenu extends Menu {
                 menuManager.navigateToMenu(inquirySubmenu);
                 break;
 
+            case 4: // Exit Program
+                menuManager.stopRunning();
+
             default:
                 System.out.println(languageManager.getTranslation("error_invalid_option"));
                 break;
