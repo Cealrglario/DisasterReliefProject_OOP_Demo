@@ -12,6 +12,7 @@ public enum DisasterVictimService {
     private final SupplyPersonAllocationAccess supplyPersonAllocationAccess = new SupplyPersonAllocationAccess();
     private final LocationService locationService = LocationService.INSTANCE;
     private final VictimMedicalRecordAccess<Object> victimMedicalRecordAccess = new VictimMedicalRecordAccess<>();
+    private final LanguageManager languageManager = LanguageManager.INSTANCE;
 
     public DisasterVictim getDisasterVictimById(int personId) throws SQLException {
         Person person = personAccess.getById(personId);
@@ -55,13 +56,13 @@ public enum DisasterVictimService {
             victim.addSupply(supply);
             return true;
         } else if (allocation == null) {
-            System.out.println("Supply allocation to person failed. Allocation returned to addSupplyAllocation is null.");
+            System.out.println(languageManager.getTranslation("supply_allocation_failed_null"));
             return false;
         } else if (!success) {
-            System.out.println("Supply allocation to person failed. Failed to remove supply from location.");
+            System.out.println(languageManager.getTranslation("supply_allocation_failed_removal"));
             return false;
         } else {
-            System.out.println("Unknown error occurred while allocating a supply to a person.");
+            System.out.println(languageManager.getTranslation("supply_allocation_unknown_error"));
             return false;
         }
     }
@@ -125,7 +126,7 @@ public enum DisasterVictimService {
 
             retrievedLocation = locationAccess.getById(retrievedLocationId);
         } catch (SQLException e) {
-            System.out.println("Failed to retrieve person's location ID: " + e.getMessage());
+            System.out.println(languageManager.getTranslation("failed_retrieve_location_id") + e.getMessage());
             return null;
         }
 

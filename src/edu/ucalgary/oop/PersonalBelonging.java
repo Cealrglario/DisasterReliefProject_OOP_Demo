@@ -9,6 +9,6 @@ public class PersonalBelonging extends Supply {
 
     @Override
     public void displayDetails() {
-        System.out.println("Description: " + super.getComments());
+        System.out.println(languageManager.getTranslation("personal_belonging_description") + super.getComments());
     }
 }

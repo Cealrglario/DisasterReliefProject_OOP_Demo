@@ -7,9 +7,10 @@ public class Blanket extends Supply {
 
     @Override
     public void displayDetails() {
-        System.out.println("Regular blanket for victim use.");
+        System.out.println(languageManager.getTranslation("blanket_description"));
+
         if (super.getComments() != null) {
-            System.out.println("Comments: " + super.getComments());
+            System.out.println(languageManager.getTranslation("comments") + ": " + super.getComments());
         }
     }
 }

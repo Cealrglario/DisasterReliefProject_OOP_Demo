@@ -28,9 +28,9 @@ public class Water extends Supply {
     @Override
     public void displayDetails() {
         if (!isExpired) {
-            System.out.println("Good for drinking, not yet expired.");
+            System.out.println(languageManager.getTranslation("water_not_expired"));
         } else {
-            System.out.println("Expired.");
+            System.out.println(languageManager.getTranslation("water_expired"));
         }
 
         if (super.getComments() != null) {

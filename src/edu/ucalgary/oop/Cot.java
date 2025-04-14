@@ -8,6 +8,6 @@ public class Cot extends Supply {
 
     @Override
     public void displayDetails() {
-        System.out.println("Cot location: " + super.getComments());
+        System.out.println(languageManager.getTranslation("cot_location") + super.getComments());
     }
 }

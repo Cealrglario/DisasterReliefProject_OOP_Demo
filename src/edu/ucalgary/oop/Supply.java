@@ -4,6 +4,7 @@ public abstract class Supply {
     private final int SUPPLY_ID;
     private final String TYPE;
     private String comments;
+    protected static final LanguageManager languageManager = LanguageManager.INSTANCE;
 
     public Supply(int supplyId, String type) {
         this.SUPPLY_ID = supplyId;

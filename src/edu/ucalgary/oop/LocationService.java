@@ -11,6 +11,8 @@ public enum LocationService {
     private final LocationAccess<Object> locationAccess = new LocationAccess<>();
     private final PersonLocationAccess personLocationAccess = new PersonLocationAccess();
     private final SupplyLocationAllocationAccess supplyLocationAllocationAccess = new SupplyLocationAllocationAccess();
+    private final LanguageManager languageManager = LanguageManager.INSTANCE;
+
 
     public Location getLocation(int locationId) throws SQLException {
         return locationAccess.getById(locationId);
@@ -84,7 +86,7 @@ public enum LocationService {
         Allocation allocation;
 
         if (supply.getType().equalsIgnoreCase("personal belonging")) {
-            System.out.println("Cannot allocate personal belongings to locations.");
+            System.out.println(languageManager.getTranslation("cannot_allocate_personal_belongings"));
             return false;
         } else {
             allocation = supplyLocationAllocationAccess.addEntry(supply, location, allocationDate);
@@ -110,7 +112,7 @@ public enum LocationService {
         }
 
         if (unwantedAllocation == null) {
-            System.out.println("The location doesn't have the specified supply.");
+            System.out.println(languageManager.getTranslation("location_no_specified_supply"));
             return false;
         }
 

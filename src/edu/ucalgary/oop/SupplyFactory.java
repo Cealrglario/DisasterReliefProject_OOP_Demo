@@ -1,6 +1,7 @@
 package edu.ucalgary.oop;
 
 public class SupplyFactory {
+    private static final LanguageManager languageManager = LanguageManager.INSTANCE;
 
     public static Supply createSupply(int supplyId, String type, String comments) {
         Supply supply = null;
@@ -14,7 +15,7 @@ public class SupplyFactory {
         } else if (type.equalsIgnoreCase("personal belonging") || type.equalsIgnoreCase("personal item")) {
             supply = new PersonalBelonging(supplyId, comments);
         } else {
-            System.out.println("WARNING: Could not create supply of type '" + type + "'");
+            System.out.println(languageManager.getTranslation("warning_supply_type_creation") + "'" + type + "'");
             return null;
         }
 

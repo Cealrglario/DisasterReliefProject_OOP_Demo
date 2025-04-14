@@ -273,6 +273,66 @@
   </translation>
 
   <translation>
+      <key>warning_supply_type_creation</key>
+      <value><![CDATA[WARNING: Could not create supply of type ]]></value>
+  </translation>
+
+  <translation>
+      <key>cannot_allocate_personal_belongings</key>
+      <value><![CDATA[Cannot allocate personal belongings to locations.]]></value>
+  </translation>
+
+  <translation>
+      <key>location_no_specified_supply</key>
+      <value><![CDATA[The location doesn't have the specified supply.]]></value>
+  </translation>
+
+  <translation>
+      <key>supply_allocation_failed_null</key>
+      <value><![CDATA[Supply allocation to person failed. Allocation returned to addSupplyAllocation is null.]]></value>
+  </translation>
+
+  <translation>
+      <key>supply_allocation_failed_removal</key>
+      <value><![CDATA[Supply allocation to person failed. Failed to remove supply from location.]]></value>
+  </translation>
+
+  <translation>
+      <key>supply_allocation_unknown_error</key>
+      <value><![CDATA[Unknown error occurred while allocating a supply to a person.]]></value>
+  </translation>
+
+  <translation>
+      <key>failed_retrieve_location_id</key>
+      <value><![CDATA[Failed to retrieve person's location ID: ]]></value>
+  </translation>
+
+  <translation>
+      <key>blanket_description</key>
+      <value><![CDATA[Regular blanket for victim use.]]></value>
+  </translation>
+
+  <translation>
+      <key>water_not_expired</key>
+      <value><![CDATA[Good for drinking, not yet expired.]]></value>
+  </translation>
+
+  <translation>
+      <key>water_expired</key>
+      <value><![CDATA[Expired.]]></value>
+  </translation>
+
+  <translation>
+      <key>personal_belonging_description</key>
+      <value><![CDATA[Description: ]]></value>
+  </translation>
+
+  <translation>
+      <key>cot_location</key>
+      <value><![CDATA[Cot location: ]]></value>
+  </translation>
+
+  <translation>
     <key>last_name_removed_success</key>
     <value><![CDATA[Successfully removed last name.]]></value>
   </translation>
