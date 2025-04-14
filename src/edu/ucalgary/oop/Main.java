@@ -18,13 +18,13 @@ public class Main {
                 System.exit(1);
             }
 
-            userInput.close();
-
             menuManager.startRunning();
 
             while(menuManager.getIsRunning()) {
                 menuManager.run();
             }
+
+            userInput.close();
         } catch (Exception e) {
             errorLogger.logError(e);
 
