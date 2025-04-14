@@ -10,14 +10,12 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class InquiryAccessTest {
-    private InquiryAccess<String> inquiryDbAccess;
-
-    Inquiry placeholderInquiry = null;
+    private InquiryAccess<Object> inquiryDbAccess;
+    private Inquiry placeholderInquiry = null;
 
     @Before
     public void setUp() throws Exception {
         inquiryDbAccess = new InquiryAccess<>();
-
         try {
             placeholderInquiry = inquiryDbAccess.addInquiry(1, 1, LocalDate.now(), "placeholder");
         } catch (SQLException e) {
@@ -41,151 +39,186 @@ public class InquiryAccessTest {
         } catch (SQLException e) {
             fail("SQLException occurred while testing getQueryResults: " + e.getMessage());
         }
-
-        assertNotNull("getQueryResults() should retrieve a valid query", inquiryDbAccess.getQueryResults());
+        assertNotNull("getQueryResults() should retrieve a valid query result set", inquiryDbAccess.getQueryResults());
     }
 
     @Test
     public void testGetAll() {
         List<Inquiry> retrievedInquiries = null;
-
         try {
             retrievedInquiries = inquiryDbAccess.getAll();
         } catch (SQLException e) {
             fail("SQLException occurred while testing getAll: " + e.getMessage());
         }
-
-        assertFalse("getAll() should return a list of Inquiries", retrievedInquiries.isEmpty());
+        assertFalse("getAll() should return a non-empty list of Inquiries", retrievedInquiries.isEmpty());
     }
 
     @Test
     public void testGetById() {
         Inquiry testInquiry = null;
-
         try {
             testInquiry = inquiryDbAccess.getById(1);
         } catch (SQLException e) {
             fail("SQLException occurred while testing getById: " + e.getMessage());
         }
-
-        assertEquals("The INQUIRY_ID of testInquiryId should be equal to the id selected when calling getById()", 1,
-                testInquiry.getInquiryId());
+        assertEquals("The inquiry ID should match the ID used in getById()", 1, testInquiry.getInquiryId());
     }
 
     @Test
     public void testUpdateInfo() {
         Inquiry originalInquiry = null;
+        try {
+            originalInquiry = inquiryDbAccess.getById(placeholderInquiry.getInquiryId());
+        } catch (SQLException e) {
+            fail("SQLException occurred while retrieving original inquiry: " + e.getMessage());
+        }
+
+        String originalComment = originalInquiry.getInfoProvided();
+        String updatedComment = "updated comment";
+
+        boolean updateSuccess = false;
+        try {
+            updateSuccess = inquiryDbAccess.updateInfo("comments", updatedComment, placeholderInquiry.getInquiryId());
+        } catch (SQLException e) {
+            fail("SQLException occurred while updating inquiry: " + e.getMessage());
+        }
+
+        assertTrue("updateInfo() should return true on successful update", updateSuccess);
+
         Inquiry updatedInquiry = null;
+        try {
+            updatedInquiry = inquiryDbAccess.getById(placeholderInquiry.getInquiryId());
+        } catch (SQLException e) {
+            fail("SQLException occurred while retrieving updated inquiry: " + e.getMessage());
+        }
 
-         try {
-             originalInquiry = inquiryDbAccess.getById(placeholderInquiry.getInquiryId());
-             inquiryDbAccess.updateInfo("comments", "updated comment", placeholderInquiry.getInquiryId());
-             updatedInquiry = inquiryDbAccess.getById(placeholderInquiry.getInquiryId());
-         } catch (SQLException e) {
-             fail("SQLException occurred while testing updateInfo: " + e.getMessage());
-         }
-
-        assertNotEquals("Inquiry information should be updated as expected",
-                originalInquiry.getInfoProvided(), updatedInquiry.getInfoProvided());
+        assertNotEquals("Inquiry comment should be updated as expected", originalComment, updatedInquiry.getInfoProvided());
     }
 
     @Test
     public void testGetInfo() {
         Inquiry testInquiry = null;
-        String retrievedComments = null;
-
         try {
             testInquiry = inquiryDbAccess.getById(placeholderInquiry.getInquiryId());
-            retrievedComments = inquiryDbAccess.getInfo("comments", placeholderInquiry.getInquiryId());
         } catch (SQLException e) {
-            fail("SQLException occurred while testing getInfo: " + e.getMessage());
+            fail("SQLException occurred while retrieving inquiry: " + e.getMessage());
         }
 
-        assertEquals("Retrieved info should match info in retrieved Inquiry", retrievedComments,
-                testInquiry.getInfoProvided());
+        String retrievedComments = null;
+        try {
+            retrievedComments = (String) inquiryDbAccess.getInfo("comments", placeholderInquiry.getInquiryId());
+        } catch (SQLException e) {
+            fail("SQLException occurred while getting info: " + e.getMessage());
+        }
+
+        assertEquals("Retrieved comments should match the inquiry's info", testInquiry.getInfoProvided(), retrievedComments);
     }
 
     @Test
     public void testAddInquiry() {
         List<Inquiry> inquiriesBeforeAdding = null;
-        List<Inquiry> inquiriesAfterAdding = null;
-        Inquiry newInquiry = null;
-
         try {
             inquiriesBeforeAdding = inquiryDbAccess.getAll();
-            newInquiry = inquiryDbAccess.addInquiry(2, 2, LocalDate.now(), "new inquiry");
-            inquiriesAfterAdding = inquiryDbAccess.getAll();
         } catch (SQLException e) {
-            fail("SQLException occurred while testing addEntry: " + e.getMessage());
+            fail("SQLException occurred while getting inquiries before adding: " + e.getMessage());
         }
 
-        assertTrue("New Inquiry should be added in the database", inquiriesAfterAdding.size() >
-                inquiriesBeforeAdding.size());
+        Inquiry newInquiry = null;
+        try {
+            newInquiry = inquiryDbAccess.addInquiry(2, 2, LocalDate.now(), "new inquiry");
+        } catch (SQLException e) {
+            fail("SQLException occurred while adding inquiry: " + e.getMessage());
+        }
+
+        assertNotNull("addInquiry() should return a non-null Inquiry object", newInquiry);
+
+        List<Inquiry> inquiriesAfterAdding = null;
+        try {
+            inquiriesAfterAdding = inquiryDbAccess.getAll();
+        } catch (SQLException e) {
+            fail("SQLException occurred while getting inquiries after adding: " + e.getMessage());
+        }
+
+        assertTrue("Number of inquiries should increase after adding",
+                inquiriesAfterAdding.size() > inquiriesBeforeAdding.size());
 
         try {
             inquiryDbAccess.removeInquiry(newInquiry);
         } catch (SQLException e) {
-            fail("SQLException occurred while testing addEntry: " + e.getMessage());
+            fail("SQLException occurred while removing test inquiry: " + e.getMessage());
         }
     }
 
     @Test
-    public void testRemoveEntry() {
-        List<Inquiry> inquiriesBeforeRemoving = null;
-        List<Inquiry> inquiriesAfterRemoving = null;
-
+    public void testRemoveInquiry() {
+        Inquiry tempInquiry = null;
         try {
-            Inquiry exInquiry = inquiryDbAccess.addInquiry(2,2, LocalDate.now(), "new inquiry");
-            inquiriesBeforeRemoving = inquiryDbAccess.getAll();
-            inquiryDbAccess.removeInquiry(exInquiry);
-            inquiriesAfterRemoving = inquiryDbAccess.getAll();
+            tempInquiry = inquiryDbAccess.addInquiry(2, 2, LocalDate.now(), "temporary inquiry");
         } catch (SQLException e) {
-            fail("SQLException occurred while testing removeEntry: " + e.getMessage());
+            fail("SQLException occurred while adding temporary inquiry: " + e.getMessage());
         }
 
-        assertTrue("Unwanted Inquiry should be no longer be in the database",
+        List<Inquiry> inquiriesBeforeRemoving = null;
+        try {
+            inquiriesBeforeRemoving = inquiryDbAccess.getAll();
+        } catch (SQLException e) {
+            fail("SQLException occurred while getting inquiries before removing: " + e.getMessage());
+        }
+
+        boolean removeSuccess = false;
+        try {
+            removeSuccess = inquiryDbAccess.removeInquiry(tempInquiry);
+        } catch (SQLException e) {
+            fail("SQLException occurred while removing inquiry: " + e.getMessage());
+        }
+
+        assertTrue("removeInquiry() should return true on successful removal", removeSuccess);
+
+        List<Inquiry> inquiriesAfterRemoving = null;
+        try {
+            inquiriesAfterRemoving = inquiryDbAccess.getAll();
+        } catch (SQLException e) {
+            fail("SQLException occurred while getting inquiries after removing: " + e.getMessage());
+        }
+
+        assertTrue("Number of inquiries should decrease after removal",
                 inquiriesAfterRemoving.size() < inquiriesBeforeRemoving.size());
     }
 
     @Test
-    public void testGetByIdNotInDb() throws SQLException {
+    public void testGetByIdNotInDb() {
         Inquiry testInquiry = null;
-
         try {
             testInquiry = inquiryDbAccess.getById(-999);
         } catch (SQLException e) {
-            fail("SQLException occurred while testing getByIdNotInDb: " + e.getMessage());
+            fail("SQLException occurred while testing getById for non-existent ID: " + e.getMessage());
         }
 
-        assertNull("testInquiry should be null as it tries to retrieve a non-existent entry", testInquiry);
+        assertNull("getById() should return null for a non-existent inquiry ID", testInquiry);
     }
 
     @Test
     public void testUpdateInfoWithInvalidField() {
-        boolean success = true;
-
+        boolean success = false;
         try {
             success = inquiryDbAccess.updateInfo("non_existent_field", "test value", placeholderInquiry.getInquiryId());
         } catch (SQLException e) {
-            fail("SQLException occurred while testing updateInfoWithInvalidField: " + e.getMessage());
+            fail("SQLException occurred while testing updateInfo with invalid field: " + e.getMessage());
         }
 
-        assertFalse("updateInfo() should return false when trying to update a non-existent field",
-                success);
+        assertFalse("updateInfo() should return false when updating a non-existent field", success);
     }
 
     @Test
-    public void testRemoveEntryNotInDb() {
-        boolean success = true;
-        Inquiry inquiryNotInDb = new Inquiry(-9999, 2, 2, LocalDate.now(), "new inquiry");
-
+    public void testRemoveInquiryNotInDb() {
+        Inquiry inquiryNotInDb = new Inquiry(-9999, 2, 2, LocalDate.now(), "non-existent inquiry");
+        boolean success = false;
         try {
             success = inquiryDbAccess.removeInquiry(inquiryNotInDb);
         } catch (SQLException e) {
-            fail("SQLException occurred while testing removeEntryNotInDb: " + e.getMessage());
+            fail("SQLException occurred while testing removeInquiry for non-existent inquiry: " + e.getMessage());
         }
 
-        assertFalse("removeEntry() should return false when trying to remove an Inquiry that isn't in the database",
-                success);
+        assertFalse("removeInquiry() should return false for a non-existent inquiry", success);
     }
 }
