@@ -4,10 +4,6 @@ public class MainMenu extends Menu {
 
     public MainMenu(String[] defaultOptions) {
         super(defaultOptions);
-        setCurrentDisplay(getDefaultOptions());
-        setRequiresIntInput(true);
-        setMinIntInput(1);
-        setMaxIntInput(getDefaultOptions().length - 1);
     }
 
     @Override
