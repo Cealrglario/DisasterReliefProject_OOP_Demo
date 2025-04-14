@@ -198,6 +198,7 @@ public class PersonAccess<U> extends DatabaseObjectAccess<Person, U> {
         }
     }
 
+
     @Override
     public U getInfo(String infoToGet, int personId) throws SQLException {
         U retrievedInfo;
@@ -223,7 +224,6 @@ public class PersonAccess<U> extends DatabaseObjectAccess<Person, U> {
 
         return retrievedInfo;
     }
-
 
 
     public boolean removePerson(Person unwantedPerson) throws SQLException {
