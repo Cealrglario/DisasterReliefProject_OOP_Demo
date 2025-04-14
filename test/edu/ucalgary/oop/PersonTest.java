@@ -106,33 +106,6 @@ public class PersonTest {
     }
 
     @Test
-    public void testGetRelatives() {
-        testFamilyGroup.addMember(testPerson1);
-        testFamilyGroup.addMember(testPerson2);
-
-        Person[] relatives = testPerson1.getRelatives();
-        Person[] expectedRelatives = {testPerson1, testPerson2};
-
-        assertEquals("getRelatives() returns expected family members", relatives, expectedRelatives);
-    }
-
-    @Test
-    public void testSetRelatives() {
-        testFamilyGroup.addMember(testPerson1);
-        testFamilyGroup.addMember(testPerson2);
-
-        Person testPerson3 = new Person(104, "Test 3", "Female", "333-3333");
-        Person testPerson4 = new Person(105, "Test 4", "Male", LocalDate.of(1990, 1, 1),
-                "444-4444");
-
-        Person[] newRelatives = {testPerson3, testPerson4};
-
-        testPerson1.setRelatives(newRelatives);
-
-        assertEquals("Relatives should be updated as expected", newRelatives, testPerson1.getRelatives());
-    }
-
-    @Test
     public void testGetAssignedId() {
         assertEquals("getAssignedId() should return the correct ID", 101, testPerson1.getAssignedId());
     }

@@ -83,12 +83,6 @@ public class Person {
         this.phoneNumber = phoneNumber;
     }
 
-    public Person[] getRelatives() {
-        return null;
-    }
-
-    public void setRelatives(Person[] relatives) {};
-
     public int getAssignedId() {
         return this.ASSIGNED_ID;
     }
