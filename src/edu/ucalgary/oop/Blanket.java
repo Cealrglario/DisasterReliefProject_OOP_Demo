@@ -8,5 +8,8 @@ public class Blanket extends Supply {
     @Override
     public void displayDetails() {
         System.out.println("Regular blanket for victim use.");
+        if (!super.getComments().isEmpty()) {
+            System.out.println("Comments: " + super.getComments());
+        }
     }
 }

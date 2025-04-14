@@ -32,6 +32,10 @@ public class Water extends Supply {
         } else {
             System.out.println("Expired.");
         }
+
+        if (!super.getComments().isEmpty()) {
+            System.out.println("Comments: " + super.getComments());
+        }
     }
 }
 
