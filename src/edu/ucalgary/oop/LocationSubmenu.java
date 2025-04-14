@@ -365,7 +365,6 @@ public class LocationSubmenu extends Menu {
                     } else {
                         boolean success = locationService.removeOccupant(retrievedLocation, personToRemove);
                         if (success) {
-                            personService.removePerson(personToRemove);
                             System.out.println(languageManager.getTranslation("occupant_removed_success"));
                         } else {
                             System.out.println(languageManager.getTranslation("occupant_removed_failure"));
