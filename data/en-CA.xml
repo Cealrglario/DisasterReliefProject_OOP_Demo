@@ -79,7 +79,7 @@
 
   <translation>
     <key>separator</key>
-    <value><![CDATA[--------------------------------------------]]></value>
+    <value><![CDATA[________________________________________________________]]></value>
   </translation>
 
   <translation>
@@ -220,6 +220,21 @@
   <translation>
     <key>error_invalid_option</key>
     <value><![CDATA[Invalid option. Please try again.]]></value>
+  </translation>
+
+  <translation>
+    <key>input_location_id_to_manage</key>
+    <value><![CDATA[Enter the ID of the location you'd like to manage: ]]></value>
+  </translation>
+
+  <translation>
+    <key>input_location_id_to_update</key>
+    <value><![CDATA[Enter the ID of the location you'd like to update: ]]></value>
+  </translation>
+
+  <translation>
+    <key>location_number</key>
+    <value><![CDATA[Location #%d: ]]></value>
   </translation>
 
   <translation>
@@ -703,8 +718,13 @@
   </translation>
 
   <translation>
-    <key>input_location_id_to_view</key>
+    <key>input_location_id_to_view_supplies</key>
     <value><![CDATA[Enter the ID of the location you want to view supplies for: ]]></value>
+  </translation>
+
+  <translation>
+    <key>input_location_id_to_view</key>
+    <value><![CDATA[Enter the ID of the location you want to view details of: ]]></value>
   </translation>
 
   <translation>
@@ -744,7 +764,7 @@
 
   <translation>
     <key>enter_gender_number</key>
-    <value><![CDATA[Enter the person's gender by typing in a corresponding number (for example, '1' for Man): ]]></value>
+    <value><![CDATA[Enter the person's gender by typing in a corresponding number (for example, '1' for Male): ]]></value>
   </translation>
 
   <translation>
