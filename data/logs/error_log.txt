@@ -21,3 +21,12 @@ java.util.NoSuchElementException
 	at edu.ucalgary.oop.MenuManager.run(MenuManager.java:49)
 	at edu.ucalgary.oop.Main.main(Main.java:26)
 
+Exception caught: Cannot read the array length because "this.currentDisplay" is null
+Timestamp of exception: 2025-04-13 20:13:46
+Stack trace: 
+---------------------------
+java.lang.NullPointerException: Cannot read the array length because "this.currentDisplay" is null
+	at edu.ucalgary.oop.Menu.handleDisplay(Menu.java:33)
+	at edu.ucalgary.oop.MenuManager.run(MenuManager.java:46)
+	at edu.ucalgary.oop.Main.main(Main.java:24)
+
