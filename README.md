@@ -1,9 +1,9 @@
 ## The Disaster Relief System
 << A demonstration of knowledge in object oriented programming, PostgreSQL, and test driven development. >>
 
-This repository is for the final project of my university object oriented programming course. This final project consisted of a large design problem requiring the development - from scratch - of a "disaster relief system" coded in Java, that allowed users (in theory, medical staff) to input, modify, remove, and view information pertaining to victims of a disaster, where they are sheltered, personal information, etc.
+This repository is for the final project of my university object oriented programming course. This final project consisted of a large design problem requiring the development - from scratch - of a "disaster relief system" coded in Java, that allowed users (in theory, medical staff) to input, modify, remove, and view information stored in a database pertaining to victims of a disaster, where they are sheltered, personal information, etc.
 
-Development began with the writing of unit tests for each class that was planned to be implemented. Unit tests were ran using JUnit, and concrete code was written based on these unit tests. A process of test, code, refactor, repeat was followed where unit tests could be ran (which was in most cases, other than in the simplest of functionalities).
+Development began with the writing of unit tests for each class - totalling over 120 unit tests - that were planned to be implemented. Unit tests were ran using JUnit, and concrete code was written based on these unit tests. A process of test, code, refactor, repeat was followed where unit tests could be ran (which was in most cases, other than in the simplest of functionalities).
 
 Information handling - pertaining to disaster victim information, inquiries, shelter information, etc. - was all sent to and received from an actual database handled using PostgreSQL. Java-PostgreSQL "bridging" was done using JDBC with classes that specifically handled database communication and modification - so called "Access" classes. 
 
