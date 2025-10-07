@@ -1,5 +1,5 @@
 ## The Disaster Relief System
-<< A demonstration of my knowledge in object oriented programming, PostgreSQL, and test driven development. >>
+<< A demonstration of knowledge in object oriented programming, PostgreSQL, and test driven development. >>
 
 This repository is for the final project of my university object oriented programming course. This final project consisted of a large design problem requiring the development - from scratch - of a "disaster relief system" coded in Java, that allowed users (in theory, medical staff) to input, modify, remove, and view information pertaining to victims of a disaster, where they are sheltered, personal information, etc.
 
